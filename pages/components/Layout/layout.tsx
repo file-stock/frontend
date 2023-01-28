@@ -7,7 +7,7 @@ type LayoutProps = {
 };
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
+    <div className="text-text">
       <NavBar />
       <main className="py-4">{children}</main>
       <Footer />

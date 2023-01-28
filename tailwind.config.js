@@ -14,6 +14,8 @@ module.exports = {
       black: "#131313",
       blacktext: "#0A001F",
       border: "#D1D5DB",
+      inputBorder: "#F3F4F6",
+      text: "#0A001F",
     },
   },
   plugins: [],

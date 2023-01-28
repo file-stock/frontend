@@ -19,7 +19,7 @@ const StepOne: FC<StepOneProps> = ({
     <>
       <div className="border-dashed border-[1px] border-main flex flex-col justify-center items-center py-[120px]">
         <Image src={upload} width={60} height={60} alt="uploadImage" />
-        <div className="text-xl font-medium my-4">Drag and drop to upload</div>
+        <div className="text-3xl font-medium my-4">Drag and drop to upload</div>
         <div className="mb-10 text-border flex justify-center items-center">
           <div className="border-b-[1px] w-20"></div>
           <div className="mx-2">or</div>

@@ -5,10 +5,8 @@ const Header = () => {
         The first NFT Blockchain site for Stock Images
       </div>
       <div className="flex">
-        <div className="text-sm bg-main rounded-md py-3 px-7 mr-4">
-          Find Images
-        </div>
-        <div className="text-sm border border-white rounded-md py-3 px-7">
+        <div className="bg-main rounded-md py-4 px-8 mr-4">Find Images</div>
+        <div className="border border-white rounded-md py-4 px-8">
           Start Selling
         </div>
       </div>
