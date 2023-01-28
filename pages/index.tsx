@@ -1,52 +1,21 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import Watermark from "@uiw/react-watermark";
+import Header from "./components/Home/Header";
 
 export default function Home() {
-  const [selectedFile, setSelectedFile] = useState();
-  const [preview, setPreview] = useState("");
-
-  useEffect(() => {
-    if (!selectedFile) {
-      setPreview("");
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreview(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
-
-  const onSelectFile = (e: any) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      setSelectedFile(undefined);
-      return;
-    }
-    setSelectedFile(e.target.files[0]);
-  };
-
   return (
     <>
-      <div className="text-2xl text-center">Home</div>
-      <input type="file" onChange={onSelectFile} />
-      {selectedFile && (
-        <div className="w-96">
-          <Watermark
-            content="FILESTOCK"
-            rotate={20}
-            gapX={5}
-            width={100}
-            gapY={80}
-            height={5}
-            fontSize={20}
-            fontColor="green"
-            style={{ background: "#fff" }}
-          >
-            <Image src={preview} width={500} height={500} alt="image" />
-          </Watermark>
+      <div className="relative">
+        <Header />
+        <div className="flex items-center absolute -bottom-14 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <input
+            className="rounded-l-md py-4 px-4 w-[600px]"
+            type="text"
+            placeholder="Search for photos"
+          />
+          <button className="text-sm text-white bg-main font-bold py-[19px] px-8 rounded-r-lg">
+            Search
+          </button>
         </div>
-      )}
+      </div>
     </>
   );
 }
