@@ -7,9 +7,9 @@ type StepTwoProps = {
   selectedFile: string;
   preview: string;
   setTitle: Dispatch<SetStateAction<string>>;
+  setPrice: Dispatch<SetStateAction<string>>;
   onChangeTitle: (e: any) => void;
   uploadOnLightHouse: () => void;
-  deploy: (e: any) => Promise<void>;
 };
 
 const StepTwo: FC<StepTwoProps> = ({
@@ -18,8 +18,8 @@ const StepTwo: FC<StepTwoProps> = ({
   selectedFile,
   preview,
   uploadOnLightHouse,
-  deploy,
   setTitle,
+  setPrice,
 }) => {
   const forms = [
     { label: "Title of the image", type: "text" },
@@ -35,13 +35,15 @@ const StepTwo: FC<StepTwoProps> = ({
         <div className="flex flex-col gap-3 mr-4">
           {selectedFile && (
             <>
-              <Image
-                src={preview}
-                alt="image"
-                width={100}
-                height={100}
-                className="rounded-xl"
-              />
+              {preview && (
+                <Image
+                  src={preview}
+                  alt="small image"
+                  width={100}
+                  height={100}
+                  className="rounded-xl"
+                />
+              )}
               <label
                 htmlFor="importFile"
                 className="text-main text-2xl flex justify-center items-center border-dashed border-[1px] w-[100px] h-[90px] rounded-lg cursor-pointer"
@@ -59,7 +61,7 @@ const StepTwo: FC<StepTwoProps> = ({
           )}
         </div>
         <div className="w-1/3">
-          {selectedFile && (
+          {selectedFile && preview && (
             <Image
               src={preview}
               alt="image"
@@ -83,11 +85,12 @@ const StepTwo: FC<StepTwoProps> = ({
                   <input
                     type={form.type}
                     placeholder="type here"
-                    className="border border-border rounded-md p-3 my-4 text-[#0A001F]"
+                    className="border border-border rounded-md p-3 mb-[35px] mt-[12px] text-[#0A001F]"
                     required
                     onChange={(e) => {
-                      form.label === "Title of the image" &&
-                        setTitle(e.target.value);
+                      form.label === "Title of the image"
+                        ? setTitle(e.target.value)
+                        : form.label === "Price" && setPrice(e.target.value);
                     }}
                   />
                 )}

@@ -10,6 +10,8 @@ const NavBar: FC = () => {
     { label: "Login", href: "/login" },
   ];
 
+  /* add connect wallet button instead login and signup */
+
   return (
     <div className="flex justify-between py-5 px-[140px] items-center">
       <div className="flex items-center">
