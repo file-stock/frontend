@@ -1,16 +1,14 @@
 import Link from "next/link";
-import { FC, useState } from "react";
+import { useState } from "react";
+import ConnectWallet from "../ConnectWallet";
 
-const NavBar: FC = () => {
+const NavBar = () => {
   const [isLogged, setIsLogged] = useState(false);
 
   const navigationLinks = [
     { label: "Home", href: "/" },
     { label: "Explore", href: "/explore" },
-    { label: "Login", href: "/login" },
   ];
-
-  /* add connect wallet button instead login and signup */
 
   return (
     <div className="flex justify-between py-5 px-[140px] items-center">
@@ -40,12 +38,7 @@ const NavBar: FC = () => {
             <Link href="/uploadImage">Upload image</Link>
           </div>
         ) : (
-          <div
-            className="ml-[39px] border rounded-md py-2 px-4 font-bold cursor-pointer"
-            onClick={() => setIsLogged((prev) => !prev)}
-          >
-            Signup
-          </div>
+          <ConnectWallet />
         )}
       </div>
     </div>
