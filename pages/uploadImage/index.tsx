@@ -16,7 +16,7 @@ function UploadImage() {
   const [price, setPrice] = useState<string>("");
   const fileInputRef = useRef(null);
 
-  const API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
+  const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
 
   useEffect(() => {
     if (!selectedFile) {
@@ -53,7 +53,7 @@ function UploadImage() {
     console.log("run");
     const output = await lighthouse.upload(
       sinteticBaseEvent,
-      API_KEY,
+      LIGHTHOUSE_API_KEY,
       progressCallback
     );
     console.log("File Status:", output);
