@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
-import Jimp, { getBase64Async } from "jimp";
 import lighthouse from "@lighthouse-web3/sdk";
 
 import StepOne from "./stepOne";
@@ -9,12 +8,12 @@ import { ThemeContext } from "../../context/context";
 
 function UploadImage() {
   const [resizedImage, setResizedImage] = useState(null);
-  const [selectedFile, setSelectedFile] = useState("");
+  const [selectedFile, setSelectedFile] = useState<any>("");
   const [preview, setPreview] = useState("");
   const [step, setStep] = useState<1 | 2 | 3 | number>(1);
   const [sinteticBaseEvent, setSinteticBaseEvent] = useState<any>();
   const [title, setTitile] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
+  const [price, setPrice] = useState<any>("");
   const [description, setDescription] = useState("");
 
   const fileInputRef = useRef(null);
@@ -48,8 +47,8 @@ function UploadImage() {
   };
 
   const progressCallback = (progressData: any) => {
-    let percentageDone =
-      100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
+    let percentageDone = 100 - progressData?.total / progressData?.uploaded;
+    percentageDone = Number(percentageDone.toFixed(2));
     console.log(percentageDone);
   };
 
@@ -119,6 +118,7 @@ function UploadImage() {
             uploadOnLightHouse={uploadOnLightHouse}
             onChangeTitle={onChangeTitle}
             setTitle={setTitile}
+            // @ts-ignore
             setPrice={setPrice}
             setStep={setStep}
             setDescription={setDescription}
@@ -129,6 +129,7 @@ function UploadImage() {
           <StepThree
             preview={preview}
             title={title}
+            // @ts-ignore
             price={price}
             description={description}
           />

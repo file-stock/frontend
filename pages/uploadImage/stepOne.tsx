@@ -3,7 +3,7 @@ import { FC } from "react";
 import upload from "../../public/images/upload.png";
 
 type StepOneProps = {
-  onSelectFile: (e: any) => void;
+  onSelectFile: any;
   fileInputRef: React.MutableRefObject<null>;
   selectedFile: string;
   preview: string;

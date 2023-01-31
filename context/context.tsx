@@ -18,7 +18,7 @@ type ContextType = {
   connecting: any;
   callContract: (hash: any) => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
-  setPrice: Dispatch<SetStateAction<number>>;
+  setPrice: any;
   price: number;
 };
 
@@ -56,7 +56,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [signer, setSigner] = useState();
   const [contract, setContract] = useState<any>();
   const [hash, setHash] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState<any>(0);
 
   const CONTRACT_ADDRESS = "0x39F7F80Fe00b190baF4526C718286eF8aB4EcA21";
 

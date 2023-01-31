@@ -4,11 +4,11 @@ import { ThemeContext } from "../../context/context";
 import BasicModal from "../../components/Modal";
 
 type StepTwoProps = {
-  onSelectFile: (e: any) => void;
+  onSelectFile: any;
   fileInputRef: React.MutableRefObject<null>;
   selectedFile: string;
   preview: string;
-  setTitle: Dispatch<SetStateAction<string>>;
+  setTitle: Dispatch<SetStateAction<any>>;
   setStep: Dispatch<SetStateAction<number>>;
   setDescription: Dispatch<SetStateAction<string>>;
   onChangeTitle: (e: any) => void;
