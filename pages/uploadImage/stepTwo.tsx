@@ -1,5 +1,7 @@
-import { Dispatch, FC, SetStateAction } from "react";
-import Image, { StaticImageData } from "next/image";
+import { Dispatch, FC, SetStateAction, useContext, useState } from "react";
+import Image from "next/image";
+import { ThemeContext } from "../../context/context";
+import BasicModal from "../../components/Modal";
 
 type StepTwoProps = {
   onSelectFile: (e: any) => void;
@@ -7,7 +9,8 @@ type StepTwoProps = {
   selectedFile: string;
   preview: string;
   setTitle: Dispatch<SetStateAction<string>>;
-  setPrice: Dispatch<SetStateAction<string>>;
+  setStep: Dispatch<SetStateAction<number>>;
+  setDescription: Dispatch<SetStateAction<string>>;
   onChangeTitle: (e: any) => void;
   uploadOnLightHouse: () => void;
 };
@@ -19,8 +22,10 @@ const StepTwo: FC<StepTwoProps> = ({
   preview,
   uploadOnLightHouse,
   setTitle,
-  setPrice,
+  setStep,
+  setDescription,
 }) => {
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const forms = [
     { label: "Title of the image", type: "text" },
     { label: "Description", type: "text" },
@@ -29,9 +34,20 @@ const StepTwo: FC<StepTwoProps> = ({
     { label: "Web3 Wallet Address", type: "text" },
   ];
 
+  const { callContract, setPrice } = useContext(ThemeContext);
+
+  const uploadImage = async () => {
+    const hash = await uploadOnLightHouse();
+    setIsPopUpOpen(true);
+    await callContract(hash);
+    setIsPopUpOpen(false);
+    setStep(3);
+  };
+
   return (
     <>
       <div className="flex gap-6 pb-[175px]">
+        <BasicModal open={isPopUpOpen} />
         <div className="flex flex-col gap-3 mr-4">
           {selectedFile && (
             <>
@@ -78,6 +94,10 @@ const StepTwo: FC<StepTwoProps> = ({
                 <label className="text-xl font-medium">{form.label}</label>
                 {form.label === "Description" ? (
                   <textarea
+                    onChange={(e) =>
+                      form.label === "Description" &&
+                      setDescription(e.target.value)
+                    }
                     placeholder="type here"
                     className="border border-border rounded-md p-3 my-4"
                   />
@@ -90,7 +110,8 @@ const StepTwo: FC<StepTwoProps> = ({
                     onChange={(e) => {
                       form.label === "Title of the image"
                         ? setTitle(e.target.value)
-                        : form.label === "Price" && setPrice(e.target.value);
+                        : form.label === "Price" &&
+                          setPrice(Number(e.target.value));
                     }}
                   />
                 )}
@@ -100,7 +121,9 @@ const StepTwo: FC<StepTwoProps> = ({
           <div className="font-medium mt-4 text-[#0A001F]">Balance: 20413</div>
           <div className="mt-[40px]">
             <button
-              onClick={() => uploadOnLightHouse()}
+              onClick={() => {
+                uploadImage();
+              }}
               className="text-white font-bold mr-4 px-5 py-2.5 bg-main border border-main rounded-md"
             >
               Upload

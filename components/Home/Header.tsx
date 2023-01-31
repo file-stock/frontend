@@ -1,4 +1,5 @@
 import Link from "next/link";
+import GenericButton from "../GenericButton";
 
 const Header = () => {
   return (
@@ -6,9 +7,14 @@ const Header = () => {
       <div className="text-5xl font-extrabold mb-[37px] w-1/3 leading-snug text-center">
         The first NFT Blockchain site for Stock Images
       </div>
-      <div className="flex">
-        <div className="bg-main rounded-md py-4 px-8 mr-4">Find Images</div>
-        <div className="border border-white rounded-md py-4 px-8">
+      <div className="flex gap-4">
+        <GenericButton
+          label="Find Images"
+          size="md"
+          variant="mainFull"
+          onclick={() => console.log("")}
+        />
+        <div className="border font-bold border-white rounded-md py-4 px-8">
           <Link href="/uploadImage">Start Selling</Link>
         </div>
       </div>

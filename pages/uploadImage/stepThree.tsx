@@ -1,5 +1,6 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import Image from "next/image";
+import { ThemeContext } from "../../context/context";
 
 import download from "../../public/images/download2.png";
 import upload from "../../public/images/download.png";
@@ -8,13 +9,17 @@ import creator from "../../public/images/creator.png";
 import imageLicenze from "../../public/images/imageLicenze.png";
 import rounded from "../../public/images/rounded.png";
 
+import GenericButton from "../../components/GenericButton";
+
 type StepThreeProps = {
   preview: string;
   title: string;
-  price: string;
+  description: string;
 };
 
-const StepThree: FC<StepThreeProps> = ({ preview, title, price }) => {
+const StepThree: FC<StepThreeProps> = ({ preview, title, description }) => {
+  const { price } = useContext(ThemeContext);
+
   const liscenses = [
     "For commercial and personal projects",
     "On digital or printed media",
@@ -38,9 +43,12 @@ const StepThree: FC<StepThreeProps> = ({ preview, title, price }) => {
         <div className="flex items-center justify-between gap-2 mb-[25px]">
           <div className="text-5xl font-extrabold">{title}</div>
           <div className="flex justify-between">
-            <button className="bg-main text-white text-xl font-bold py-4 px-6 rounded-lg">
-              Buy Image
-            </button>
+            <GenericButton
+              label="Buy Image"
+              variant="mainFull"
+              size="md"
+              onclick={() => console.log("")}
+            />
             <div className="flex items-center justify-between ml-4 gap-4 py-2 px-6 border border-main rounded-lg cursor-pointer text-lg font-bold">
               <Image src={upload} height={15} width={15} alt="upload" />
               <div className="text-main font-bold">Try Photo</div>
@@ -59,15 +67,7 @@ const StepThree: FC<StepThreeProps> = ({ preview, title, price }) => {
         </div>
         <div className="mb-[30px]">
           <div className="text-lg text-greyText mb-[2px]">Description</div>
-          <div className="text-xl">
-            em ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-            veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat. Duis aute irure dolor in reprehenderit in
-            voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia
-          </div>
+          <div className="text-xl">{description}</div>
         </div>
         <div className="border-b border-border pb-[50px]">
           <div className="text-lg text-greyText mb-[30px]">Owned by</div>

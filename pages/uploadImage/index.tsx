@@ -1,20 +1,25 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Jimp, { getBase64Async } from "jimp";
 import lighthouse from "@lighthouse-web3/sdk";
 
 import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
 import StepThree from "./stepThree";
+import { ThemeContext } from "../../context/context";
 
 function UploadImage() {
   const [resizedImage, setResizedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState("");
   const [preview, setPreview] = useState("");
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | number>(1);
   const [sinteticBaseEvent, setSinteticBaseEvent] = useState<any>();
   const [title, setTitile] = useState<string>("");
   const [price, setPrice] = useState<string>("");
+  const [description, setDescription] = useState("");
+
   const fileInputRef = useRef(null);
+
+  const { setHash } = useContext(ThemeContext);
 
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
 
@@ -56,19 +61,21 @@ function UploadImage() {
       LIGHTHOUSE_API_KEY,
       progressCallback
     );
+    // setHash(output.data.Hash);
     console.log("File Status:", output);
     console.log(
       "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
     );
+    return output.data.Hash;
   };
 
-  const uploadOnLightHouse = () => {
+  const uploadOnLightHouse = async () => {
     if (title.length < 1) {
       return;
     }
-    setStep(3);
+
     if (sinteticBaseEvent) {
-      deploy();
+      return await deploy();
     }
   };
 
@@ -113,11 +120,18 @@ function UploadImage() {
             onChangeTitle={onChangeTitle}
             setTitle={setTitile}
             setPrice={setPrice}
+            setStep={setStep}
+            setDescription={setDescription}
           />
         </>
       ) : (
         <>
-          <StepThree preview={preview} title={title} price={price} />
+          <StepThree
+            preview={preview}
+            title={title}
+            price={price}
+            description={description}
+          />
         </>
       )}
     </div>
