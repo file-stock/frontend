@@ -1,6 +1,12 @@
 import { init, useConnectWallet } from "@web3-onboard/react";
 import injectedModule from "@web3-onboard/injected-wallets";
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { ethers } from "ethers";
 import ContractAbi from "../lib/contractAbi.json";
 
@@ -10,18 +16,22 @@ type ContextType = {
   wallet: any;
   disconnect: any;
   connecting: any;
+  callContract: (hash: any) => Promise<void>;
+  setHash: Dispatch<SetStateAction<string>>;
+  setPrice: Dispatch<SetStateAction<number>>;
+  price: number;
 };
 
-const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
+const rpcUrl = "https://endpoints.omniatech.io/v1/matic/mumbai/public";
 const injected = injectedModule();
 
 init({
   wallets: [injected],
   chains: [
     {
-      id: "0x3141",
-      token: "tFIL",
-      label: "Filecoin hyperspace",
+      id: "0x13881",
+      token: "MATIC",
+      label: "Polygon Mombai",
       rpcUrl,
     },
   ],
@@ -45,8 +55,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [userAddress, setUserAddress] = useState("");
   const [signer, setSigner] = useState();
   const [contract, setContract] = useState<any>();
+  const [hash, setHash] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
 
-  const CONTRACT_ADDRESS = "0xD6268E0f96dd072D18a263A80c2C51194720E6B5";
+  const CONTRACT_ADDRESS = "0x39F7F80Fe00b190baF4526C718286eF8aB4EcA21";
 
   useEffect(() => {
     const hProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
@@ -75,9 +87,35 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setContract(contract);
   }, [signer]);
 
+  const callContract = async (hash: any) => {
+    console.log(contract, hash, price);
+    if (!contract || !price) return;
+    const tx = await contract.storeFile(
+      hash,
+      ethers.utils.parseEther(price.toString()),
+      []
+    );
+    await tx.wait();
+    contract.on("StoreFile", (value1: any, value2: any, value3: any) => {
+      console.log(value1);
+      console.log(value2);
+      console.log(value3);
+    });
+  };
+
   return (
     <ThemeContext.Provider
-      value={{ isConnected, connect, disconnect, wallet, connecting }}
+      value={{
+        isConnected,
+        connect,
+        disconnect,
+        wallet,
+        connecting,
+        callContract,
+        setHash,
+        setPrice,
+        price,
+      }}
     >
       {children}
     </ThemeContext.Provider>
