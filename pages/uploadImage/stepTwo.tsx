@@ -12,7 +12,7 @@ type StepTwoProps = {
   setStep: Dispatch<SetStateAction<number>>;
   setDescription: Dispatch<SetStateAction<string>>;
   onChangeTitle: (e: any) => void;
-  uploadOnLightHouse: () => void;
+  handleFileChange: () => void;
 };
 
 const StepTwo: FC<StepTwoProps> = ({
@@ -20,7 +20,7 @@ const StepTwo: FC<StepTwoProps> = ({
   fileInputRef,
   selectedFile,
   preview,
-  uploadOnLightHouse,
+  handleFileChange,
   setTitle,
   setStep,
   setDescription,
@@ -37,7 +37,7 @@ const StepTwo: FC<StepTwoProps> = ({
   const { callContract, setPrice } = useContext(ThemeContext);
 
   const uploadImage = async () => {
-    const hash = await uploadOnLightHouse();
+    const hash = await handleFileChange();
     setIsPopUpOpen(true);
     await callContract(hash);
     setIsPopUpOpen(false);
