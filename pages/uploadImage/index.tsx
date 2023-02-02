@@ -32,8 +32,33 @@ function UploadImage() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
-  const onSelectFile = (e: any) => {
-    setSinteticBaseEvent(e);
+  const onSelectFile = async (e: any) => {
+
+    const file = e.target.files[0];
+    const fileName = file.name;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const image = await Jimp.read(reader.result);
+      await image.resize(200, 200);
+      const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
+      const file = new File([base64], `${fileName}_resized`, {
+        type: "image/jpeg",
+      });
+
+      //new FileList which is the type of target.files
+      let list = new DataTransfer();
+      list.items.add(file);
+
+      await setSinteticBaseEvent(e);
+      await setSinteticBaseEvent(prevState => {
+        let newState = prevState;
+        newState.target.files = list.files;
+        return{newState} //to fix beacause returns an object with a newstate object inside
+      });
+    };
+
+    console.log(sinteticBaseEvent)
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile("");
       return;
@@ -56,7 +81,7 @@ function UploadImage() {
     // Push file to lighthouse node
     console.log("run");
     const output = await lighthouse.upload(
-      sinteticBaseEvent,
+      sinteticBaseEvent.newState,
       LIGHTHOUSE_API_KEY,
       progressCallback
     );
@@ -68,34 +93,15 @@ function UploadImage() {
     return output.data.Hash;
   };
 
-  const uploadOnLightHouse = async () => {
+  const handleFileChange = async () => {
     if (title.length < 1) {
       return;
     }
-
     if (sinteticBaseEvent) {
       return await deploy();
     }
   };
 
-  // const handleFileChange = async () => {
-  //   const file = fileInputRef.current.files[0];
-  //   console.log("file", file);
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-  //   reader.onload = async () => {
-  //     const image = await Jimp.read(reader.result);
-  //     await image.resize(200, 200);
-  //     console.log("image", image);
-  //     const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
-  //     const file = new File([base64], "image.jpg", {
-  //       type: "image/jpeg",
-  //     });
-  //     setResizedImage(base64);
-  //     setResized(true);
-  //     deploy(file.name);
-  //   };
-  // };
 
   return (
     <div className="px-[140px] pt-[60px]">
@@ -115,13 +121,13 @@ function UploadImage() {
             fileInputRef={fileInputRef}
             selectedFile={selectedFile}
             preview={preview}
-            uploadOnLightHouse={uploadOnLightHouse}
             onChangeTitle={onChangeTitle}
             setTitle={setTitile}
             // @ts-ignore
             setPrice={setPrice}
             setStep={setStep}
             setDescription={setDescription}
+            handleFileChange={handleFileChange}
           />
         </>
       ) : (
