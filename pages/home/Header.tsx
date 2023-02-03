@@ -1,5 +1,5 @@
 import Link from "next/link";
-import GenericButton from "../GenericButton";
+import GenericButton from "../../components/GenericButton";
 
 const Header = () => {
   return (
