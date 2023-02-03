@@ -43,7 +43,6 @@ const StepTwo: FC<StepTwoProps> = ({
     setIsPopUpOpen(false);
     setStep(3);
   };
-  console.log("step two");
 
   return (
     <>

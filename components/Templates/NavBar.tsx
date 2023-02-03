@@ -1,14 +1,17 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ConnectWallet from "../ConnectWallet";
 import InputSerach from "../InputSearch";
 import Image from "next/image";
 
-import { user, logoBlack } from "../../public/index";
+import { logoBlack } from "../../public/index";
 import UserDropDownIcon from "../UserDropDownIcon";
+import { ThemeContext } from "../../context/context";
 
 const NavBar = () => {
   const [isLogged, setIsLogged] = useState(true);
+
+  const { isConnected } = useContext(ThemeContext);
 
   const navigationLinks = [
     { label: "Home", href: "/" },
@@ -18,7 +21,7 @@ const NavBar = () => {
   return (
     <div className="flex justify-between py-5 px-[140px] items-center">
       <div className="flex items-center">
-        <div className="relative mr-[70px] font-extrabold w-[180px] h-10 shadow-lg">
+        <div className="relative mr-[70px] font-extrabold w-[180px] h-10">
           <Image src={logoBlack} fill={true} alt="logo" />
         </div>
         <div className="flex items-center">
@@ -34,7 +37,7 @@ const NavBar = () => {
           );
         })}
         <ConnectWallet />
-        {isLogged && <UserDropDownIcon />}
+        {isConnected && <UserDropDownIcon />}
       </div>
     </div>
   );

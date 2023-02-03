@@ -9,15 +9,18 @@ import StepThree from "./stepThree";
 
 function UploadImage() {
   const [selectedFile, setSelectedFile] = useState<any>("");
-  const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useState<string>("");
   const [step, setStep] = useState<1 | 2 | 3 | number>(1);
   const [sinteticBaseEvent, setSinteticBaseEvent] = useState<any>();
   const [title, setTitile] = useState<string>("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState<string>("");
+
+  console.log("preview", preview);
 
   const fileInputRef = useRef(null);
 
-  const { setPrice, price } = useContext(ThemeContext);
+  const { setPrice, price, imgForSale, setImgForSale } =
+    useContext(ThemeContext);
 
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
 
@@ -73,12 +76,10 @@ function UploadImage() {
   const progressCallback = (progressData: any) => {
     let percentageDone = 100 - progressData?.total / progressData?.uploaded;
     percentageDone = Number(percentageDone.toFixed(2));
-    console.log(percentageDone);
   };
 
   const deploy = async () => {
     // Push file to lighthouse node
-    console.log("run");
     const output = await lighthouse.upload(
       sinteticBaseEvent.newState,
       LIGHTHOUSE_API_KEY,
@@ -91,16 +92,25 @@ function UploadImage() {
     return output.data.Hash;
   };
 
+  const mergeImageForSale = () => {
+    const newImgObject = {
+      img: preview,
+      title: title,
+      description: description,
+      price: price,
+    };
+    setImgForSale((prev: any) => [...prev, newImgObject]);
+  };
+
   const handleFileChange = async () => {
-    if (title.length < 1) {
-      return;
-    }
+    // if (title.length < 1) {
+    //   return;
+    // }
     if (sinteticBaseEvent) {
+      mergeImageForSale();
       return await deploy();
     }
   };
-
-  console.log("step zero");
 
   return (
     <div className="px-[140px] pt-[60px]">
@@ -131,12 +141,7 @@ function UploadImage() {
         </>
       ) : (
         <>
-          <StepThree
-            img={preview}
-            title={title}
-            description={description}
-            price={price}
-          />
+          <StepThree imageForSale={imgForSale} />
         </>
       )}
     </div>

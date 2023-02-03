@@ -5,7 +5,7 @@ import { myCardSale } from "../../constants/constants";
 const Collection = () => {
   const [myImage, setMyImage] = useState(myCardSale);
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap gap-14">
       {myCardSale.map((card, i) => (
         <ImageCardForSale
           key={i}
@@ -13,6 +13,7 @@ const Collection = () => {
           title={card.title}
           description={card.description}
           price={card.price}
+          downloadButton={true}
         />
       ))}
     </div>

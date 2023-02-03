@@ -9,6 +9,7 @@ import {
 } from "react";
 import { ethers } from "ethers";
 import ContractAbi from "../lib/contractAbi.json";
+import { myCardSale } from "../constants/constants";
 
 type ContextType = {
   isConnected: boolean;
@@ -18,9 +19,11 @@ type ContextType = {
   connecting: any;
   callContract: (hash: any) => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
-  setIsConnected: Dispatch<SetStateAction<boolean>>;
+  setIsConnected?: Dispatch<SetStateAction<boolean>>;
+  setImgForSale: Dispatch<SetStateAction<any>>;
   setPrice: any;
   price: any;
+  imgForSale: any;
 };
 
 const rpcUrl = "https://endpoints.omniatech.io/v1/matic/mumbai/public";
@@ -58,6 +61,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [contract, setContract] = useState<any>();
   const [hash, setHash] = useState<string>("");
   const [price, setPrice] = useState<any>();
+  const [imgForSale, setImgForSale] = useState<any[]>(myCardSale);
 
   const CONTRACT_ADDRESS = "0x39F7F80Fe00b190baF4526C718286eF8aB4EcA21";
 
@@ -72,6 +76,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       window.localStorage.setItem("connectedWallets", JSON.stringify(label));
       setProvider(new ethers.providers.Web3Provider(provider, "any"));
       setUserAddress(accounts[0].address);
+      setIsConnected(true);
     }
   }, [wallet]);
 
@@ -116,6 +121,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setPrice,
         price,
         setIsConnected,
+        imgForSale,
+        setImgForSale,
       }}
     >
       {children}

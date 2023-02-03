@@ -16,8 +16,6 @@ const StepOne: FC<StepOneProps> = ({
   selectedFile,
   preview,
 }) => {
-  console.log("step one");
-
   return (
     <>
       <div className="border-dashed border-[1px] border-main flex flex-col justify-center items-center py-[120px]">

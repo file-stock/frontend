@@ -1,21 +1,26 @@
-import { useState } from "react";
+import { useContext } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
-import { myCardSale } from "../../constants/constants";
+import { ThemeContext } from "../../context/context";
 
 const ForSale = () => {
-  const [myImage, setMyImage] = useState(myCardSale);
+  const { imgForSale } = useContext(ThemeContext);
+
+  console.log("forsale", imgForSale);
+
   return (
-    <>
-      {myCardSale.map((card, i) => (
-        <ImageCardForSale
-          key={i}
-          img={card.img}
-          title={card.title}
-          description={card.description}
-          price={card.price}
-        />
+    <div className="flex flex-wrap gap-14">
+      {imgForSale.map((card: any, i: any) => (
+        <div key={i}>
+          <ImageCardForSale
+            img={card.img}
+            title={card.title}
+            description={card.description}
+            price={card.price}
+            downloadButton={true}
+          />
+        </div>
       ))}
-    </>
+    </div>
   );
 };
 

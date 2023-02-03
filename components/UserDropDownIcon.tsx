@@ -18,7 +18,7 @@ const UserDropDownMenu = () => {
   };
 
   return (
-    <div className="border-2 border-main rounded-full">
+    <div className="border-2 border-main rounded-full cursor-pointer">
       <div
         id="fade-button"
         aria-controls={open ? "fade-menu" : undefined}

@@ -8,6 +8,7 @@ type ImageCardForSaleProps = {
   title: string;
   description: string;
   price: any;
+  downloadButton: boolean;
 };
 
 const ImageCardForSale: FC<ImageCardForSaleProps> = ({
@@ -15,6 +16,7 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
   title,
   description,
   price,
+  downloadButton,
 }) => {
   return (
     <>
@@ -31,9 +33,11 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
           <div className="text-md max-w-[420px]">{description}</div>
           <div>
             <div className="flex items-center gap-3">
-              <div className="bg-main text-white py-2 px-4 cursor-pointer rounded-lg font-semibold text-lg">
-                Download Image
-              </div>
+              {downloadButton && (
+                <div className="bg-main text-white py-2 px-4 cursor-pointer rounded-lg font-semibold text-lg">
+                  Download Image
+                </div>
+              )}
               <div className="border border-border rounded-lg py-3.5 px-4 cursor-pointer">
                 <Image src={deleteIcon} width={15} height={15} alt="delete" />
               </div>
