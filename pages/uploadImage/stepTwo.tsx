@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useContext, useState } from "react";
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
-import BasicModal from "../../components/Modal";
+import GenericModal from "../../components/GenericModal";
 
 type StepTwoProps = {
   onSelectFile: any;
@@ -43,11 +43,17 @@ const StepTwo: FC<StepTwoProps> = ({
     setIsPopUpOpen(false);
     setStep(3);
   };
+  console.log("step two");
 
   return (
     <>
       <div className="flex gap-6 pb-[175px]">
-        <BasicModal open={isPopUpOpen} />
+        <GenericModal
+          open={isPopUpOpen}
+          loader={true}
+          label="Loading..."
+          description="the operation may take a few seconds"
+        />
         <div className="flex flex-col gap-3 mr-4">
           {selectedFile && (
             <>

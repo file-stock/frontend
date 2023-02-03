@@ -1,24 +1,23 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import lighthouse from "@lighthouse-web3/sdk";
+import Jimp from "jimp";
+import { ThemeContext } from "../../context/context";
 
 import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
 import StepThree from "./stepThree";
-import { ThemeContext } from "../../context/context";
 
 function UploadImage() {
-  const [resizedImage, setResizedImage] = useState(null);
   const [selectedFile, setSelectedFile] = useState<any>("");
   const [preview, setPreview] = useState("");
   const [step, setStep] = useState<1 | 2 | 3 | number>(1);
   const [sinteticBaseEvent, setSinteticBaseEvent] = useState<any>();
   const [title, setTitile] = useState<string>("");
-  const [price, setPrice] = useState<any>("");
   const [description, setDescription] = useState("");
 
   const fileInputRef = useRef(null);
 
-  const { setHash } = useContext(ThemeContext);
+  const { setPrice, price } = useContext(ThemeContext);
 
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
 
@@ -33,12 +32,12 @@ function UploadImage() {
   }, [selectedFile]);
 
   const onSelectFile = async (e: any) => {
-
     const file = e.target.files[0];
     const fileName = file.name;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
+      // @ts-ignore
       const image = await Jimp.read(reader.result);
       await image.resize(200, 200);
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
@@ -51,14 +50,14 @@ function UploadImage() {
       list.items.add(file);
 
       await setSinteticBaseEvent(e);
-      await setSinteticBaseEvent(prevState => {
+      await setSinteticBaseEvent((prevState: any) => {
         let newState = prevState;
         newState.target.files = list.files;
-        return{newState} //to fix beacause returns an object with a newstate object inside
+        return { newState }; //to fix beacause returns an object with a newstate object inside
       });
     };
 
-    console.log(sinteticBaseEvent)
+    console.log(sinteticBaseEvent);
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile("");
       return;
@@ -85,7 +84,6 @@ function UploadImage() {
       LIGHTHOUSE_API_KEY,
       progressCallback
     );
-    // setHash(output.data.Hash);
     console.log("File Status:", output);
     console.log(
       "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
@@ -102,6 +100,7 @@ function UploadImage() {
     }
   };
 
+  console.log("step zero");
 
   return (
     <div className="px-[140px] pt-[60px]">
@@ -133,11 +132,10 @@ function UploadImage() {
       ) : (
         <>
           <StepThree
-            preview={preview}
+            img={preview}
             title={title}
-            // @ts-ignore
-            price={price}
             description={description}
+            price={price}
           />
         </>
       )}

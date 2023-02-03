@@ -18,8 +18,9 @@ type ContextType = {
   connecting: any;
   callContract: (hash: any) => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
+  setIsConnected: Dispatch<SetStateAction<boolean>>;
   setPrice: any;
-  price: number;
+  price: any;
 };
 
 const rpcUrl = "https://endpoints.omniatech.io/v1/matic/mumbai/public";
@@ -56,7 +57,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [signer, setSigner] = useState();
   const [contract, setContract] = useState<any>();
   const [hash, setHash] = useState<string>("");
-  const [price, setPrice] = useState<any>(0);
+  const [price, setPrice] = useState<any>();
 
   const CONTRACT_ADDRESS = "0x39F7F80Fe00b190baF4526C718286eF8aB4EcA21";
 
@@ -88,7 +89,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [signer]);
 
   const callContract = async (hash: any) => {
-    console.log(contract, hash, price);
     if (!contract || !price) return;
     const tx = await contract.storeFile(
       hash,
@@ -115,6 +115,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setHash,
         setPrice,
         price,
+        setIsConnected,
       }}
     >
       {children}
