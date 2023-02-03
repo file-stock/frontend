@@ -37,6 +37,7 @@ function UploadImage() {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
+      // @ts-ignore
       const image = await Jimp.read(reader.result);
       await image.resize(200, 200);
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
