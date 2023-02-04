@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 
 type StepThreeProps = {

@@ -5,7 +5,7 @@ import { ThemeContext } from "../../context/context";
 const ForSale = () => {
   const { imgForSale } = useContext(ThemeContext);
 
-  console.log("forsale", imgForSale);
+  console.log("OUT", imgForSale);
 
   return (
     <div className="flex flex-wrap gap-14">

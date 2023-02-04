@@ -1,4 +1,11 @@
-import { Dispatch, FC, SetStateAction, useContext, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
 import GenericModal from "../../components/GenericModal";
@@ -13,6 +20,7 @@ type StepTwoProps = {
   setDescription: Dispatch<SetStateAction<string>>;
   onChangeTitle: (e: any) => void;
   handleFileChange: () => void;
+  hashValue: string;
 };
 
 const StepTwo: FC<StepTwoProps> = ({
@@ -24,6 +32,7 @@ const StepTwo: FC<StepTwoProps> = ({
   setTitle,
   setStep,
   setDescription,
+  hashValue,
 }) => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const forms = [
@@ -37,12 +46,23 @@ const StepTwo: FC<StepTwoProps> = ({
   const { callContract, setPrice } = useContext(ThemeContext);
 
   const uploadImage = async () => {
-    const hash = await handleFileChange();
-    setIsPopUpOpen(true);
-    await callContract(hash);
-    setIsPopUpOpen(false);
-    setStep(3);
+    handleFileChange();
+    // const hash = await handleFileChange();
+    const hash = hashValue;
   };
+
+  useEffect(() => {
+    if (hashValue) {
+      const completeUpload = async () => {
+        setIsPopUpOpen(true);
+        await callContract(hashValue);
+        setIsPopUpOpen(false);
+        setStep(3);
+      };
+      completeUpload();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hashValue]);
 
   return (
     <>
