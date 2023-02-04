@@ -61,6 +61,7 @@ const StepTwo: FC<StepTwoProps> = ({
       };
       completeUpload();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hashValue]);
 
   return (

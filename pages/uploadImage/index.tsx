@@ -77,6 +77,7 @@ function UploadImage() {
       };
       handleSynthetic();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sinteticBaseEvent]);
 
   const onSelectFile = async (e: any) => {
