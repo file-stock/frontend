@@ -25,6 +25,8 @@ function UploadImage() {
   const { setPrice, price, imgForSale, setImgForSale } =
     useContext(ThemeContext);
 
+  console.log("IMG", selectedFile.name);
+
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
 
   useEffect(() => {
@@ -208,6 +210,7 @@ function UploadImage() {
       return;
     }
     if (encryptedSinteticBaseEvent) {
+      mergeImageForSale();
       deployEncrypted();
 
       // return await deploy();
@@ -240,6 +243,7 @@ function UploadImage() {
             setStep={setStep}
             setDescription={setDescription}
             handleFileChange={handleFileChange}
+            hashValue={hashValue}
           />
         </>
       ) : (
