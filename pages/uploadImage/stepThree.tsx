@@ -12,8 +12,6 @@ type StepThreeProps = {
 const StepThree: FC<StepThreeProps> = ({ img, title, description, price }) => {
   const [myImagesCard, setMyImagesCard] = useState<any[]>(myCardSale);
 
-  console.log("ste three");
-
   useEffect(() => {
     console.log("inside effect");
 

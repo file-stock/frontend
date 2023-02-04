@@ -8,6 +8,7 @@ type StepOneProps = {
   fileInputRef: React.MutableRefObject<null>;
   selectedFile: string;
   preview: string;
+  setEncriptedSinteticBaseEvent: any;
 };
 
 const StepOne: FC<StepOneProps> = ({
@@ -15,8 +16,8 @@ const StepOne: FC<StepOneProps> = ({
   fileInputRef,
   selectedFile,
   preview,
+  setEncriptedSinteticBaseEvent,
 }) => {
-  console.log("step one");
 
   return (
     <>
@@ -38,7 +39,7 @@ const StepOne: FC<StepOneProps> = ({
           className="hidden"
           type="file"
           id="importFile"
-          onChange={onSelectFile}
+          onChange= {onSelectFile}
           ref={fileInputRef}
         />
         {selectedFile && (
