@@ -38,6 +38,7 @@ function UploadImage() {
     console.log("OBJ", objectUrl);
     setPreview(objectUrl);
     return () => URL.revokeObjectURL(objectUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFile]);
 
   async function modifyFile(e: any) {
