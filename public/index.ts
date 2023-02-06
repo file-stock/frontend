@@ -17,6 +17,7 @@ import flowers from "./images/imageSample/flowers.png";
 import lady from "./images/imageSample/lady.png";
 import meccanic from "./images/imageSample/meccanic.png";
 import user from "./images/imageSample/user.png";
+import horse from "./images/imageSample/horse.jpg";
 
 export {
   deleteIcon,
@@ -37,4 +38,5 @@ export {
   user,
   logoBlack,
   logoWhite,
+  horse,
 };

@@ -24,6 +24,8 @@ type ContextType = {
   setPrice: any;
   price: any;
   imgForSale: any;
+  preview: string;
+  setPreview: Dispatch<SetStateAction<string>>;
 };
 
 const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
@@ -62,6 +64,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [hash, setHash] = useState<string>("");
   const [price, setPrice] = useState<any>();
   const [imgForSale, setImgForSale] = useState<any[]>(myCardSale);
+  const [preview, setPreview] = useState<string>("");
 
   const CONTRACT_ADDRESS = "0x307c87ff1e333ad5cc193e2fe0a13c3d27fa2d60";
 
@@ -129,6 +132,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setIsConnected,
         imgForSale,
         setImgForSale,
+        preview,
+        setPreview,
       }}
     >
       {children}

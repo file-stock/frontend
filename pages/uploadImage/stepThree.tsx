@@ -1,12 +1,24 @@
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
+import lighthouse from "@lighthouse-web3/sdk";
 
 type StepThreeProps = {
   imageForSale: any[];
 };
 
 const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
+  useEffect(() => {
+    const getFiles = async () => {
+      // const lighthouse = require("@lighthouse-web3/sdk");
+      const uploads = await lighthouse.getUploads(
+        "310ae584-7656-4940-b42f-397d73cfca5f"
+      );
+      console.log("UPLOADS", uploads);
+    };
+    getFiles();
+  }, []);
+
   return (
     <div className="pb-[128px]">
       <div className="flex gap-4  mb-20 items-center">
