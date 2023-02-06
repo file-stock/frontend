@@ -26,16 +26,16 @@ type ContextType = {
   imgForSale: any;
 };
 
-const rpcUrl = "https://endpoints.omniatech.io/v1/matic/mumbai/public";
+const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
 const injected = injectedModule();
 
 init({
   wallets: [injected],
   chains: [
     {
-      id: "0x13881",
-      token: "MATIC",
-      label: "Polygon Mombai",
+      id: "0xC49", //correspond to 3141
+      token: "tFIL",
+      label: "Filecoin Hyperspace",
       rpcUrl,
     },
   ],
@@ -63,7 +63,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [price, setPrice] = useState<any>();
   const [imgForSale, setImgForSale] = useState<any[]>(myCardSale);
 
-  const CONTRACT_ADDRESS = "0x39F7F80Fe00b190baF4526C718286eF8aB4EcA21";
+  const CONTRACT_ADDRESS = "0x307c87ff1e333ad5cc193e2fe0a13c3d27fa2d60";
 
   useEffect(() => {
     const hProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
@@ -101,12 +101,18 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       []
     );
     await tx.wait();
+    console.log("after transaction")
     contract.on("StoreFile", (value1: any, value2: any, value3: any) => {
       console.log(value1);
       console.log(value2);
       console.log(value3);
     });
   };
+
+  const callBuyFile = async () => {
+    const tx = await contract.buyFile(1);
+    await tx.wait();
+  }
 
   return (
     <ThemeContext.Provider

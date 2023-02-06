@@ -38,7 +38,7 @@ const StepTwo: FC<StepTwoProps> = ({
   const forms = [
     { label: "Title of the image", type: "text" },
     { label: "Description", type: "text" },
-    { label: "Keywords", type: "text" },
+    { label: "Tags", type: "text" },
     { label: "Price", type: "number" },
     { label: "Web3 Wallet Address", type: "text" },
   ];
