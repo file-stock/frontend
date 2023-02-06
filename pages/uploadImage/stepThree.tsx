@@ -35,19 +35,20 @@ const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
         </div>
       </div>
       <div className="flex flex-wrap gap-10">
-        {imageForSale.map((card: any, i: any) => {
-          return (
-            <div key={i} className="flex gap-5">
-              <ImageCardForSale
-                img={card.img}
-                title={card.title}
-                description={card.description}
-                price={card.price}
-                downloadButton={false}
-              />
-            </div>
-          );
-        })}
+        {imageForSale &&
+          imageForSale.map((card: any, i: any) => {
+            return (
+              <div key={i} className="flex gap-5">
+                <ImageCardForSale
+                  img={card.img}
+                  title={card.title}
+                  description={card.description}
+                  price={card.price}
+                  downloadButton={false}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );
