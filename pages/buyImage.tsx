@@ -1,6 +1,7 @@
 import { FC, useContext } from "react";
 import Image from "next/image";
 import { ThemeContext } from "../context/context";
+import Watermark from "@uiw/react-watermark";
 
 import {
   downloadIcon,
@@ -9,9 +10,11 @@ import {
   imageLicenzeIcon,
   roundedIcon,
   creatorSample,
+  tree,
 } from "../public";
 import GenericButton from "../components/GenericButton";
 import ProfileUserPicture from "../components/ProfileUserPicture";
+import { horse } from "../public";
 
 type StepThreeProps = {
   preview: string;
@@ -19,8 +22,16 @@ type StepThreeProps = {
   description: string;
 };
 
-const StepThree: FC<StepThreeProps> = ({ preview, title, description }) => {
-  const { price } = useContext(ThemeContext);
+const StepThree: FC<StepThreeProps> = ({ title, description }) => {
+  const { price, preview } = useContext(ThemeContext);
+
+  const style = {
+    width: "100%",
+    maxWidth: "100%",
+    height: 200,
+    display: "block",
+  };
+  const text = "file-stock";
 
   const liscenses = [
     "For commercial and personal projects",
@@ -32,16 +43,23 @@ const StepThree: FC<StepThreeProps> = ({ preview, title, description }) => {
 
   return (
     <>
-      <div className="flex flex-col pb-[180px]">
-        <div className="w-full flex items-center justify-center mb-[40px]">
-          <Image
-            src={preview}
-            height={500}
-            width={500}
-            alt="uploadImage"
-            className="rounded-xl"
-          />
-        </div>
+      <div className="flex flex-col pb-[180px] px-[140px] pt-10">
+        <Watermark
+          content="File-Stock"
+          fontSize={20}
+          fontColor="gray"
+          style={{ background: "#fff" }}
+        >
+          <div className="relative flex items-center justify-center mb-[40px] h-[500px]">
+            <Image
+              src={horse}
+              fill={true}
+              alt="uploadImage"
+              className="rounded-xl"
+            />
+            <textarea style={style} spellCheck={false} defaultValue={text} />
+          </div>
+        </Watermark>
         <div className="flex items-center justify-between gap-2 mb-[25px]">
           <div className="text-5xl font-extrabold">{title}</div>
           <div className="flex justify-between">
@@ -64,12 +82,22 @@ const StepThree: FC<StepThreeProps> = ({ preview, title, description }) => {
           <div className="text-lg text-greyText">Image price</div>
           <div className="flex items-center  text-3xl font-semibold gap-3">
             <Image src={filecoinIcon} width={15} height={15} alt="filecoin" />
-            {price}
+            0.2
           </div>
         </div>
         <div className="mb-[30px]">
-          <div className="text-lg text-greyText mb-[2px]">Description</div>
-          <div className="text-xl">{description}</div>
+          <div className="flex justify-between items-center">
+            <div className="text-lg text-greyText mb-[2px] ">Description</div>
+            <div className="text-lg text-greyText mr-[370px]">Tags:</div>
+          </div>
+          <div className="flex gap-5 items-center justify-between">
+            <div className="text-xl">
+              An horse galloping on a flaming background
+            </div>
+            <div className="text-lg mr-[180px]">
+              <div className="text-xl">nature, horse, landscape</div>
+            </div>
+          </div>
         </div>
         <div className="border-b border-border pb-[50px]">
           <div className="text-lg text-greyText mb-[30px]">Owned by</div>
@@ -83,7 +111,7 @@ const StepThree: FC<StepThreeProps> = ({ preview, title, description }) => {
               height={20}
               alt="imageLicenze"
             />
-            <div className="text-3xl font-semibold">Image Liscenze</div>
+            <div className="text-3xl font-semibold">Image License</div>
           </div>
           <div className="grid grid-cols-3 mb-[30px]">
             {liscenses.map((liscense, i) => {
