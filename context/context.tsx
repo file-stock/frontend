@@ -24,6 +24,8 @@ type ContextType = {
   setPrice: any;
   price: any;
   imgForSale: any;
+  preview: string;
+  setPreview: Dispatch<SetStateAction<string>>;
 };
 
 const rpcUrl = "https://endpoints.omniatech.io/v1/matic/mumbai/public";
@@ -62,6 +64,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [hash, setHash] = useState<string>("");
   const [price, setPrice] = useState<any>();
   const [imgForSale, setImgForSale] = useState<any[]>(myCardSale);
+  const [preview, setPreview] = useState<string>("");
 
   const CONTRACT_ADDRESS = "0x39F7F80Fe00b190baF4526C718286eF8aB4EcA21";
 
@@ -123,6 +126,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setIsConnected,
         imgForSale,
         setImgForSale,
+        preview,
+        setPreview,
       }}
     >
       {children}

@@ -17,7 +17,11 @@ const GenericButton: FC<GenericButtonProps> = ({
     <button
       onClick={onclick}
       className={`${
-        size === "sm" ? "py-2 px-6" : size === "md" ? "py-4 px-8" : "py-6 px-12"
+        size === "sm"
+          ? "py-2 px-6 text-sm"
+          : size === "md"
+          ? "py-4 px-8"
+          : "py-6 px-12"
       } rounded-lg ${
         variant === "mainFull"
           ? "bg-main text-lg font-bold text-white"

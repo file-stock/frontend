@@ -54,7 +54,7 @@ const Main = () => {
         <GenericButton
           label="View all"
           variant="mainFull"
-          size="sm"
+          size="md"
           onclick={() => null}
         />
       </div>

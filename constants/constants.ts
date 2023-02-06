@@ -1,4 +1,4 @@
-import { flowers, forest, guys, tree } from "../public";
+import { flowers, forest, guys, tree, horse } from "../public";
 
 export const myCardSale = [
   {
@@ -37,11 +37,11 @@ export const myCardSale = [
 
 export const homePageImages = [
   {
-    title: "Flowers",
+    title: "Horse",
     description:
       "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
     false: false,
-    img: flowers,
+    img: horse,
     id: 0,
   },
   {

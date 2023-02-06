@@ -10,7 +10,7 @@ import StepThree from "./stepThree";
 
 function UploadImage() {
   const [selectedFile, setSelectedFile] = useState<any>("");
-  const [preview, setPreview] = useState<string>("");
+  // const [preview, setPreview] = useState<string>("");
   const [step, setStep] = useState<1 | 2 | 3 | number>(1);
   const [sinteticBaseEvent, setSinteticBaseEvent] = useState<any>();
   const [encryptedSinteticBaseEvent, setEncryptedSinteticBaseEvent] =
@@ -22,7 +22,7 @@ function UploadImage() {
 
   const fileInputRef = useRef(null);
 
-  const { setPrice, price, imgForSale, setImgForSale } =
+  const { setPrice, price, imgForSale, setImgForSale, preview, setPreview } =
     useContext(ThemeContext);
 
   console.log("IMG", selectedFile.name);
@@ -35,8 +35,10 @@ function UploadImage() {
       return;
     }
     const objectUrl = URL.createObjectURL(selectedFile);
+    console.log("OBJ", objectUrl);
     setPreview(objectUrl);
     return () => URL.revokeObjectURL(objectUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFile]);
 
   async function modifyFile(e: any) {

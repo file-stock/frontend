@@ -1,6 +1,7 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import Image from "next/image";
 import { favouriteIcon } from "../public";
+import Link from "next/link";
 
 type ImageCardProps = {
   title: string;
@@ -26,8 +27,8 @@ const ImageCard: FC<ImageCardProps> = ({
         <div className="absolute bottom-24 left-5 text-2xl font-bold">
           {title}
         </div>
-        <div className="absolute bottom-10 left-5 text-lg font-medium">
-          {description}
+        <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
+          <Link href="/buyImage">Buy</Link>
         </div>
       </div>
       <div
