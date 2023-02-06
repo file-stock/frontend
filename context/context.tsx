@@ -18,6 +18,7 @@ type ContextType = {
   disconnect: any;
   connecting: any;
   callContract: (hash: any) => Promise<void>;
+  callBuyFile: () => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;
   setImgForSale: Dispatch<SetStateAction<any>>;
@@ -113,8 +114,12 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const callBuyFile = async () => {
-    const tx = await contract.buyFile(1);
+    console.log("callBuyFile");
+    const amount = ethers.utils.parseEther("0.2");
+    console.log(amount.toString())
+    const tx = await contract.buyFile(1, {gasLimit : 200000, value: amount});
     await tx.wait();
+    console.log(tx)
   }
 
   return (
@@ -126,6 +131,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         wallet,
         connecting,
         callContract,
+        callBuyFile,
         setHash,
         setPrice,
         price,
