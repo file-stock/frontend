@@ -54,10 +54,9 @@ const Gallery = () => {
         {allFiles.map((src, index) => {
           //console.log("src", src);
           return (
-            <div className="flex gap-x-3 m-8 w-full">
+            <div key={index} className="flex gap-x-3 m-8 w-full">
               <Image
                 className="border-2 rounded-lg shadow-lg mb-3 transition  duration-500 ease-in-out transform hover:scale-110"
-                key={index}
                 src={src}
                 width={300}
                 height={300}
