@@ -1,6 +1,6 @@
 import { useState } from "react";
 import GenericButton from "../../components/GenericButton";
-
+import Link from "next/link";
 import ImageCard from "../../components/ImageCard";
 import { homePageImages } from "../../constants/constants";
 
@@ -40,11 +40,11 @@ const Main = () => {
             <div key={i}>
               <ImageCard
                 img={card.img}
-                description={card.description}
                 title={card.title}
                 onClick={() => updateFavorite(card.id)}
                 id={i}
                 favorite={favorite}
+                buyLink="/buyImage"
               />
             </div>
           );

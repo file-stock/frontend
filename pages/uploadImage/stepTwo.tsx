@@ -4,11 +4,14 @@ import {
   SetStateAction,
   useContext,
   useState,
-  useEffect,
+  useEffect, 
+  useRef,
+  Key,
 } from "react";
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
 import GenericModal from "../../components/GenericModal";
+import {tags} from "./tags";
 
 type StepTwoProps = {
   onSelectFile: any;
@@ -36,12 +39,51 @@ const StepTwo: FC<StepTwoProps> = ({
 }) => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const forms = [
-    { label: "Title of the image", type: "text" },
-    { label: "Description", type: "text" },
-    { label: "Tags", type: "text" },
-    { label: "Price", type: "number" },
-    { label: "Web3 Wallet Address", type: "text" },
+    /*{ label: "Title of the image", type: "text", required: true},
+  { label: "Description", type: "text"},*/
+    { label: "Tags", type: "text", required: true},
+    { label: "Price", type: "number", required: true},
   ];
+  const [searchTerm, setSearchTerm] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
+  
+  const menuRef = useRef<HTMLDivElement>(null);
+  const filteredTags = Object.values(tags).filter(tag => !selectedTags.includes(tag) && tag.toLowerCase().startsWith(searchTerm.toLowerCase()));
+  
+  const handleTagClick = (tag: string) => {
+    setMenuOpen(false);
+    setSelectedTags([...selectedTags, tag]);
+    const selectedTagNumber = Object.entries(tags).find(([key, value]) => value === tag)?.[0];
+    if (selectedTagNumber) {
+      setSelectedTagNumbers([...selectedTagNumbers, parseInt(selectedTagNumber)]);
+    }
+    setSearchTerm("");
+  };
+console.log(selectedTagNumbers, selectedTags)
+
+const handleTagRemove = (tag: string) => {
+  setSelectedTags(selectedTags.filter((t: string) => t !== tag));
+  const selectedTagNumber = Object.entries(tags).find(([key, value]) => value === tag)?.[0];
+  if (selectedTagNumber) {
+    setSelectedTagNumbers(selectedTagNumbers.filter((num: number) => num !== parseInt(selectedTagNumber)));
+  }
+};
+
+
+  const handleOutsideClick = (e: any) => {
+    if (menuRef.current && !menuRef.current.contains(e.target)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick, false);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick, false);
+    };
+  }, []);
 
   const { callContract, setPrice } = useContext(ThemeContext);
 
@@ -55,7 +97,7 @@ const StepTwo: FC<StepTwoProps> = ({
     if (hashValue) {
       const completeUpload = async () => {
         setIsPopUpOpen(true);
-        await callContract(hashValue);
+        await callContract(hashValue, selectedTags);
         setIsPopUpOpen(false);
         setStep(3);
       };
@@ -116,8 +158,8 @@ const StepTwo: FC<StepTwoProps> = ({
           {forms.map((form, i) => {
             return (
               <form key={i} className="flex flex-col max-w-2xl">
-                <label className="text-xl font-medium">{form.label}</label>
-                {form.label === "Description" ? (
+                <label className="text-xl font-medium">{form.label}{form.required && <span className="text-[#D0312D]">*</span>}</label>
+                {/*form.label === "Description" ? (
                   <textarea
                     onChange={(e) =>
                       form.label === "Description" &&
@@ -126,24 +168,68 @@ const StepTwo: FC<StepTwoProps> = ({
                     placeholder="type here"
                     className="border border-border rounded-md p-3 my-4"
                   />
-                ) : (
+                  ) :*/ (
                   <input
                     type={form.type}
-                    placeholder="type here"
+                    placeholder={form.label === "Tags" ? "Example: Rain, Nature, Moutains" : "type here"}
                     className="border border-border rounded-md p-3 mb-[35px] mt-[12px] text-[#0A001F]"
                     required
+                    value={form.label === "Tags" ? searchTerm : undefined}
                     onChange={(e) => {
-                      form.label === "Title of the image"
-                        ? setTitle(e.target.value)
-                        : form.label === "Price" &&
-                          setPrice(Number(e.target.value));
+                      {/*if (form.label === "Title of the image") {
+                        setTitle(e.target.value);
+                      } else*/} if (form.label === "Price") {
+                        setPrice(Number(e.target.value));
+                      } else if (form.label === "Tags") {
+                        setSearchTerm(e.target.value);
+                        if (e.target.value.length >= 2) {
+                          setMenuOpen(true);
+                        } else {
+                          setMenuOpen(false);
+                        }
+                      }
                     }}
                   />
+                )}
+                {menuOpen && form.label === "Tags" && filteredTags.length > 0 && (
+                  <div ref={menuRef} className="absolute z-50 bg-white w-80 shadow-lg rounded-md border-2 border-black mt-24">
+                    <ul className="py-2">
+                      <li className="relative">
+                      </li>
+                      {filteredTags.map((tag, i) => (
+                        <li
+                          key={i}
+                          className="px-3 py-2 hover:bg-main hover:text-white  cursor-pointer flex justify-between items-center"
+                          onClick={() => handleTagClick(tag)}
+                        >
+                          <span>{tag}</span>
+                          +
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {selectedTags.length > 0 && form.label === "Tags" && (
+                  <div className="flex flex-wrap mb-6">
+                    {selectedTags.map((tag: string, i: Key) => (
+                      <div
+                        key={i}
+                        className="bg-main text-white rounded-md px-3 py-1 flex justify-between items-center mr-2 mb-2"
+                      >
+                        <span className="mr-2">{tag}</span>
+                        <span
+                          className="cursor-pointer"
+                          onClick={() => handleTagRemove(tag)}
+                        >
+                          x
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </form>
             );
           })}
-          <div className="font-medium mt-4 text-[#0A001F]">Balance: 20413</div>
           <div className="mt-[40px]">
             <button
               onClick={() => {
@@ -152,9 +238,6 @@ const StepTwo: FC<StepTwoProps> = ({
               className="text-white font-bold mr-4 px-5 py-2.5 bg-main border border-main rounded-md"
             >
               Upload
-            </button>
-            <button className="px-7 font-bold text-main py-2.5 border border-main rounded-md">
-              Mint
             </button>
           </div>
         </div>

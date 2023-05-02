@@ -17,7 +17,7 @@ type ContextType = {
   wallet: any;
   disconnect: any;
   connecting: any;
-  callContract: (hash: any) => Promise<void>;
+  callContract: (hash: any, tags: any) => Promise<void>;
   callBuyFile: () => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;
@@ -97,12 +97,12 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setContract(contract);
   }, [signer]);
 
-  const callContract = async (hash: any) => {
+  const callContract = async (hash: any, tags: any) => {
     if (!contract || !price) return;
     const tx = await contract.storeFile(
       hash,
       ethers.utils.parseEther(price.toString()),
-      []
+      tags
     );
     await tx.wait();
     console.log("after transaction")
