@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    domains: ["ipfs.io"],
+  },
   webpack: (config, options) => {
     if (options.isServer) {
       return config;
