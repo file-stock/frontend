@@ -1,62 +1,73 @@
+import React, { useContext, useEffect, useState } from "react";
+import { ThemeContext } from "../../context/context";
 import Image from "next/image";
-import { guys, tree, forest, flowers, lady, meccanic } from "../../public";
+//import { src, src2, src3 } from "./SourceGallery";
+
+import { ethers } from "ethers";
+import lighthouse from "@lighthouse-web3/sdk";
 
 const Gallery = () => {
+  const { allFiles } = useContext(ThemeContext);
+  const [fileURL, setFileURL] = useState<string | null>(null);
+  //const images = [src, src2, src3];
+
+  console.log("allFilessss", allFiles);
+
+  const encryptionSignature = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    const messageRequested = (await lighthouse.getAuthMessage(address)).data
+      .message;
+    const signedMessage = await signer.signMessage(messageRequested);
+    return {
+      signedMessage: signedMessage,
+      publicKey: address,
+    };
+  };
+
+  // const decrypt = async () => {
+  //   const cid = "QmfFLXPTFgaWxki26rFpkbQVKN8ohTgVnKxsBLNeacxVYV";
+  //   const { publicKey, signedMessage } = await encryptionSignature();
+  //   const keyObject = await lighthouse.fetchEncryptionKey(
+  //     cid,
+  //     publicKey,
+  //     signedMessage
+  //   );
+  //   const fileType = "image/jpeg";
+  //   const decryted = await lighthouse.decryptFile(fileType, keyObject.data.key);
+  //   console.log(decryted);
+
+  //   const url = URL.createObjectURL(decryted);
+  //   console.log(url);
+  //   setFileURL(url);
+  //   console.log("fileURL", fileURL);
+  // };
+
+  // useEffect(() => {
+  //   decrypt();
+  // }, []);
+
   return (
-    <>
-      <div className="overflow-hidden">
-        <div className="container px-5 py-2 mx-auto lg:pt-24 lg:px-32">
-          <div className="flex flex-wrap -m-1 md:-m-2">
-            <div className="flex flex-wrap w-1/2">
-              <div className="w-1/2 p-1 md:p-2">
-                <Image
-                  alt="gallery"
-                  className="block object-cover object-center w-full h-full rounded-lg"
-                  src={guys}
-                />
-              </div>
-              <div className="w-1/2 p-1 md:p-2">
-                <Image
-                  alt="gallery"
-                  className="block object-cover object-center w-full h-full rounded-lg"
-                  src={forest}
-                />
-              </div>
-              <div className="w-full p-1 md:p-2">
-                <Image
-                  alt="gallery"
-                  className="block object-cover object-center w-full h-full rounded-lg"
-                  src={flowers}
-                />
-              </div>
+    <div className="gallery">
+      <div className="gallery-item">
+        {allFiles.map((src, index) => {
+          //console.log("src", src);
+          return (
+            <div className="flex gap-x-3 m-8 w-full">
+              <Image
+                className="border-2 rounded-lg shadow-lg mb-3 transition  duration-500 ease-in-out transform hover:scale-110"
+                key={index}
+                src={src}
+                width={300}
+                height={300}
+                alt="Picture of the author"
+              />
             </div>
-            <div className="flex flex-wrap w-1/2">
-              <div className="w-full p-1 md:p-2">
-                <Image
-                  alt="gallery"
-                  className="block object-cover object-center w-full h-full rounded-lg"
-                  src={tree}
-                />
-              </div>
-              <div className="w-1/2 p-1 md:p-2">
-                <Image
-                  alt="gallery"
-                  className="block object-cover object-center w-full h-full rounded-lg"
-                  src={meccanic}
-                />
-              </div>
-              <div className="w-1/2 p-1 md:p-2">
-                <Image
-                  alt="gallery"
-                  className="block object-cover object-center w-full h-full rounded-lg"
-                  src={lady}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 };
 

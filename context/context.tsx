@@ -10,6 +10,14 @@ import {
 import { ethers } from "ethers";
 import ContractAbi from "../lib/contractAbi.json";
 import { myCardSale } from "../constants/constants";
+import lighthouse from "@lighthouse-web3/sdk";
+import { tags } from "../pages/uploadImage/tags";
+
+declare global {
+  interface Window {
+    ethereum: any;
+  }
+}
 
 type ContextType = {
   isConnected: boolean;
@@ -27,6 +35,10 @@ type ContextType = {
   imgForSale: any;
   preview: string;
   setPreview: Dispatch<SetStateAction<string>>;
+  randomImages: any;
+  setRandomImages: Dispatch<SetStateAction<any[]>>;
+  readOnlyContract: any;
+  allFiles: any[];
 };
 
 const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
@@ -66,6 +78,9 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [price, setPrice] = useState<any>();
   const [imgForSale, setImgForSale] = useState<any[]>(myCardSale);
   const [preview, setPreview] = useState<string>("");
+  const [randomImages, setRandomImages] = useState<any[]>([]);
+  const [readOnlyContract, setReadOnlyContract] = useState<any>();
+  const [allFiles, setAllFiles] = useState<any[]>([]);
 
   const CONTRACT_ADDRESS = "0x307c87ff1e333ad5cc193e2fe0a13c3d27fa2d60";
 
@@ -93,11 +108,33 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (!signer) return;
     const contract = new ethers.Contract(CONTRACT_ADDRESS, ContractAbi, signer);
+    console.log("Contract object:", contract);
 
     setContract(contract);
   }, [signer]);
 
-  const callContract = async (hash: any, tags: any) => {
+  useEffect(() => {
+    const fetchFiles = async () => {
+      const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+
+      const fileStockContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        ContractAbi,
+        provider
+      );
+
+      try {
+        const fetchedFiles = await fileStockContract.getAllFiles();
+        setAllFiles(fetchedFiles);
+      } catch (error) {
+        console.error("Error fetching files:", error);
+      }
+    };
+
+    fetchFiles();
+  }, [CONTRACT_ADDRESS, rpcUrl]);
+
+  const callContract = async (hash: any) => {
     if (!contract || !price) return;
     const tx = await contract.storeFile(
       hash,
@@ -105,7 +142,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       tags
     );
     await tx.wait();
-    console.log("after transaction")
+    console.log("after transaction");
     contract.on("StoreFile", (value1: any, value2: any, value3: any) => {
       console.log(value1);
       console.log(value2);
@@ -116,11 +153,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const callBuyFile = async () => {
     console.log("callBuyFile");
     const amount = ethers.utils.parseEther("0.2");
-    console.log(amount.toString())
-    const tx = await contract.buyFile(1, {gasLimit : 200000, value: amount});
+    console.log(amount.toString());
+    const tx = await contract.buyFile(1, { gasLimit: 200000, value: amount });
     await tx.wait();
-    console.log(tx)
-  }
+    console.log(tx);
+  };
 
   return (
     <ThemeContext.Provider
@@ -140,6 +177,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setImgForSale,
         preview,
         setPreview,
+        randomImages,
+        setRandomImages,
+        readOnlyContract,
+        allFiles,
       }}
     >
       {children}
