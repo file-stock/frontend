@@ -1,4 +1,4 @@
-import { flowers, forest, guys, tree, horse } from "../public";
+import { flowers, forest, guys, tree, horse, lady, meccanic, user, creatorSample } from "../public";
 
 export const myCardSale = [
   {
@@ -31,6 +31,73 @@ export const myCardSale = [
       "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
     img: tree,
     id: 3,
+    price: 100.0,
+  },
+];
+
+export const exploreImages = [
+  {
+    title: "user",
+    description:
+      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
+    img: user,
+    id: 0,
+    price: 100.0,
+  },
+  {
+    title: "Forest",
+    description:
+      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
+    img: forest,
+    id: 1,
+    price: 100.0,
+  },
+  {
+    title: "Friends",
+    description:
+      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
+    img: guys,
+    id: 2,
+    price: 100.0,
+  },
+  {
+    title: "Tree",
+    description:
+      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
+    img: tree,
+    id: 3,
+    price: 100.0,
+  },
+  {
+    title: "lady",
+    description:
+      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
+    img: lady,
+    id: 4,
+    price: 100.0,
+  },
+  {
+    title: "meccanic",
+    description:
+      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
+    img: meccanic,
+    id: 5,
+    price: 100.0,
+  },
+  {
+    title: "Flowers",
+    description:
+      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
+    img: flowers,
+    id: 6,
+    price: 100.0,
+  },
+  {
+    title: "user",
+    description:
+      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
+    img: user,
+    id: 7,
     price: 100.0,
   },
 ];
