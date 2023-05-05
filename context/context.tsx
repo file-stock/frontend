@@ -11,7 +11,7 @@ import { ethers } from "ethers";
 import ContractAbi from "../lib/contractAbi.json";
 import { myCardSale } from "../constants/constants";
 import lighthouse from "@lighthouse-web3/sdk";
-import { tags } from "../pages/uploadImage/tags";
+
 
 declare global {
   interface Window {
@@ -134,7 +134,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     fetchFiles();
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
-  const callContract = async (hash: any) => {
+  const callContract = async (hash: any, tags: any) => {
     if (!contract || !price) return;
     const tx = await contract.storeFile(
       hash,
@@ -142,11 +142,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       tags
     );
     await tx.wait();
-    console.log("after transaction");
+    console.log("after transaction", imgForSale);
     contract.on("StoreFile", (value1: any, value2: any, value3: any) => {
-      console.log(value1);
-      console.log(value2);
-      console.log(value3);
+      console.log("Value 1:", value1);
+      console.log("Value 2:", value2);
+      console.log("Value 3:", value3);
     });
   };
 

@@ -8,6 +8,7 @@ import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
 import StepThree from "./stepThree";
 
+
 function UploadImage() {
   const [selectedFile, setSelectedFile] = useState<any>("");
   // const [preview, setPreview] = useState<string>("");
@@ -19,14 +20,16 @@ function UploadImage() {
   const [description, setDescription] = useState("");
   const [accessConditionCid, setAccessConditionCid] = useState("");
   const [hashValue, setHashValue] = useState("");
-
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
+  
   const fileInputRef = useRef(null);
 
   const { setPrice, price, imgForSale, setImgForSale, preview, setPreview } =
     useContext(ThemeContext);
 
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
-
+  
   useEffect(() => {
     if (!selectedFile) {
       setPreview("");
@@ -178,6 +181,9 @@ function UploadImage() {
       title: title,
       description: description,
       price: price,
+      tags: selectedTags,
+      tagsId: selectedTagNumbers,
+      
     };
     setImgForSale((prev: any) => [...prev, newImgObject]);
   };
@@ -207,9 +213,6 @@ function UploadImage() {
   };
 
   const handleFileChange = async () => {
-    if (title.length < 1) {
-      return;
-    }
     if (encryptedSinteticBaseEvent) {
       mergeImageForSale();
       deployEncrypted();
@@ -233,6 +236,10 @@ function UploadImage() {
       ) : step === 2 ? (
         <>
           <StepTwo
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            selectedTagNumbers={selectedTagNumbers}
+            setSelectedTagNumbers={setSelectedTagNumbers}
             onSelectFile={onSelectFile}
             fileInputRef={fileInputRef}
             selectedFile={selectedFile}
