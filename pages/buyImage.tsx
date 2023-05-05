@@ -56,6 +56,9 @@ const StepThree: FC<StepThreeProps> = ({ title, description }) => {
               fill={true}
               alt="uploadImage"
               className="rounded-xl"
+              priority={true}
+              height={500}
+              width={300}
             />
             <textarea style={style} spellCheck={false} defaultValue={text} />
           </div>

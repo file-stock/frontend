@@ -3,8 +3,11 @@ import Header from "./home/Header";
 import InputSerach from "../components/InputSearch";
 import CreatorOfTheMonth from "./home/CreatorOfTheMonth";
 import Gallery from "./home/Gallery";
+import { useContext } from "react";
+import { ThemeContext } from "../context/context";
 
 export default function Home() {
+  const { allFiles } = useContext(ThemeContext);
   return (
     <>
       <div className="relative">
@@ -15,7 +18,11 @@ export default function Home() {
       </div>
       <Main />
       <CreatorOfTheMonth />
-      <Gallery />
+      <div className="flex ml-4 mt-8 gap-1">
+        {allFiles.map((file: any, index: any) => (
+          <Gallery key={index} cid={file[0]} />
+        ))}
+      </div>
     </>
   );
 }

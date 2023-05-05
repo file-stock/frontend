@@ -134,7 +134,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     fetchFiles();
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
-  const callContract = async (hash: any) => {
+  const callContract = async (hash: any, tags: any) => {
     if (!contract || !price) return;
     const tx = await contract.storeFile(
       hash,
