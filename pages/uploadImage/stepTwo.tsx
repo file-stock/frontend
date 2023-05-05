@@ -11,7 +11,7 @@ import {
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
 import GenericModal from "../../components/GenericModal";
-import {tags} from "./tags";
+import {tags} from "../../public/tags";
 
 type StepTwoProps = {
   selectedTags: string[];
