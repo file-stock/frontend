@@ -5,7 +5,22 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        scrollLeft: "scrollLeft 4s linear infinite",
+        scrollRight: "scrollRight 4s linear infinite",
+      },
+      keyframes: {
+        scrollLeft: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" }, //set to -100% to scroll all the way
+        },
+        scrollRight: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(50%)" }, // set to 100% to scroll all the way
+        },
+      },
+    },
     colors: {
       main: "#603EB6",
       greyText: "#6B7280",

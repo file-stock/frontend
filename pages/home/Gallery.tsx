@@ -1,71 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../../context/context";
-import Image from "next/image";
-//import { src, src2, src3 } from "./SourceGallery";
+import React, { FC, useEffect, useState } from "react";
 
-import { ethers } from "ethers";
-import lighthouse from "@lighthouse-web3/sdk";
+interface GalleryProps {
+  cid: string;
+}
 
-const Gallery = () => {
-  const { allFiles } = useContext(ThemeContext);
-  const [fileURL, setFileURL] = useState<string | null>(null);
-  //const images = [src, src2, src3];
+const Gallery: FC<GalleryProps> = ({ cid }) => {
+  const [imageData, setImageData] = useState("");
 
-  console.log("allFilessss", allFiles);
+  useEffect(() => {
+    async function fetchImageData() {
+      try {
+        const response = await fetch(`https://ipfs.io/ipfs/${cid}`);
+        const data = await response.text();
+        setImageData(data);
+      } catch (error) {
+        console.error("Error fetching image data:", error);
+      }
+    }
 
-  const encryptionSignature = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    const messageRequested = (await lighthouse.getAuthMessage(address)).data
-      .message;
-    const signedMessage = await signer.signMessage(messageRequested);
-    return {
-      signedMessage: signedMessage,
-      publicKey: address,
-    };
-  };
-
-  // const decrypt = async () => {
-  //   const cid = "QmfFLXPTFgaWxki26rFpkbQVKN8ohTgVnKxsBLNeacxVYV";
-  //   const { publicKey, signedMessage } = await encryptionSignature();
-  //   const keyObject = await lighthouse.fetchEncryptionKey(
-  //     cid,
-  //     publicKey,
-  //     signedMessage
-  //   );
-  //   const fileType = "image/jpeg";
-  //   const decryted = await lighthouse.decryptFile(fileType, keyObject.data.key);
-  //   console.log(decryted);
-
-  //   const url = URL.createObjectURL(decryted);
-  //   console.log(url);
-  //   setFileURL(url);
-  //   console.log("fileURL", fileURL);
-  // };
-
-  // useEffect(() => {
-  //   decrypt();
-  // }, []);
-
+    fetchImageData();
+  }, [cid]);
   return (
-    <div className="gallery">
-      <div className="gallery-item">
-        {allFiles.map((src, index) => {
-          //console.log("src", src);
-          return (
-            <div className="flex gap-x-3 m-8 w-full">
-              <Image
-                className="border-2 rounded-lg shadow-lg mb-3 transition  duration-500 ease-in-out transform hover:scale-110"
-                key={index}
-                src={src}
-                width={300}
-                height={300}
-                alt="Picture of the author"
-              />
-            </div>
-          );
-        })}
+    <div className="">
+      {imageData && (
+        <img
+          className="w-[200px] h-[200px] rounded-lg animate-scrollLeft"
+          src={imageData}
+          alt="my images"
+        />
+      )}
+      <div className="mt-4">
+        {imageData && (
+          <img
+            className="w-[200px] h-[200px] rounded-lg animate-scrollRight"
+            src={imageData}
+            alt="my images"
+          />
+        )}
       </div>
     </div>
   );
