@@ -19,10 +19,9 @@ export default function Home() {
       <Main />
       <CreatorOfTheMonth />
       <div className="flex ml-4 mt-8 gap-1">
-        {allFiles.map((file: any, index: any) => { console.log("file tags", file.fileTags) 
-        return (
+        {allFiles.map((file: any, index: any) => (
           <Gallery key={index} cid={file[0]} />
-        )})}
+        ))}
       </div>
     </>
   );

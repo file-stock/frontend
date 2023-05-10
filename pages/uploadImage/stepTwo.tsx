@@ -4,14 +4,16 @@ import {
   SetStateAction,
   useContext,
   useState,
-  useEffect, 
+  useEffect,
   useRef,
   Key,
 } from "react";
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
 import GenericModal from "../../components/GenericModal";
+
 import {tags} from "../../public/tags";
+
 
 type StepTwoProps = {
   selectedTags: string[];
@@ -49,35 +51,50 @@ const StepTwo: FC<StepTwoProps> = ({
   const forms = [
     /*{ label: "Title of the image", type: "text", required: true},
   { label: "Description", type: "text"},*/
-    { label: "Tags", type: "text", required: true},
-    { label: "Price", type: "number", required: true},
+    { label: "Tags", type: "text", required: true },
+    { label: "Price", type: "number", required: true },
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
 
-  
   const menuRef = useRef<HTMLDivElement>(null);
-  const filteredTags = Object.values(tags).filter(tag => !selectedTags.includes(tag) && tag.toLowerCase().startsWith(searchTerm.toLowerCase()));
-  
+  const filteredTags = Object.values(tags).filter(
+    (tag) =>
+      !selectedTags.includes(tag) &&
+      tag.toLowerCase().startsWith(searchTerm.toLowerCase())
+  );
+
   const handleTagClick = (tag: string) => {
     setMenuOpen(false);
     setSelectedTags([...selectedTags, tag]);
-    const selectedTagNumber = Object.entries(tags).find(([key, value]) => value === tag)?.[0];
+    const selectedTagNumber = Object.entries(tags).find(
+      ([key, value]) => value === tag
+    )?.[0];
     if (selectedTagNumber) {
-      setSelectedTagNumbers([...selectedTagNumbers, parseInt(selectedTagNumber)]);
+      setSelectedTagNumbers([
+        ...selectedTagNumbers,
+        parseInt(selectedTagNumber),
+      ]);
     }
     setSearchTerm("");
   };
-console.log(selectedTagNumbers, selectedTags)
+  console.log(selectedTagNumbers, selectedTags);
 
-const handleTagRemove = (tag: string) => {
-  setSelectedTags(selectedTags.filter((t: string) => t !== tag));
-  const selectedTagNumber = Object.entries(tags).find(([key, value]) => value === tag)?.[0];
-  if (selectedTagNumber) {
-    setSelectedTagNumbers(selectedTagNumbers.filter((num: number) => num !== parseInt(selectedTagNumber)));
-  }
-};
-
+  const handleTagRemove = (tag: string) => {
+    setSelectedTags(selectedTags.filter((t: string) => t !== tag));
+    const selectedTagNumber = Object.entries(tags).find(
+      ([key, value]) => value === tag
+    )?.[0];
+    if (selectedTagNumber) {
+      setSelectedTagNumbers(
+        selectedTagNumbers.filter(
+          (num: number) => num !== parseInt(selectedTagNumber)
+        )
+      );
+    }
+  };
 
   const handleOutsideClick = (e: any) => {
     if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -166,8 +183,12 @@ const handleTagRemove = (tag: string) => {
           {forms.map((form, i) => {
             return (
               <form key={i} className="flex flex-col max-w-2xl">
-                <label className="text-xl font-medium">{form.label}{form.required && <span className="text-[#D0312D]">*</span>}</label>
-                {/*form.label === "Description" ? (
+                <label className="text-xl font-medium">
+                  {form.label}
+                  {form.required && <span className="text-[#D0312D]">*</span>}
+                </label>
+                {
+                  /*form.label === "Description" ? (
                   <textarea
                     onChange={(e) =>
                       form.label === "Description" &&
@@ -176,17 +197,23 @@ const handleTagRemove = (tag: string) => {
                     placeholder="type here"
                     className="border border-border rounded-md p-3 my-4"
                   />
-                  ) :*/ (
-                  <input
+                  ) :*/ <input
                     type={form.type}
-                    placeholder={form.label === "Tags" ? "Example: Rain, Nature, Moutains" : "type here"}
+                    placeholder={
+                      form.label === "Tags"
+                        ? "Example: Rain, Nature, Moutains"
+                        : "type here"
+                    }
                     className="border border-border rounded-md p-3 mb-[35px] mt-[12px] text-[#0A001F]"
                     required
                     value={form.label === "Tags" ? searchTerm : undefined}
                     onChange={(e) => {
-                      {/*if (form.label === "Title of the image") {
+                      {
+                        /*if (form.label === "Title of the image") {
                         setTitle(e.target.value);
-                      } else*/} if (form.label === "Price") {
+                      } else*/
+                      }
+                      if (form.label === "Price") {
                         setPrice(Number(e.target.value));
                       } else if (form.label === "Tags") {
                         setSearchTerm(e.target.value);
@@ -198,25 +225,28 @@ const handleTagRemove = (tag: string) => {
                       }
                     }}
                   />
-                )}
-                {menuOpen && form.label === "Tags" && filteredTags.length > 0 && (
-                  <div ref={menuRef} className="absolute z-50 bg-white w-80 shadow-lg rounded-md border-2 border-black mt-24">
-                    <ul className="py-2">
-                      <li className="relative">
-                      </li>
-                      {filteredTags.map((tag, i) => (
-                        <li
-                          key={i}
-                          className="px-3 py-2 hover:bg-main hover:text-white  cursor-pointer flex justify-between items-center"
-                          onClick={() => handleTagClick(tag)}
-                        >
-                          <span>{tag}</span>
-                          +
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                }
+                {menuOpen &&
+                  form.label === "Tags" &&
+                  filteredTags.length > 0 && (
+                    <div
+                      ref={menuRef}
+                      className="absolute z-50 bg-white w-80 shadow-lg rounded-md border-2 border-black mt-24"
+                    >
+                      <ul className="py-2">
+                        <li className="relative"></li>
+                        {filteredTags.map((tag, i) => (
+                          <li
+                            key={i}
+                            className="px-3 py-2 hover:bg-main hover:text-white  cursor-pointer flex justify-between items-center"
+                            onClick={() => handleTagClick(tag)}
+                          >
+                            <span>{tag}</span>+
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 {selectedTags.length > 0 && form.label === "Tags" && (
                   <div className="flex flex-wrap mb-6">
                     {selectedTags.map((tag: string, i: Key) => (
