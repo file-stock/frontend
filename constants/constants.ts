@@ -37,14 +37,6 @@ export const myCardSale = [
 
 export const exploreImages = [
   {
-    title: "user",
-    description:
-      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
-    img: user,
-    id: 0,
-    price: 100.0,
-  },
-  {
     title: "Forest",
     description:
       "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
@@ -66,22 +58,6 @@ export const exploreImages = [
       "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
     img: tree,
     id: 3,
-    price: 100.0,
-  },
-  {
-    title: "lady",
-    description:
-      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
-    img: lady,
-    id: 4,
-    price: 100.0,
-  },
-  {
-    title: "meccanic",
-    description:
-      "Lorem ipsum doarl sit delaka it timarn adrer er aslwe csderd vcdf....",
-    img: meccanic,
-    id: 5,
     price: 100.0,
   },
   {

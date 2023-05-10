@@ -3,6 +3,7 @@ import Header from "./home/Header";
 import InputSerach from "../components/InputSearch";
 import CreatorOfTheMonth from "./home/CreatorOfTheMonth";
 import Gallery from "./home/Gallery";
+
 import React from "react";
 import { ThemeContext } from "../context/context";
 import { useContext } from "react";
@@ -20,6 +21,7 @@ export default function Home() {
   console.log("allfileshome", allFiles);
 
   const randomIndices = getRandomIndices(allFiles.length, 7);
+
 
   return (
     <>

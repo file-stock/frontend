@@ -1,4 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
+import Image from "next/image";
+
 
 interface GalleryProps {
   cid: string;
@@ -14,27 +16,47 @@ const Gallery: FC<GalleryProps> = ({ cid }) => {
         const data = await response.text();
         setImageData(data);
       } catch (error) {
+
         console.error("Error fetching image data:", error);
       }
     }
+
 
     fetchImageData();
   }, [cid]);
   return (
     <div className="">
       {imageData && (
-        <img
+
+        <img // check ivonna quale delle due img usare
           className="w-[200px] h-[200px] rounded-lg animate-scrollLeft"
           src={imageData}
           alt="my images"
+
+     //   <Image
+      //    className="rounded-lg animate-scrollLeft"
+      //    src={imageData}
+      //    alt="image"
+     //     width={400}
+      //    height={400}
+
         />
       )}
       <div className="mt-4">
         {imageData && (
-          <img
+
+          <img // check ivonna quale delle due img usare
             className="w-[200px] h-[200px] rounded-lg animate-scrollRight"
             src={imageData}
             alt="my images"
+
+     //     <Image
+      //      className="rounded-lg animate-scrollRight"
+      //      src={imageData}
+       //     alt="image"
+     //       width={400}
+        //    height={400}
+
           />
         )}
       </div>
