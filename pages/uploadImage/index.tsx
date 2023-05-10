@@ -183,7 +183,6 @@ function UploadImage() {
       price: price,
       tags: selectedTags,
       tagsId: selectedTagNumbers,
-      
     };
     setImgForSale((prev: any) => [...prev, newImgObject]);
   };
