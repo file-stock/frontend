@@ -18,10 +18,7 @@ import { useContext } from "react";
 
 export default function Home() {
   const { allFiles } = useContext(ThemeContext);
-  console.log("allfileshome", allFiles);
-
- 
-
+  // console.log("allfileshome", allFiles);
 
   return (
     <>
@@ -33,9 +30,7 @@ export default function Home() {
       </div>
       <Main />
       <CreatorOfTheMonth />
-      <div className="flex ml-4 mt-8 gap-1">
-     
-      </div>
+      <div className="flex ml-4 mt-8 gap-1"></div>
     </>
   );
 }
