@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Layout from "../components/Templates/layout";
 import { Inter } from "@next/font/google";
 import ContextProvider from "../context/context";
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 

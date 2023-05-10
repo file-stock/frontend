@@ -13,11 +13,11 @@ module.exports = {
       keyframes: {
         scrollLeft: {
           "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(-50%)" }, //set to -100% to scroll all the way
         },
         scrollRight: {
-          "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(0)" },
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(50%)" }, // set to 100% to scroll all the way
         },
       },
     },
