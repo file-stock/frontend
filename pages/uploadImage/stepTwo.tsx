@@ -56,8 +56,6 @@ const StepTwo: FC<StepTwoProps> = ({
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const filteredTags = Object.values(tags).filter(

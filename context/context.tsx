@@ -28,7 +28,7 @@ type ContextType = {
   wallet: any;
   disconnect: any;
   connecting: any;
-  callContract: (hash: any) => Promise<void>;
+  callContract: (hash: any, tags: number[],) => Promise<void>;
   callBuyFile: () => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;

@@ -9,8 +9,8 @@ type ImageCardForSaleProps = {
   description: string;
   price: any;
   downloadButton: boolean;
-  tags: string;
-  tagsId: number;
+  tags?: string;
+  tagsId?: number;
 };
 
 const ImageCardForSale: FC<ImageCardForSaleProps> = ({

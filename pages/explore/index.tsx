@@ -1,13 +1,13 @@
 import { useState, useContext } from "react";
 import { ThemeContext } from "../../context/context";
 import FilterDropdown from "./filters";
-import {
-  colorFilters,
-  sizeFilters,
-  licenseFilters,
-  orientationFilters,
-  priceFilters,
-} from "./filters_data";
+import 
+  // colorFilters,
+  // sizeFilters,
+  // licenseFilters,
+  // orientationFilters,
+  priceFilters
+ from "./filters_data";
 import ImageCard from "../../components/ImageCard";
 import { exploreImages as cards } from "../../constants/constants";
 import { tags } from "../../public/tags";
@@ -23,7 +23,7 @@ const Explore = () => {
   const [favorite, setFavorite] = useState<any[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
-console.log(allFiles)
+
   const updateFavorite = (cardId: any) => {
     let updatedFavorite = [...favorite];
     if (!updatedFavorite.includes(cardId)) {

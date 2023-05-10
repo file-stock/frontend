@@ -8,7 +8,7 @@ import React from "react";
 import { ThemeContext } from "../context/context";
 import { useContext } from "react";
 
-function getRandomIndices(arrLength, numIndices) {
+function getRandomIndices(arrLength: any, numIndices: any) {
   const indices = new Set();
   while (indices.size < numIndices) {
     indices.add(Math.floor(Math.random() * arrLength));
