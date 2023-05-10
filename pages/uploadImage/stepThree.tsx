@@ -12,7 +12,7 @@ const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
     const getFiles = async () => {
       // const lighthouse = require("@lighthouse-web3/sdk");
       const uploads = await lighthouse.getUploads(
-        "310ae584-7656-4940-b42f-397d73cfca5f"
+        "0x65d46FA545aD86A139647351786D17Bf46C173dC"
       );
       console.log("UPLOADS", uploads);
     };
@@ -45,6 +45,8 @@ const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
                   description={card.description}
                   price={card.price}
                   downloadButton={false}
+                  tags={card.tags}
+                  tagsId={card.tagsId}
                 />
               </div>
             );

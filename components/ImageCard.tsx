@@ -2,16 +2,17 @@ import { FC } from "react";
 import Image from "next/image";
 import { favouriteIcon } from "../public";
 import Link from "next/link";
-
+import { useEffect, useState } from "react";
 type ImageCardProps = {
-  title: string;
+  title?: string;
   description?: string;
-  img: any;
+  img?: any;
   onClick?: (id: any) => void;
   id: number;
-  favorite: any;
+  favorite?: any;
   className?: string;
   buyLink?: string;
+  cid?: string;
 };
 
 const ImageCard: FC<ImageCardProps> = ({
@@ -23,10 +24,26 @@ const ImageCard: FC<ImageCardProps> = ({
   favorite,
   className,
   buyLink,
+  cid,
 }) => {
+  const [imageData, setImageData] = useState("");
+
+  useEffect(() => {
+    async function fetchImageData() {
+      try {
+        const response = await fetch(`https://ipfs.io/ipfs/${cid}`);
+        const data = await response.text();
+        setImageData(data);
+      } catch (error) {
+        console.log("Error fetching image data", error);
+      }
+    }
+    fetchImageData();
+  }, [cid]);
   return (
     <div className="relative w-[390px] h-[460px]">
-      <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
+      {cid ? <Image src={imageData} fill={true} alt="myImages" className="rounded-lg" /> : <Image src={img} fill={true} alt="myImages" className="rounded-lg" />}
+      
       <div className={className}>
         <div className="flex flec-col text-white">
           <div className="absolute bottom-24 left-5 text-2xl font-bold">
@@ -44,7 +61,7 @@ const ImageCard: FC<ImageCardProps> = ({
           }`}
           onClick={onClick}
         >
-          <Image src={favouriteIcon} fill={true} alt="fav" />
+          <Image src={favouriteIcon}  fill={true} alt="fav" />
         </div>
       </div>
     </div>
