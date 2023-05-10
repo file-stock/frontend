@@ -8,19 +8,19 @@ import React from "react";
 import { ThemeContext } from "../context/context";
 import { useContext } from "react";
 
-function getRandomIndices(arrLength: any, numIndices: any) {
-  const indices = new Set();
-  while (indices.size < numIndices) {
-    indices.add(Math.floor(Math.random() * arrLength));
-  }
-  return [...indices];
-}
+// function getRandomIndices(arrLength, numIndices) {
+//   const indices = new Set();
+//   while (indices.size < numIndices) {
+//     indices.add(Math.floor(Math.random() * arrLength));
+//   }
+//   return [...indices];
+// }
 
 export default function Home() {
   const { allFiles } = useContext(ThemeContext);
   console.log("allfileshome", allFiles);
 
-  const randomIndices = getRandomIndices(allFiles.length, 7);
+ 
 
 
   return (
@@ -34,9 +34,7 @@ export default function Home() {
       <Main />
       <CreatorOfTheMonth />
       <div className="flex ml-4 mt-8 gap-1">
-        {randomIndices.map((index: any) => (
-          <Gallery key={String(index)} cid={allFiles[index].watermarkedCid} />
-        ))}
+     
       </div>
     </>
   );
