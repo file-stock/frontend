@@ -1,4 +1,8 @@
-export const tags = {
+interface Tags {
+  [key: string]: string;
+}
+
+export const tags: Tags = {
     "1": "aerial",
     "2": "summer",
     "3": "dancing",

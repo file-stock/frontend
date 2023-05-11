@@ -6,6 +6,14 @@ import Gallery from "./home/Gallery";
 import { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../context/context";
 
+// function getRandomIndices(arrLength, numIndices) {
+//   const indices = new Set();
+//   while (indices.size < numIndices) {
+//     indices.add(Math.floor(Math.random() * arrLength));
+//   }
+//   return [...indices];
+// }
+
 export default function Home() {
   const { allFiles } = useContext(ThemeContext);
   const [selectedImages, setSelectedImages] = useState<any>([]);

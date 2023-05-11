@@ -1,3 +1,4 @@
+import React from "react";
 import { init, useConnectWallet } from "@web3-onboard/react";
 import injectedModule from "@web3-onboard/injected-wallets";
 import {
@@ -10,8 +11,9 @@ import {
 import { ethers } from "ethers";
 import ContractAbi from "../lib/contractAbi.json";
 import { myCardSale } from "../constants/constants";
+
 import lighthouse from "@lighthouse-web3/sdk";
-import { tags } from "../pages/uploadImage/tags";
+
 
 declare global {
   interface Window {
@@ -19,13 +21,14 @@ declare global {
   }
 }
 
+
 type ContextType = {
   isConnected: boolean;
   connect: any;
   wallet: any;
   disconnect: any;
   connecting: any;
-  callContract: (hash: any, tags: any) => Promise<void>;
+  callContract: (hash: any, tags: number[]) => Promise<void>;
   callBuyFile: () => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;
@@ -35,9 +38,10 @@ type ContextType = {
   imgForSale: any;
   preview: string;
   setPreview: Dispatch<SetStateAction<string>>;
-  randomImages: any;
+  randomImages: any[];
   setRandomImages: Dispatch<SetStateAction<any[]>>;
-  readOnlyContract: any;
+  readOnly: any;
+  setReadOnly: Dispatch<SetStateAction<any>>;
   allFiles: any[];
   contract: any;
   userAddress: string;
@@ -83,7 +87,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [imgForSale, setImgForSale] = useState<any[]>(myCardSale);
   const [preview, setPreview] = useState<string>("");
   const [randomImages, setRandomImages] = useState<any[]>([]);
-  const [readOnlyContract, setReadOnlyContract] = useState<any>();
+  const [readOnly, setReadOnly] = useState<any>();
   const [allFiles, setAllFiles] = useState<any[]>([]);
 
   const CONTRACT_ADDRESS = "0x307c87ff1e333ad5cc193e2fe0a13c3d27fa2d60";
@@ -112,7 +116,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (!signer) return;
     const contract = new ethers.Contract(CONTRACT_ADDRESS, ContractAbi, signer);
-    console.log("Contract object:", contract);
 
     setContract(contract);
   }, [signer]);
@@ -120,21 +123,19 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchFiles = async () => {
       const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-
       const fileStockContract = new ethers.Contract(
         CONTRACT_ADDRESS,
         ContractAbi,
         provider
       );
-
       try {
         const fetchedFiles = await fileStockContract.getAllFiles();
         setAllFiles(fetchedFiles);
       } catch (error) {
-        console.error("Error fetching files:", error);
+        console.error("Error fetching files: ", error);
       }
+      console.log("fetchedFiles", allFiles);
     };
-
     fetchFiles();
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
@@ -143,14 +144,14 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     const tx = await contract.storeFile(
       hash,
       ethers.utils.parseEther(price.toString()),
-      tags
+      []
     );
     await tx.wait();
-    console.log("after transaction");
+    console.log("after transaction", imgForSale);
     contract.on("StoreFile", (value1: any, value2: any, value3: any) => {
-      console.log(value1);
-      console.log(value2);
-      console.log(value3);
+      console.log("Value 1:", value1);
+      console.log("Value 2:", value2);
+      console.log("Value 3:", value3);
     });
   };
 
@@ -183,7 +184,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setPreview,
         randomImages,
         setRandomImages,
-        readOnlyContract,
+        readOnly,
+        setReadOnly,
         allFiles,
         contract,
         userAddress,

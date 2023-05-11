@@ -52,6 +52,8 @@ const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
                   description={card.description}
                   price={card.price}
                   downloadButton={false}
+                  tags={card.tags}
+                  tagsId={card.tagsId}
                 />
               </div>
             );

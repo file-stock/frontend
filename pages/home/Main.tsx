@@ -3,6 +3,7 @@ import GenericButton from "../../components/GenericButton";
 import Link from "next/link";
 import ImageCard from "../../components/ImageCard";
 import { homePageImages } from "../../constants/constants";
+import React from "react";
 
 const Main = () => {
   const [favorite, setFavorite] = useState<any[]>([]);

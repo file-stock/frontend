@@ -1,26 +1,28 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { ThemeContext } from "../../context/context";
 import FilterDropdown from "./filters";
-import {
-  colorFilters,
-  sizeFilters,
-  licenseFilters,
-  orientationFilters,
-  priceFilters,
-} from "./filters_data";
+import 
+  // colorFilters,
+  // sizeFilters,
+  // licenseFilters,
+  // orientationFilters,
+  priceFilters
+ from "./filters_data";
 import ImageCard from "../../components/ImageCard";
 import { exploreImages as cards } from "../../constants/constants";
+import { tags } from "../../public/tags";
+import TagSearch from "../../components/TagSearch";
 
 const filterOptions = [
-  { label: "Colors", options: colorFilters },
-  { label: "Sizes", options: sizeFilters },
-  { label: "License type", options: licenseFilters },
-  { label: "Orientations", options: orientationFilters },
   { label: "Price ranges", options: priceFilters },
 ];
 
 const Explore = () => {
+  const { allFiles } = useContext(ThemeContext);
   const [selectedFilters, setSelectedFilters] = useState({});
   const [favorite, setFavorite] = useState<any[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
 
   const updateFavorite = (cardId: any) => {
     let updatedFavorite = [...favorite];
@@ -41,13 +43,24 @@ const Explore = () => {
     });
   };
 
+  const filterImagesByTags = (file: any) => {
+    if (selectedTagNumbers.length === 0) return true;
+    const fileTags = file.fileTags.map((tag: any) => parseInt(tag));
+    return selectedTagNumbers.every((tagNumber) => fileTags.includes(tagNumber));
+  };
+
   return (
     <div>
       <div className="w-[87%] mx-auto">
         <h1 className="text-4xl font-bold">Jungle images</h1>
       </div>
-      <div className="h-16 w-[87%] mx-auto"> TAGS div</div> 
       <div className="flex justify-between gap-6 w-[87%] mx-auto">
+        <TagSearch
+          selectedTags={selectedTags}
+          setSelectedTags={setSelectedTags}
+          selectedTagNumbers={selectedTagNumbers}
+          setSelectedTagNumbers={setSelectedTagNumbers}
+        />
         {filterOptions.map(({ label, options }) => (
           <div key={label} className="my-4">
             <h3 className="text-lg font-semibold">{label}</h3>
@@ -60,21 +73,21 @@ const Explore = () => {
         ))}
       </div>
       <div className="grid grid-cols-4 gap-5 mt-6 w-[87%] mx-auto">
-        {cards.map((card: any, i: any) => {
-          return (
-            <div key={i}>
-              <ImageCard
-                img={card.img}
-                description={card.description}
-                title={card.title}
-                onClick={() => updateFavorite(card.id)}
-                id={i}
-                favorite={favorite}
-                className="opacity-0 hover:opacity-100 h-full relative"
-              />
-            </div>
-          );
-        })}
+        {allFiles
+          .filter((file: any) => file.fileTags && file.fileTags.length > 0)
+          .filter(filterImagesByTags)
+          .map((file: any, index: any) => {
+            return (
+              <div key={index}>
+                <ImageCard
+                  cid={file[0]}
+                  onClick={() => updateFavorite(file.fileTags)}
+                  id={file.fileTags}
+                  favorite={favorite}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );

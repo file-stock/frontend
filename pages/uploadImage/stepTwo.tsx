@@ -11,9 +11,15 @@ import {
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
 import GenericModal from "../../components/GenericModal";
-import { tags } from "./tags";
+import {tags} from "../../public/tags";
+
+
 
 type StepTwoProps = {
+  selectedTags: string[];
+  setSelectedTags: Dispatch<SetStateAction<string[]>>;
+  selectedTagNumbers: number[];
+  setSelectedTagNumbers: Dispatch<SetStateAction<number[]>>;
   onSelectFile: any;
   fileInputRef: React.MutableRefObject<null>;
   selectedFile: string;
@@ -27,6 +33,10 @@ type StepTwoProps = {
 };
 
 const StepTwo: FC<StepTwoProps> = ({
+  selectedTags,
+  setSelectedTags,
+  selectedTagNumbers,
+  setSelectedTagNumbers,
   onSelectFile,
   fileInputRef,
   selectedFile,
@@ -46,8 +56,6 @@ const StepTwo: FC<StepTwoProps> = ({
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const filteredTags = Object.values(tags).filter(
@@ -105,7 +113,8 @@ const StepTwo: FC<StepTwoProps> = ({
     handleFileChange();
     // const hash = await handleFileChange();
     const hash = hashValue;
-  };
+    //setStep(3)
+  }
 
   useEffect(() => {
     if (hashValue) {

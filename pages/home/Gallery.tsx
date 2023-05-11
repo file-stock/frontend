@@ -14,9 +14,10 @@ const Gallery: FC<GalleryProps> = ({ cid }) => {
         const data = await response.text();
         setImageData(data);
       } catch (error) {
-        console.log("Error fetching image data", error);
+        console.error("Error fetching image data:", error);
       }
     }
+
     fetchImageData();
   }, [cid]);
   return (

@@ -19,6 +19,8 @@ function UploadImage() {
   const [description, setDescription] = useState("");
   const [accessConditionCid, setAccessConditionCid] = useState("");
   const [hashValue, setHashValue] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
 
   const fileInputRef = useRef(null);
 
@@ -178,6 +180,8 @@ function UploadImage() {
       title: title,
       description: description,
       price: price,
+      tags: selectedTags,
+      tagsId: selectedTagNumbers,
     };
     setImgForSale((prev: any) => [...prev, newImgObject]);
   };
@@ -233,6 +237,10 @@ function UploadImage() {
       ) : step === 2 ? (
         <>
           <StepTwo
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            selectedTagNumbers={selectedTagNumbers}
+            setSelectedTagNumbers={setSelectedTagNumbers}
             onSelectFile={onSelectFile}
             fileInputRef={fileInputRef}
             selectedFile={selectedFile}

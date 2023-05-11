@@ -9,9 +9,13 @@ type ImageCardForSaleProps = {
   description: string;
   price: any;
   downloadButton: boolean;
+  tags?: string;
+  tagsId?: number;
 };
 
 const ImageCardForSale: FC<ImageCardForSaleProps> = ({
+  tagsId,
+  tags,
   img,
   title,
   description,
@@ -30,6 +34,7 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
             <Image src={filecoinIcon} width={15} height={15} alt="filecoin" />
             {price}
           </div>
+          <div>{tags} - {tagsId}</div>
           <div className="text-md max-w-[420px]">{description}</div>
           <div>
             <div className="flex items-center gap-3">
