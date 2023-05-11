@@ -1,5 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { ThemeContext } from "../../context/context";
+import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 import FilterDropdown from "./filters";
 import // colorFilters,
 // sizeFilters,
@@ -21,9 +22,27 @@ const Explore = () => {
   const { allFiles, selectedTags, setSelectedTags, selectedTagNumbers, setSelectedTagNumbers } = useContext(ThemeContext);
   const [selectedFilters, setSelectedFilters] = useState({ "Price ranges": "All" });
   const [favorite, setFavorite] = useState<any[]>([]);
+  const [visibleImages, setVisibleImages] = useState<any[]>([])
+  const [filteredImages, setFilteredImages] = useState<any[]>([]);
 
+  useEffect(() => {
+    const filtered = allFiles
+      .filter((file: any) => file.fileTags && file.fileTags.length > 0)
+      .filter(filterImagesByTags)
+      .filter(filterImagesByPrice);
+    setFilteredImages(filtered);
+    setVisibleImages(filtered.slice(0, 16));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allFiles, selectedTagNumbers, selectedFilters]);
 
-  
+  const loadMoreImages = () => {
+    setVisibleImages((prevImages) =>
+      prevImages.concat(filteredImages.slice(prevImages.length, prevImages.length + 16))
+    );
+  };
+
+  useInfiniteScroll(loadMoreImages);
+
   useEffect(() => {
     const passedSearchTerm = router.query.search as string || undefined;
     if (passedSearchTerm) {
@@ -119,22 +138,18 @@ const Explore = () => {
         ))}
       </div>
       <div className="grid grid-cols-4 gap-10 mt-6 w-[87%] mx-auto mt-20">
-        {allFiles 
-          .filter((file: any) => file.fileTags && file.fileTags.length > 0)
-          .filter(filterImagesByTags)
-          .filter(filterImagesByPrice)
-          .map((file: any, index: any) => {
-            return (
-              <div key={index} className="shadow-2xl rounded-xl">
-                <ImageCard
-                  cid={file[0]}
-                  onClick={() => updateFavorite(file.fileTags)}
-                  id={file.tokenId}
-                  favorite={favorite}
-                />
-              </div>
-            );
-          })}
+        {visibleImages.map((file: any, index: any) => {
+          return (
+            <div key={index} className="shadow-2xl rounded-xl">
+              <ImageCard
+                cid={file[0]}
+                onClick={() => updateFavorite(file.fileTags)}
+                id={file.tokenId}
+                favorite={favorite}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
