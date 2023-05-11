@@ -29,6 +29,7 @@
     "ethers": "^5.7.2",
     "font-awesome": "^4.7.0",
     "fs-extra": "^11.1.0",
+    "ipfs-http-client": "^60.0.0",
     "jimp": "^0.16.2",
     "jimp-watermark": "^1.1.0",
     "next": "^13.3.2",
