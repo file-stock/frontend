@@ -11,9 +11,7 @@ import {
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
 import GenericModal from "../../components/GenericModal";
-import {tags} from "../../public/tags";
-
-
+import { tags } from "../../public/tags";
 
 type StepTwoProps = {
   
@@ -55,7 +53,7 @@ const StepTwo: FC<StepTwoProps> = ({
   const menuRef = useRef<HTMLDivElement>(null);
   const filteredTags = Object.values(tags).filter(
     (tag) =>
-      !selectedTags.includes(tag) &&
+      !selectedTags?.includes(tag) &&
       tag.toLowerCase().startsWith(searchTerm.toLowerCase())
   );
 
@@ -109,7 +107,7 @@ const StepTwo: FC<StepTwoProps> = ({
     // const hash = await handleFileChange();
     const hash = hashValue;
     //setStep(3)
-  }
+  };
 
   useEffect(() => {
     if (hashValue) {
@@ -210,7 +208,7 @@ const StepTwo: FC<StepTwoProps> = ({
                         setPrice(Number(e.target.value));
                       } else if (form.label === "Tags") {
                         setSearchTerm(e.target.value);
-                        if (e.target.value.length >= 2) {
+                        if (e.target.value?.length >= 2) {
                           setMenuOpen(true);
                         } else {
                           setMenuOpen(false);
@@ -221,7 +219,7 @@ const StepTwo: FC<StepTwoProps> = ({
                 }
                 {menuOpen &&
                   form.label === "Tags" &&
-                  filteredTags.length > 0 && (
+                  filteredTags?.length > 0 && (
                     <div
                       ref={menuRef}
                       className="absolute z-50 bg-white w-80 shadow-lg rounded-md border-2 border-black mt-24"
@@ -240,7 +238,7 @@ const StepTwo: FC<StepTwoProps> = ({
                       </ul>
                     </div>
                   )}
-                {selectedTags.length > 0 && form.label === "Tags" && (
+                {selectedTags?.length > 0 && form.label === "Tags" && (
                   <div className="flex flex-wrap mb-6">
                     {selectedTags.map((tag: string, i: Key) => (
                       <div

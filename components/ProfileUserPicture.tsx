@@ -1,27 +1,24 @@
-import Image from "next/image";
-import { user } from "../public/index";
+import { useContext } from "react";
+import { ThemeContext } from "../context/context";
+import { useState } from "react";
 
 const ProfileUserPicture = () => {
+  const { userAddress } = useContext(ThemeContext);
+  const [showFullAddress, setShowFullAddress] = useState(false);
+
+  const handleAddressClick = () => {
+    setShowFullAddress(!showFullAddress);
+  };
+
+  const displayAddress = showFullAddress
+    ? userAddress
+    : userAddress.slice(0, 5) + "...";
+
   return (
     <>
-      <div className="flex gap-6 items-center w-2/5">
-        <Image
-          src={user}
-          width={150}
-          height={200}
-          alt="creator"
-          className="rounded-full"
-        />
-        <div className="flex flex-col gap-2">
-          <div className="text-xl font-semibold">Jacon Moore</div>
-          <div className="text-lg text-greyText">
-            ↓ Instagram Subscription will really support me ♡ Thank you! I love
-            vintage, art and clear aesthetic!
-          </div>
-          <button className="text-sm font-bold text-greyText bg-[#E5E7EB] py-2 px-4 rounded-lg w-1/4">
-            View profile
-          </button>
-        </div>
+      <div onClick={handleAddressClick} className="cursor-pointer flex">
+        <div className="font-bold">User address: </div>
+        <span className="ml-2">{displayAddress}</span>
       </div>
     </>
   );

@@ -1,13 +1,11 @@
 import { useState, useContext, useEffect } from "react";
 import { ThemeContext } from "../../context/context";
 import FilterDropdown from "./filters";
-import 
-  // colorFilters,
-  // sizeFilters,
-  // licenseFilters,
-  // orientationFilters,
-  priceFilters
- from "./filters_data";
+import // colorFilters,
+// sizeFilters,
+// licenseFilters,
+// orientationFilters,
+priceFilters from "../../components/filters_data";
 import ImageCard from "../../components/ImageCard";
 import { exploreImages as cards } from "../../constants/constants";
 import { tags } from "../../public/tags";
@@ -15,9 +13,7 @@ import TagSearch from "../../components/TagSearch";
 import { useRouter } from "next/router";
 import { utils } from "ethers";
 
-const filterOptions = [
-  { label: "Price ranges", options: priceFilters },
-];
+const filterOptions = [{ label: "Price ranges", options: priceFilters }];
 
 const Explore = () => {
   const router = useRouter();
@@ -95,7 +91,9 @@ const Explore = () => {
   const filterImagesByTags = (file: any) => {
     if (selectedTagNumbers.length === 0) return true;
     const fileTags = file.fileTags.map((tag: any) => parseInt(tag));
-    return selectedTagNumbers.every((tagNumber) => fileTags.includes(tagNumber));
+    return selectedTagNumbers.every((tagNumber) =>
+      fileTags.includes(tagNumber)
+    );
   };
 
   return (

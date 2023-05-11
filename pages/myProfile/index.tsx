@@ -1,12 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProfileUserPicture from "../../components/ProfileUserPicture";
 import Collection from "./Collection";
 import ForSale from "./ForSale";
+import { useContext } from "react";
+import { ThemeContext } from "../../context/context";
 
 const MyProfile = () => {
+  const { allFiles, wallet, isConnected } = useContext(ThemeContext);
   const [currenView, setCurrentView] = useState<"collection" | "forsale">(
     "collection"
   );
+  const [myImages, setMyImages] = useState<any>([]);
+
+  let walletAddress = "";
+  if (isConnected && wallet && wallet.accounts && wallet.accounts[0]) {
+    walletAddress = wallet.accounts[0].address;
+  }
+
+  useEffect(() => {
+    if (walletAddress) {
+      const imagesCreatedByUser = allFiles.filter(
+        (file) => file.creator.toLowerCase() === walletAddress.toLowerCase()
+      );
+      setMyImages(imagesCreatedByUser);
+    }
+  }, [allFiles, walletAddress]);
+  //console.log("myimages in my profile", myImages[0].price);
   return (
     <div className="px-[140px] pb-[150px]">
       <div className="mt-[75px]">
@@ -30,7 +49,13 @@ const MyProfile = () => {
           For sale
         </div>
       </div>
-      {currenView === "collection" ? <Collection /> : <ForSale />}
+      {currenView === "collection" ? (
+        <Collection />
+      ) : (
+        myImages.map((file: any, index: any) => (
+          <ForSale key={index} cids={file.watermarkedCid} />
+        ))
+      )}
     </div>
   );
 };

@@ -45,6 +45,10 @@ type ContextType = {
   readOnly: any;
   setReadOnly: Dispatch<SetStateAction<any>>;
   allFiles: any[];
+  contract: any;
+  userAddress: string;
+  setImageForSale: Dispatch<SetStateAction<any>>;
+  imageForSale: any;
 };
 
 const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
