@@ -27,7 +27,7 @@
 
  const priceFilters = [
     { value: "All", label: "All" },
-    { value: "1", label: "$1 - $10" },
+    { value: "0", label: "$0 - $10" },
     { value: "10", label: "$11 - $50" },
     { value: "50", label: "$51+" },
  ];

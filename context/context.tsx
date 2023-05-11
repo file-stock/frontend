@@ -31,7 +31,7 @@ type ContextType = {
   disconnect: any;
   connecting: any;
   callContract: (hash: any, tags: number[]) => Promise<void>;
-  callBuyFile: () => Promise<void>;
+  callBuyFile: (id: any, price: any) => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;
   setImgForSale: Dispatch<SetStateAction<any>>;
@@ -157,14 +157,19 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const callBuyFile = async () => {
+  const callBuyFile = async (id: any, price: any) => {
     console.log("callBuyFile");
-    const amount = ethers.utils.parseEther("0.2");
+    const amount = ethers.utils.parseEther(price);
     console.log(amount.toString());
-    const tx = await contract.buyFile(1, { gasLimit: 200000, value: amount });
-    await tx.wait();
-    console.log(tx);
+    try {
+      const tx = await contract.buyFile(id, { gasLimit: 200000, value: amount });
+      await tx.wait();
+      console.log(tx);
+    } catch (error) {
+      console.error("Transaction failed: ", error);
+    }
   };
+  
 
   return (
     <ThemeContext.Provider

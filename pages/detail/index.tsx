@@ -64,7 +64,7 @@ const Detail = () => {
               label="Buy Image"
               variant="mainFull"
               size="md"
-              onclick={() => callBuyFile()}
+              onclick={() => callBuyFile(id, price)}
             />
             </div>
           </div>
