@@ -24,7 +24,7 @@ const Main = () => {
   return (
     <div className="pt-[60px] pb-[100px] px-[140px]">
       <div className="flex flex-col justify-center items-center">
-        <div className="-ml-[480px]">
+        <div className="-ml-[360px]">
           <span className="text-greyText">Popular</span>: Rain, Nature, Moutains
         </div>
         <div className="mt-[90px] text-center">

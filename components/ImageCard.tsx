@@ -42,34 +42,45 @@ const ImageCard: FC<ImageCardProps> = ({
     fetchImageData();
   }, [cid]);
   return (
-    <div className="relative w-[390px] h-[460px]">
-      {cid ? <Image src={imageData} fill={true} alt="myImages" className="rounded-lg" /> : <Image src={img} fill={true} alt="myImages" className="rounded-lg" />}
-      
-      <div className={className}>
-        <div className="flex flec-col text-white">
-          <div className="absolute bottom-24 left-5 text-2xl font-bold">
-            {title}
+    <Link href={`/detail?id=${id}`}>
+      <div className="relative w-[390px] h-[460px]">
+        {cid ? (
+          <Image
+            src={imageData}
+            fill={true}
+            alt="myImages"
+            className="rounded-lg object-cover transform transition-transform hover:scale-110 hover:border hover:border-border hover:z-50"
+          />
+        ) : (
+          <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
+        )}
+
+        <div>
+          <div className="flex flec-col text-white">
+            <div className="absolute bottom-24 left-5 text-2xl font-bold">
+              {title}
+            </div>
+            {buyLink ? (
+              <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
+                <Link href={buyLink}>Buy</Link>
+              </div>
+            ) : (
+              <div className="absolute bottom-10 left-5 text-sm font-normal">
+                {description}
+              </div>
+            )}
           </div>
-          {buyLink ? (
-            <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
-              <Link href={buyLink}>Buy</Link>
-            </div>
-          ) : (
-            <div className="absolute bottom-10 left-5 text-sm font-normal">
-              {description}
-            </div>
-          )}
-        </div>
-        <div
-          className={`absolute right-2 top-2 w-5 h-5 p-2 rounded-full ${
-            favorite.includes(id) ? "bg-error" : ""
-          }`}
-          onClick={onClick}
-        >
-          <Image src={favouriteIcon}  fill={true} alt="fav" />
+          <div
+            className={`absolute right-2 top-2 w-5 h-5 p-2 rounded-full ${
+              favorite.includes(id) ? "bg-error" : ""
+            }`}
+            onClick={onClick}
+          >
+            <Image src={favouriteIcon} fill={true} alt="fav" />
+          </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
