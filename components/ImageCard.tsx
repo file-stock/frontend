@@ -42,45 +42,44 @@ const ImageCard: FC<ImageCardProps> = ({
     fetchImageData();
   }, [cid]);
   return (
-    <Link href={`/detail?id=${id}`}>
-      <div className="relative w-[390px] h-[460px]">
+    <div className="relative w-[390px] h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg hover:z-50">
+      <Link href={`/detail?id=${id}`}>
         {cid ? (
           <Image
             src={imageData}
             fill={true}
             alt="myImages"
-            className="rounded-lg object-cover transform transition-transform hover:scale-110 hover:border hover:border-border hover:z-50"
+            className="rounded-lg object-fit "
           />
         ) : (
           <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
         )}
-
-        <div>
-          <div className="flex flec-col text-white">
-            <div className="absolute bottom-24 left-5 text-2xl font-bold">
-              {title}
+      </Link>
+      <div>
+        <div className="flex flec-col text-white">
+          <div className="absolute bottom-24 left-5 text-2xl font-bold">
+            {title}
+          </div>
+          {buyLink ? (
+            <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
+              <Link href={buyLink}>Buy</Link>
             </div>
-            {buyLink ? (
-              <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
-                <Link href={buyLink}>Buy</Link>
-              </div>
-            ) : (
-              <div className="absolute bottom-10 left-5 text-sm font-normal">
-                {description}
-              </div>
-            )}
-          </div>
-          <div
-            className={`absolute right-2 top-2 w-5 h-5 p-2 rounded-full ${
-              favorite.includes(id) ? "bg-error" : ""
-            }`}
-            onClick={onClick}
-          >
-            <Image src={favouriteIcon} fill={true} alt="fav" />
-          </div>
+          ) : (
+            <div className="absolute bottom-10 left-5 text-sm font-normal">
+              {description}
+            </div>
+          )}
+        </div>
+        <div
+          className={`absolute right-2 top-2 w-5 h-5 p-2 rounded-full ${
+            favorite.includes(id) ? "bg-error" : ""
+          }`}
+          onClick={onClick}
+        >
+          <Image src={favouriteIcon} fill={true} alt="fav" />
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 

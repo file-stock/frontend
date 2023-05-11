@@ -18,11 +18,19 @@ const filterOptions = [{ label: "Price ranges", options: priceFilters }];
 
 const Explore = () => {
   const router = useRouter();
- 
-  const { allFiles, selectedTags, setSelectedTags, selectedTagNumbers, setSelectedTagNumbers } = useContext(ThemeContext);
-  const [selectedFilters, setSelectedFilters] = useState({ "Price ranges": "All" });
+  const [isLoading, setIsLoading] = useState(true);
+  const {
+    allFiles,
+    selectedTags,
+    setSelectedTags,
+    selectedTagNumbers,
+    setSelectedTagNumbers,
+  } = useContext(ThemeContext);
+  const [selectedFilters, setSelectedFilters] = useState({
+    "Price ranges": "All",
+  });
   const [favorite, setFavorite] = useState<any[]>([]);
-  const [visibleImages, setVisibleImages] = useState<any[]>([])
+  const [visibleImages, setVisibleImages] = useState<any[]>([]);
   const [filteredImages, setFilteredImages] = useState<any[]>([]);
 
   useEffect(() => {
@@ -32,19 +40,39 @@ const Explore = () => {
       .filter(filterImagesByPrice);
     setFilteredImages(filtered);
     setVisibleImages(filtered.slice(0, 16));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allFiles, selectedTagNumbers, selectedFilters]);
+  
+
+  useEffect(() => {
+    // controllo dell'url al refresh
+    const unmountFlag = window.localStorage.getItem("unmountFlag");
+    if (!unmountFlag) {
+      router.push("/explore");
+    } else {
+      window.localStorage.removeItem("unmountFlag");
+    }
+    return () => {
+      window.localStorage.setItem("unmountFlag", "true");
+    };
+  }, [router]);
 
   const loadMoreImages = () => {
     setVisibleImages((prevImages) =>
-      prevImages.concat(filteredImages.slice(prevImages.length, prevImages.length + 16))
+      prevImages.concat(
+        filteredImages.slice(prevImages.length, prevImages.length + 16)
+      )
     );
   };
 
   useInfiniteScroll(loadMoreImages);
 
   useEffect(() => {
-    const passedSearchTerm = router.query.search as string || undefined;
+    const passedSearchTerm = (router.query.search as string) || undefined;
     if (passedSearchTerm) {
       setSelectedTags([passedSearchTerm]);
     } else {
@@ -56,7 +84,6 @@ const Explore = () => {
     if (selectedTagNumber) {
       setSelectedTagNumbers([parseInt(selectedTagNumber)]);
     }
- 
   }, [router.query, setSelectedTagNumbers, setSelectedTags]);
 
   useEffect(() => {
@@ -64,28 +91,26 @@ const Explore = () => {
       setSelectedTags([]);
       setSelectedTagNumbers([]);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
-   
+
   const filterImagesByPrice = (file: any) => {
     const selectedPrice = selectedFilters["Price ranges"];
-  
+
     if (!selectedPrice || selectedPrice === "All") return true;
-  
+
     const etherValue = parseInt(utils.formatEther(file.price.toString()), 10);
-  
-    if (selectedPrice === "1") {
-      return etherValue >= 1 && etherValue <= 10;
+
+    if (selectedPrice === "0") {
+      return etherValue >= 0 && etherValue <= 10;
     } else if (selectedPrice === "10") {
       return etherValue >= 11 && etherValue <= 50;
     } else if (selectedPrice === "50") {
       return etherValue >= 51;
     }
-  
+
     return false;
   };
-  
 
   const updateFavorite = (cardId: any) => {
     let updatedFavorite = [...favorite];
@@ -105,7 +130,6 @@ const Explore = () => {
       [label]: value,
     });
   };
-  
 
   const filterImagesByTags = (file: any) => {
     if (selectedTagNumbers.length === 0) return true;
@@ -137,19 +161,29 @@ const Explore = () => {
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-4 gap-10 mt-6 w-[87%] mx-auto mt-20">
-        {visibleImages.map((file: any, index: any) => {
-          return (
-            <div key={index} className="shadow-2xl rounded-xl">
-              <ImageCard
-                cid={file[0]}
-                onClick={() => updateFavorite(file.fileTags)}
-                id={file.tokenId}
-                favorite={favorite}
-              />
-            </div>
-          );
-        })}
+      <div className="grid xl:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10 mt-6 w-fit mx-auto mt-20 min-h-[600px]">
+        {isLoading ? (
+          <p className="text-lg text-center">Loading...</p>
+        ) : visibleImages.length > 0 ? (
+          visibleImages.map((file: any, index: any) => {
+            return (
+              <div key={index} className="shadow-2xl rounded-xl">
+                <ImageCard
+                  cid={file[0]}
+                  onClick={() => updateFavorite(file.tokenId)}
+                  id={file.tokenId}
+                  favorite={favorite}
+                />
+              </div>
+            );
+          })
+        ) : (
+          <div className="">
+            <p className="text-lg text-center">
+              There are no images with these tags.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

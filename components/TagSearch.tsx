@@ -35,6 +35,7 @@ const TagSearch: FC<TagSearchProps> = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const tagsLeft = 10 - selectedTags.length;
   const filteredTags = Object.values(tags).filter(
     (tag) =>
       !selectedTags.includes(tag) &&
@@ -48,8 +49,11 @@ const TagSearch: FC<TagSearchProps> = ({
     });
     setInputValue("");
   };
+
   console.log("selectedTags", selectedTags);
-  const handleTagClick = (tag: string) => {
+
+ const handleTagClick = (tag: string) => {
+  if (selectedTags.length < 10) { 
     setMenuOpen(false);
     if (btn) {
       setInputValue(tag);
@@ -67,7 +71,11 @@ const TagSearch: FC<TagSearchProps> = ({
       }
       setSearchTerm("");
     }
-  };
+  } else {
+    alert("10 tags limit reached!");  
+  }
+};
+
 
   const handleTagRemove = (tag: string) => {
     setSelectedTags(selectedTags.filter((t: string) => t !== tag));
@@ -89,6 +97,8 @@ const TagSearch: FC<TagSearchProps> = ({
     }
   };
 
+
+  
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick, false);
     return () => {
@@ -103,7 +113,7 @@ const TagSearch: FC<TagSearchProps> = ({
           <div
             ref={menuRef}
             className={`absolute z-50 bg-white shadow-lg rounded-md border-2 border-black ${
-              !btn && "top-[68px]"
+              !btn && "top-[80px]"
             } ${size === "lg" ? "mt-[58px] w-80" : "mt-[40px] w-64"}`}
           >
             <ul className="py-2">
@@ -123,7 +133,7 @@ const TagSearch: FC<TagSearchProps> = ({
           </div>
         )}
         {!btn && selectedTags.length > 0 && (
-          <div className="flex flex-wrap mb-6">
+          <div className="flex flex-wrap mb-10">
             {selectedTags.map((tag: string, i: Key) => (
               <div
                 key={i}
@@ -142,14 +152,16 @@ const TagSearch: FC<TagSearchProps> = ({
         )}
       </div>
       <div className="flex relative">
-        <div>
+      <div>
           <input
             type="text"
             placeholder={
-              btn ? "Search for photos" : "Example: Rain, Nature, Moutains"
+              btn
+                ? "Search for photos"
+                : `Example: Rain, Nature, Moutains... ${tagsLeft} tags left. `
             }
             className={`border border-border rounded-md text-[#0A001F] shadow-md ${
-              size === "lg" ? "py-4 px-4 w-[600px]" : "py-2 px-4"
+              size === "lg" && !btn ? "py-4 px-4 w-[600px] mt-3" : size === "lg" ? "py-4 px-4 w-[600px]" : "py-2 px-4"
             }`}
             required
             value={btn ? inputValue : searchTerm}

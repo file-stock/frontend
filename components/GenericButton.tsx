@@ -2,7 +2,7 @@ import { FC } from "react";
 
 type GenericButtonProps = {
   label: string;
-  onclick: () => void;
+  onclick?: () => void;
   size: "sm" | "md" | "lg";
   variant: "mainFull" | "base" | "mainEmpty";
 };
