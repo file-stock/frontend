@@ -24,6 +24,7 @@ const Gallery: FC<GalleryProps> = ({ cid }) => {
     <div className="h-full">
       <div className="w-[200px]">
         {imageData && (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             className="rounded-lg animate-scrollLeft"
             src={imageData}
@@ -34,6 +35,7 @@ const Gallery: FC<GalleryProps> = ({ cid }) => {
 
       <div className="mt-4 w-[200px]">
         {imageData && (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             className="rounded-lg animate-scrollRight"
             src={imageData}
