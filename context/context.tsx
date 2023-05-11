@@ -39,6 +39,10 @@ type ContextType = {
   setRandomImages: Dispatch<SetStateAction<any[]>>;
   readOnlyContract: any;
   allFiles: any[];
+  contract: any;
+  userAddress: string;
+  setImageForSale: Dispatch<SetStateAction<any>>;
+  imageForSale: any;
 };
 
 const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
@@ -181,6 +185,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setRandomImages,
         readOnlyContract,
         allFiles,
+        contract,
+        userAddress,
+        setImageForSale: setImgForSale,
+        imageForSale: imgForSale,
       }}
     >
       {children}

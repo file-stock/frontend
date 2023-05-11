@@ -111,7 +111,7 @@ const StepTwo: FC<StepTwoProps> = ({
     if (hashValue) {
       const completeUpload = async () => {
         setIsPopUpOpen(true);
-        await callContract(hashValue, selectedTags);
+        await callContract(hashValue, selectedTagNumbers);
         setIsPopUpOpen(false);
         setStep(3);
       };

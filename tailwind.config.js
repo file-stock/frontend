@@ -7,8 +7,8 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        scrollLeft: "scrollLeft 4s linear infinite",
-        scrollRight: "scrollRight 4s linear infinite",
+        scrollLeft: "scrollLeft 10s linear infinite",
+        scrollRight: "scrollRight 10s linear infinite",
       },
       keyframes: {
         scrollLeft: {

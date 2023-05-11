@@ -207,9 +207,9 @@ function UploadImage() {
   };
 
   const handleFileChange = async () => {
-    if (title.length < 1) {
-      return;
-    }
+    // if (title.length < 1) {
+    //   return;
+    // }
     if (encryptedSinteticBaseEvent) {
       mergeImageForSale();
       deployEncrypted();

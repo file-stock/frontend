@@ -11,10 +11,15 @@ const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
   useEffect(() => {
     const getFiles = async () => {
       // const lighthouse = require("@lighthouse-web3/sdk");
-      const uploads = await lighthouse.getUploads(
-        "310ae584-7656-4940-b42f-397d73cfca5f"
-      );
-      console.log("UPLOADS", uploads);
+      try {
+        const uploads = await lighthouse.getUploads(
+          //"310ae584-7656-4940-b42f-397d73cfca5f"
+          "0xe832cf443356A229636EdBa5799F4B24A662b31A"
+        );
+        console.log("UPLOADS", uploads);
+      } catch (error) {
+        console.log("ERROR", error);
+      }
     };
     getFiles();
   }, []);
@@ -37,6 +42,8 @@ const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
       <div className="flex flex-wrap gap-10">
         {imageForSale &&
           imageForSale.map((card: any, i: any) => {
+            console.log("CARD", card);
+            console.log("Blob URL:", card.img);
             return (
               <div key={i} className="flex gap-5">
                 <ImageCardForSale

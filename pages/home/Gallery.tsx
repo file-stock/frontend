@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import Image from "next/image";
 
 interface GalleryProps {
   cid: string;
@@ -21,24 +20,23 @@ const Gallery: FC<GalleryProps> = ({ cid }) => {
     fetchImageData();
   }, [cid]);
   return (
-    <div className="">
-      {imageData && (
-        <Image
-          className="rounded-lg animate-scrollLeft"
-          src={imageData}
-          alt="image"
-          width={400}
-          height={400}
-        />
-      )}
-      <div className="mt-4">
+    <div className="h-full">
+      <div className="w-[200px]">
         {imageData && (
-          <Image
+          <img
+            className="rounded-lg animate-scrollLeft"
+            src={imageData}
+            alt="image"
+          />
+        )}
+      </div>
+
+      <div className="mt-4 w-[200px]">
+        {imageData && (
+          <img
             className="rounded-lg animate-scrollRight"
             src={imageData}
             alt="image"
-            width={400}
-            height={400}
           />
         )}
       </div>
