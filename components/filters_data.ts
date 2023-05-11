@@ -25,11 +25,10 @@
 //     { value: "Portrait", label: "Portrait" },
 //   ];
 
- const priceFilters = [
-    { value: "All", label: "All" },
-    { value: "$10", label: "$10" },
-    { value: "$20", label: "$20" },
-    { value: "$50", label: "$50" },
- ];
-export default priceFilters
- 
+const priceFilters = [
+  { value: "All", label: "All" },
+  { value: "$10", label: "$10" },
+  { value: "$20", label: "$20" },
+  { value: "$50", label: "$50" },
+];
+export default priceFilters;
