@@ -1,25 +1,38 @@
-import { useContext } from "react";
+import { FC, useEffect, useState, useContext } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 import { ThemeContext } from "../../context/context";
 
-const ForSale = () => {
-  const { imgForSale } = useContext(ThemeContext);
+interface ForSaleProps {
+  cids: string;
+}
+const ForSale: FC<ForSaleProps> = ({ cids }) => {
+  const [imagesForSale, setImagesForSale] = useState("");
 
-  console.log("OUT", imgForSale);
-
+  useEffect(() => {
+    async function fetchImageData() {
+      try {
+        const response = await fetch(`https://ipfs.io/ipfs/${cids}`);
+        const data = await response.text();
+        setImagesForSale(data);
+      } catch (error) {
+        console.log("Error fetching image data", error);
+      }
+    }
+    fetchImageData();
+  }, [cids]);
   return (
-    <div className="flex flex-wrap gap-14">
-      {imgForSale.map((card: any, i: any) => (
-        <div key={i}>
+    <div className="mb-6">
+      <div className="">
+        {imagesForSale && (
           <ImageCardForSale
-            img={card.img}
-            title={card.title}
-            description={card.description}
-            price={card.price}
+            img={imagesForSale}
+            title={""}
+            description={""}
+            price={"2"}
             downloadButton={true}
           />
-        </div>
-      ))}
+        )}
+      </div>
     </div>
   );
 };
