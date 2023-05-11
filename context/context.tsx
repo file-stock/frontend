@@ -14,15 +14,17 @@ import { myCardSale } from "../constants/constants";
 
 import lighthouse from "@lighthouse-web3/sdk";
 
-
 declare global {
   interface Window {
     ethereum: any;
   }
 }
 
-
 type ContextType = {
+  selectedTags: string[];
+  setSelectedTags: Dispatch<SetStateAction<string[]>>;
+  selectedTagNumbers: number[];
+  setSelectedTagNumbers: Dispatch<SetStateAction<number[]>>;
   isConnected: boolean;
   connect: any;
   wallet: any;
@@ -85,7 +87,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [randomImages, setRandomImages] = useState<any[]>([]);
   const [readOnly, setReadOnly] = useState<any>();
   const [allFiles, setAllFiles] = useState<any[]>([]);
-
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
   const CONTRACT_ADDRESS = "0x307c87ff1e333ad5cc193e2fe0a13c3d27fa2d60";
 
   useEffect(() => {
@@ -133,6 +136,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("fetchedFiles", allFiles);
     };
     fetchFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
   const callContract = async (hash: any, tags: any) => {
@@ -140,7 +144,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     const tx = await contract.storeFile(
       hash,
       ethers.utils.parseEther(price.toString()),
-      []
+      tags
     );
     await tx.wait();
     console.log("after transaction", imgForSale);
@@ -183,6 +187,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         readOnly,
         setReadOnly,
         allFiles,
+        selectedTags,
+        setSelectedTags,
+        selectedTagNumbers,
+        setSelectedTagNumbers,
       }}
     >
       {children}

@@ -20,12 +20,11 @@ function UploadImage() {
   const [description, setDescription] = useState("");
   const [accessConditionCid, setAccessConditionCid] = useState("");
   const [hashValue, setHashValue] = useState("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
+
   
   const fileInputRef = useRef(null);
 
-  const { setPrice, price, imgForSale, setImgForSale, preview, setPreview } =
+  const { setPrice, price, imgForSale, setImgForSale, preview, setPreview, selectedTags, selectedTagNumbers } =
     useContext(ThemeContext);
 
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
@@ -52,7 +51,7 @@ function UploadImage() {
     reader.onload = async () => {
       // @ts-ignore
       const image = await Jimp.read(reader.result);
-      image.resize(200, 200);
+     // image.resize(200, 200);
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
@@ -185,6 +184,7 @@ function UploadImage() {
       tagsId: selectedTagNumbers,
     };
     setImgForSale((prev: any) => [...prev, newImgObject]);
+    console.log("prezzo",price)
   };
 
   const deployEncrypted = async () => {
@@ -235,10 +235,6 @@ function UploadImage() {
       ) : step === 2 ? (
         <>
           <StepTwo
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-            selectedTagNumbers={selectedTagNumbers}
-            setSelectedTagNumbers={setSelectedTagNumbers}
             onSelectFile={onSelectFile}
             fileInputRef={fileInputRef}
             selectedFile={selectedFile}

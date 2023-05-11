@@ -16,10 +16,7 @@ import {tags} from "../../public/tags";
 
 
 type StepTwoProps = {
-  selectedTags: string[];
-  setSelectedTags: Dispatch<SetStateAction<string[]>>;
-  selectedTagNumbers: number[];
-  setSelectedTagNumbers: Dispatch<SetStateAction<number[]>>;
+  
   onSelectFile: any;
   fileInputRef: React.MutableRefObject<null>;
   selectedFile: string;
@@ -33,10 +30,7 @@ type StepTwoProps = {
 };
 
 const StepTwo: FC<StepTwoProps> = ({
-  selectedTags,
-  setSelectedTags,
-  selectedTagNumbers,
-  setSelectedTagNumbers,
+
   onSelectFile,
   fileInputRef,
   selectedFile,
@@ -47,6 +41,7 @@ const StepTwo: FC<StepTwoProps> = ({
   setDescription,
   hashValue,
 }) => {
+  const { callContract, setPrice, selectedTags, setSelectedTags, selectedTagNumbers, setSelectedTagNumbers  } = useContext(ThemeContext);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const forms = [
     /*{ label: "Title of the image", type: "text", required: true},
@@ -107,7 +102,7 @@ const StepTwo: FC<StepTwoProps> = ({
     };
   }, []);
 
-  const { callContract, setPrice } = useContext(ThemeContext);
+  
 
   const uploadImage = async () => {
     handleFileChange();
