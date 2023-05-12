@@ -14,13 +14,11 @@ import { myCardSale } from "../constants/constants";
 
 import lighthouse from "@lighthouse-web3/sdk";
 
-
 declare global {
   interface Window {
     ethereum: any;
   }
 }
-
 
 type ContextType = {
   isConnected: boolean;

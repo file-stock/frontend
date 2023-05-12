@@ -53,7 +53,7 @@ const MyProfile = () => {
         <Collection />
       ) : (
         myImages.map((file: any, index: any) => (
-          <ForSale key={index} cids={file.watermarkedCid} />
+          <ForSale key={index} cids={file.watermarkedCid} price={file.price} />
         ))
       )}
     </div>

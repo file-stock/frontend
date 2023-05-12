@@ -42,9 +42,18 @@ const ImageCard: FC<ImageCardProps> = ({
     fetchImageData();
   }, [cid]);
   return (
-    <div className="relative w-[390px] h-[460px]">
-      {cid ? <Image src={imageData} fill={true} alt="myImages" className="rounded-lg" /> : <Image src={img} fill={true} alt="myImages" className="rounded-lg" />}
-      
+    <div className="relative w-[360px] h-[460px]">
+      {cid ? (
+        <Image
+          src={imageData}
+          fill={true}
+          alt="myImages"
+          className="rounded-lg"
+        />
+      ) : (
+        <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
+      )}
+
       <div className={className}>
         <div className="flex flec-col text-white">
           <div className="absolute bottom-24 left-5 text-2xl font-bold">
@@ -66,7 +75,7 @@ const ImageCard: FC<ImageCardProps> = ({
           }`}
           onClick={onClick}
         >
-          <Image src={favouriteIcon}  fill={true} alt="fav" />
+          <Image src={favouriteIcon} fill={true} alt="fav" />
         </div>
       </div>
     </div>

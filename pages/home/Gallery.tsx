@@ -22,20 +22,10 @@ const Gallery: FC<GalleryProps> = ({ cid }) => {
   }, [cid]);
   return (
     <div className="h-full">
-      <div className="w-[200px]">
+      <div className="">
         {imageData && (
           <img
-            className="rounded-lg animate-scrollLeft"
-            src={imageData}
-            alt="image"
-          />
-        )}
-      </div>
-
-      <div className="mt-4 w-[200px]">
-        {imageData && (
-          <img
-            className="rounded-lg animate-scrollRight"
+            className="rounded-lg w-[360px] h-[460px]"
             src={imageData}
             alt="image"
           />
