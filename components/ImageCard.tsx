@@ -33,6 +33,9 @@ const ImageCard: FC<ImageCardProps> = ({
     async function fetchImageData() {
       try {
         const response = await fetch(`https://ipfs.io/ipfs/${cid}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.text();
         setImageData(data);
       } catch (error) {
@@ -42,7 +45,7 @@ const ImageCard: FC<ImageCardProps> = ({
     fetchImageData();
   }, [cid]);
   return (
-    <div className="relative w-[390px] h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg">
+    <div className="relative w-[390px] group h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg">
       <Link href={`/detail?id=${id}`}>
         {cid ? (
           <Image
@@ -71,7 +74,7 @@ const ImageCard: FC<ImageCardProps> = ({
           )}
         </div>
         <div
-          className={`absolute right-2 top-2 w-5 h-5 p-2 rounded-full ${
+          className={`absolute opacity-0 group-hover:opacity-100 right-2 top-2 w-5 h-5 p-2 rounded-full ${
             favorite.includes(id) ? "bg-error" : ""
           }`}
           onClick={onClick}
