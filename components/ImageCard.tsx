@@ -42,19 +42,20 @@ const ImageCard: FC<ImageCardProps> = ({
     fetchImageData();
   }, [cid]);
   return (
-    <div className="relative w-[360px] h-[460px]">
-      {cid ? (
-        <Image
-          src={imageData}
-          fill={true}
-          alt="myImages"
-          className="rounded-lg"
-        />
-      ) : (
-        <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
-      )}
-
-      <div className={className}>
+    <div className="relative w-[390px] h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg">
+      <Link href={`/detail?id=${id}`}>
+        {cid ? (
+          <Image
+            src={imageData}
+            fill={true}
+            alt="myImages"
+            className="rounded-lg object-fit "
+          />
+        ) : (
+          <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
+        )}
+      </Link>
+      <div>
         <div className="flex flec-col text-white">
           <div className="absolute bottom-24 left-5 text-2xl font-bold">
             {title}

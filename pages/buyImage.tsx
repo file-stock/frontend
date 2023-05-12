@@ -70,7 +70,7 @@ const StepThree: FC<StepThreeProps> = ({ title, description }) => {
               label="Buy Image"
               variant="mainFull"
               size="md"
-              onclick={() => callBuyFile()}
+           //   onclick={() => callBuyFile(id, price)}
             />
             <div className="flex items-center justify-between ml-4 gap-4 py-2 px-6 border border-main rounded-lg cursor-pointer text-lg font-bold">
               <Image src={uploadIcon} height={15} width={15} alt="upload" />

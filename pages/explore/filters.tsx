@@ -17,7 +17,7 @@ const FiltersDropdown = ({ options, defaultOption, onChange }: FiltersDropdownPr
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleOptionClick = (option: FilterOption) => {
-    setSelectedOption(option.value);
+    setSelectedOption(option.label);
     setIsOpen(false);
     onChange(option.value);
   };
@@ -36,7 +36,7 @@ const FiltersDropdown = ({ options, defaultOption, onChange }: FiltersDropdownPr
   }, []);
 
   return (
-    <div ref={menuRef} className="relative">
+    <div ref={menuRef} className="relative shadow-md">
       <button
         onClick={() => setIsOpen(!isOpen)}
         type="button"
@@ -50,16 +50,16 @@ const FiltersDropdown = ({ options, defaultOption, onChange }: FiltersDropdownPr
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-[280px] border border-border rounded-b-mb bg-white divide-y divide-border">
+        <div className="absolute z-10 w-[280px] border border-border rounded-b-mb bg-white divide-y divide-border shadow-md">
           {options.map((option, index) => (
             <button
               key={index}
               className={`${
                 selectedOption === option.value ? "bg-gray-100" : ""
-              } w-full px-4 py-2 text-sm text-gray-700 hover:bg-main hover:text-white`}
+              } w-full px-4 py-2 text-sm text-gray-700 hover:bg-main hover:text-white flex justify-center`}
               onClick={() => handleOptionClick(option)}
             >
-              {option.label}
+              <span className=" transform transition-transform hover:scale-110">{option.label}</span>
             </button>
           ))}
         </div>
