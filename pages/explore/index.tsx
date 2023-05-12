@@ -161,7 +161,7 @@ const Explore = () => {
           </div>
         ))}
       </div>
-      <div className="grid xl:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10 mt-6 w-fit mx-auto mt-20 min-h-[600px]">
+      <div className="grid xl:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
         {isLoading ? (
           <p className="text-lg text-center">Loading...</p>
         ) : visibleImages.length > 0 ? (

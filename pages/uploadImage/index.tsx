@@ -3,7 +3,6 @@ import lighthouse from "@lighthouse-web3/sdk";
 import { ethers } from "ethers";
 import Jimp from "jimp";
 import { ThemeContext } from "../../context/context";
-
 import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
 import StepThree from "./stepThree";
@@ -20,11 +19,18 @@ function UploadImage() {
   const [accessConditionCid, setAccessConditionCid] = useState("");
   const [hashValue, setHashValue] = useState("");
 
-
   const fileInputRef = useRef(null);
 
-  const { setPrice, price, imgForSale, setImgForSale, preview, setPreview, selectedTags, selectedTagNumbers } =
-    useContext(ThemeContext);
+  const {
+    setPrice,
+    price,
+    imgForSale,
+    setImgForSale,
+    preview,
+    setPreview,
+    selectedTags,
+    selectedTagNumbers,
+  } = useContext(ThemeContext);
 
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
 
@@ -50,7 +56,30 @@ function UploadImage() {
     reader.onload = async () => {
       // @ts-ignore
       const image = await Jimp.read(reader.result);
-     // image.resize(200, 200);
+      const watermarkedImg = await Jimp.read(
+        `${window.location.origin}/images/imageSample/filestockwm.png`
+      );
+      image.resize(800, 600);
+      image.composite(watermarkedImg, 10, 10);
+      image.composite(
+        watermarkedImg,
+        image.bitmap.width - watermarkedImg.bitmap.width - 10,
+        10
+      );
+      image.composite(
+        watermarkedImg,
+        10,
+        image.bitmap.height - watermarkedImg.bitmap.height - 10
+      );
+      image.composite(
+        watermarkedImg,
+        image.bitmap.width - watermarkedImg.bitmap.width - 10,
+        image.bitmap.height - watermarkedImg.bitmap.height - 10
+      );
+      const centerX = image.bitmap.width / 2 - watermarkedImg.bitmap.width / 2;
+      const centerY = image.bitmap.height / 2 - watermarkedImg.bitmap.height / 2;
+      image.composite(watermarkedImg, centerX, centerY);
+      image.resize(800, Jimp.AUTO);
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
@@ -183,7 +212,7 @@ function UploadImage() {
       tagsId: selectedTagNumbers,
     };
     setImgForSale((prev: any) => [...prev, newImgObject]);
-    console.log("prezzo",price)
+    console.log("prezzo", price);
   };
 
   const deployEncrypted = async () => {

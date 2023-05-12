@@ -52,30 +52,29 @@ const TagSearch: FC<TagSearchProps> = ({
 
   console.log("selectedTags", selectedTags);
 
- const handleTagClick = (tag: string) => {
-  if (selectedTags.length < 10) { 
-    setMenuOpen(false);
-    if (btn) {
-      setInputValue(tag);
-      setSearchTerm(tag);
-    } else {
-      setSelectedTags([...selectedTags, tag]);
-      const selectedTagNumber = Object.entries(tags).find(
-        ([key, value]) => value === tag
-      )?.[0];
-      if (selectedTagNumber) {
-        setSelectedTagNumbers([
-          ...selectedTagNumbers,
-          parseInt(selectedTagNumber),
-        ]);
+  const handleTagClick = (tag: string) => {
+    if (selectedTags.length < 10) {
+      setMenuOpen(false);
+      if (btn) {
+        setInputValue(tag);
+        setSearchTerm(tag);
+      } else {
+        setSelectedTags([...selectedTags, tag]);
+        const selectedTagNumber = Object.entries(tags).find(
+          ([key, value]) => value === tag
+        )?.[0];
+        if (selectedTagNumber) {
+          setSelectedTagNumbers([
+            ...selectedTagNumbers,
+            parseInt(selectedTagNumber),
+          ]);
+        }
+        setSearchTerm("");
       }
-      setSearchTerm("");
+    } else {
+      alert("10 tags limit reached!");
     }
-  } else {
-    alert("10 tags limit reached!");  
-  }
-};
-
+  };
 
   const handleTagRemove = (tag: string) => {
     setSelectedTags(selectedTags.filter((t: string) => t !== tag));
@@ -97,8 +96,6 @@ const TagSearch: FC<TagSearchProps> = ({
     }
   };
 
-
-  
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick, false);
     return () => {
@@ -152,7 +149,7 @@ const TagSearch: FC<TagSearchProps> = ({
         )}
       </div>
       <div className="flex relative">
-      <div>
+        <div>
           <input
             type="text"
             placeholder={
@@ -161,7 +158,11 @@ const TagSearch: FC<TagSearchProps> = ({
                 : `Example: Rain, Nature, Moutains... ${tagsLeft} tags left. `
             }
             className={`border border-border rounded-md text-[#0A001F] shadow-md ${
-              size === "lg" && !btn ? "py-4 px-4 w-[600px] mt-3" : size === "lg" ? "py-4 px-4 w-[600px]" : "py-2 px-4"
+              size === "lg" && !btn
+                ? "py-4 px-4 w-[600px] mt-3"
+                : size === "lg"
+                ? "py-4 px-4 w-[600px]"
+                : "py-2 px-4"
             }`}
             required
             value={btn ? inputValue : searchTerm}
