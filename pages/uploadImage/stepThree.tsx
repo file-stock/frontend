@@ -24,7 +24,7 @@ const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
       }
     };
     getFiles();
-  }, []);
+  }, [userAddress]);
 
   return (
     <div className="pb-[128px]">
