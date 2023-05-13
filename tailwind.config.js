@@ -20,6 +20,10 @@ module.exports = {
           "100%": { transform: "translateX(50%)" }, // set to 100% to scroll all the way
         },
       },
+      transitionProperty: {
+        'height': 'height',
+        'spacing': 'margin, padding',
+      },
     },
     colors: {
       main: "#603EB6",
