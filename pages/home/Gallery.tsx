@@ -26,7 +26,7 @@ const Gallery: FC<GalleryProps> = ({ cid }) => {
         {imageData && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            className="rounded-lg w-[360px] h-[460px]"
+            className="rounded-lg w-[480px] h-[460px]"
             src={imageData}
             alt="image"
           />

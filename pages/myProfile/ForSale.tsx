@@ -25,16 +25,18 @@ const ForSale: FC<ForSaleProps> = ({ cids, price }) => {
   }, [cids, price]);
 
   return (
-    <div className="mb-6">
-      {imagesForSale && (
-        <ImageCardForSale
-          img={imagesForSale}
-          title={""}
-          description={""}
-          price={priceInEther}
-          downloadButton={true}
-        />
-      )}
+    <div>
+      <div className="mb-6">
+        {imagesForSale && (
+          <ImageCardForSale
+            img={imagesForSale}
+            title={""}
+            description={""}
+            price={priceInEther}
+            downloadButton={true}
+          />
+        )}
+      </div>
     </div>
   );
 };
