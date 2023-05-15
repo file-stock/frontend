@@ -45,19 +45,19 @@ const Main = () => {
                 onClick={() => updateFavorite(card.id)}
                 id={i}
                 favorite={favorite}
-                buyLink="/buyImage"
               />
             </div>
           );
         })}
       </div>
       <div className="flex justify-center my-20">
-        <GenericButton
+        <Link href={"/explore"}> <GenericButton
           label="View all"
           variant="mainFull"
           size="md"
           onclick={() => null}
-        />
+        /></Link>
+       
       </div>
     </div>
   );

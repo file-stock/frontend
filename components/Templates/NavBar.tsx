@@ -21,7 +21,8 @@ const NavBar = () => {
     <div className="flex justify-between py-5 px-[140px] items-center sticky top-0 z-50 bg-white opacity-90 hover:opacity-100">
       <div className="flex items-center">
         <div className="relative mr-[70px] font-extrabold w-[180px] h-10">
-          <Image src={logoBlack} fill={true} alt="logo" />
+          <Link href={"/"}><Image src={logoBlack} fill={true} alt="logo" /></Link>
+          
         </div>
         <div className="flex items-center">
         <TagSearch

@@ -8,12 +8,12 @@ const Header = () => {
         The first NFT Blockchain site for Stock Images
       </div>
       <div className="flex gap-4">
-        <GenericButton
+        <Link href={"/explore"}><GenericButton
           label="Find Images"
           size="md"
           variant="mainFull"
           onclick={() => console.log("")}
-        />
+        /></Link>
         <div className="border font-bold border-white rounded-md py-4 px-8">
           <Link href="/uploadImage">Start Selling</Link>
         </div>

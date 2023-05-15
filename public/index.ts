@@ -9,6 +9,7 @@ import favouriteIcon from "./images/icons/favourite.png";
 import logoWhite from "./images/icons/logoWhite.png";
 import logoBlack from "./images/icons/logoBlack.png";
 import filestockwm from "./images/imageSample/filestockwm.png";
+import filestockwm2 from "./images/imageSample/filestockwm2.png";
 import creatorSample from "./images/imageSample/creator.png";
 import guys from "./images/imageSample/guys.png";
 import forest from "./images/imageSample/forest.png";
@@ -20,6 +21,7 @@ import user from "./images/imageSample/user.png";
 import horse from "./images/imageSample/horse.jpg";
 
 export {
+  filestockwm2,
   filestockwm,
   deleteIcon,
   downloadIcon,

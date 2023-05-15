@@ -39,7 +39,7 @@ const StepTwo: FC<StepTwoProps> = ({
   setDescription,
   hashValue,
 }) => {
-  const { callContract, setPrice, selectedTags, setSelectedTags, selectedTagNumbers, setSelectedTagNumbers  } = useContext(ThemeContext);
+  const { startUpload, setPrice, selectedTags, setSelectedTags, selectedTagNumbers, setSelectedTagNumbers  } = useContext(ThemeContext);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const forms = [
     /*{ label: "Title of the image", type: "text", required: true},
@@ -113,7 +113,7 @@ const StepTwo: FC<StepTwoProps> = ({
     if (hashValue) {
       const completeUpload = async () => {
         setIsPopUpOpen(true);
-        await callContract(hashValue, selectedTagNumbers);
+        await startUpload(hashValue, selectedTagNumbers);
         setIsPopUpOpen(false);
         setStep(3);
       };
