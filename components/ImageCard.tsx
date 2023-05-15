@@ -12,7 +12,7 @@ type ImageCardProps = {
   id: number;
   favorite?: any;
   className?: string;
-  buyLink?: string;
+
   cid?: string;
 };
 
@@ -24,7 +24,7 @@ const ImageCard: FC<ImageCardProps> = ({
   id,
   favorite,
   className,
-  buyLink,
+
   cid,
 }) => {
   const [imageData, setImageData] = useState("");
@@ -63,15 +63,15 @@ const ImageCard: FC<ImageCardProps> = ({
           <div className="absolute bottom-24 left-5 text-2xl font-bold">
             {title}
           </div>
-          {buyLink ? (
+          {/* {buyLink ? (
             <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
               <Link href={buyLink}>Buy</Link>
             </div>
-          ) : (
+          ) : ( */}
             <div className="absolute bottom-10 left-5 text-sm font-normal">
               {description}
             </div>
-          )}
+     
         </div>
         <div
           className={`absolute opacity-0 group-hover:opacity-100 right-2 top-2 w-5 h-5 p-2 rounded-full ${

@@ -30,7 +30,7 @@ type ContextType = {
   wallet: any;
   disconnect: any;
   connecting: any;
-  callContract: (hash: any, tags: number[]) => Promise<void>;
+  startUpload: (hash: any, tags: number[]) => Promise<void>;
   callBuyFile: (id: any, price: any) => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;
@@ -147,7 +147,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
-  const callContract = async (hash: any, tags: any) => {
+  const startUpload = async (hash: any, tags: any) => {
     if (!contract || !price) return;
     const tx = await contract.storeFile(
       hash,
@@ -169,11 +169,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     console.log(amount.toString());
     try {
       const tx = await contract.buyFile(id, {
-        gasLimit: 200000,
         value: amount,
       });
       await tx.wait();
-      console.log("buyfile",tx);
+      console.log("buyfile", tx);
     } catch (error) {
       console.error("Transaction failed: ", error);
     }
@@ -189,7 +188,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         disconnect,
         wallet,
         connecting,
-        callContract,
+        startUpload,
         callBuyFile,
         setHash,
         setPrice,

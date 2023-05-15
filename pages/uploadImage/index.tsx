@@ -50,8 +50,7 @@ function UploadImage() {
 
   async function modifyFile(e: any) {
     let originalFile = e.target.files[0];
-    let file = e.target.files[0];  
-
+    let file = e.target.files[0];
 
     console.log("event", e);
     const fileName = file.name;
@@ -61,29 +60,47 @@ function UploadImage() {
       // @ts-ignore
       const image = await Jimp.read(reader.result);
       const watermarkedImg = await Jimp.read(
-        `${window.location.origin}/images/imageSample/filestockwm.png`
+        `${window.location.origin}/images/imageSample/filestockwm2.png`
       );
-      image.resize(800, 600);
-      image.composite(watermarkedImg, 10, 10);
-      image.composite(
-        watermarkedImg,
-        image.bitmap.width - watermarkedImg.bitmap.width - 10,
-        10
-      );
-      image.composite(
-        watermarkedImg,
-        10,
-        image.bitmap.height - watermarkedImg.bitmap.height - 10
-      );
-      image.composite(
-        watermarkedImg,
-        image.bitmap.width - watermarkedImg.bitmap.width - 10,
-        image.bitmap.height - watermarkedImg.bitmap.height - 10
-      );
-      const centerX = image.bitmap.width / 2 - watermarkedImg.bitmap.width / 2;
-      const centerY = image.bitmap.height / 2 - watermarkedImg.bitmap.height / 2;
-      image.composite(watermarkedImg, centerX, centerY);
+      // image.resize(800, 600);
+      // image.composite(watermarkedImg, 10, 10);
+      // image.composite(
+      //   watermarkedImg,
+      //   image.bitmap.width - watermarkedImg.bitmap.width - 10,
+      //   10
+      // );
+      // image.composite(
+      //   watermarkedImg,
+      //   10,
+      //   image.bitmap.height - watermarkedImg.bitmap.height - 10
+      // );
+      // image.composite(
+      //   watermarkedImg,
+      //   image.bitmap.width - watermarkedImg.bitmap.width - 10,
+      //   image.bitmap.height - watermarkedImg.bitmap.height - 10
+      // );
+      // const centerX = image.bitmap.width / 2 - watermarkedImg.bitmap.width / 2;
+      // const centerY = image.bitmap.height / 2 - watermarkedImg.bitmap.height / 2;
+      // image.composite(watermarkedImg, centerX, centerY);
+      // image.resize(800, Jimp.AUTO);
       image.resize(800, Jimp.AUTO);
+
+      const watermarkWidth = watermarkedImg.bitmap.width;
+      const watermarkHeight = watermarkedImg.bitmap.height;
+
+      const xWatermarks = Math.ceil(image.bitmap.width / watermarkWidth);
+      const yWatermarks = Math.ceil(image.bitmap.height / watermarkHeight);
+
+      for (let i = 0; i < xWatermarks; i++) {
+        for (let j = 0; j < yWatermarks; j++) {
+          image.composite(
+            watermarkedImg,
+            i * watermarkWidth,
+            j * watermarkHeight
+          );
+        }
+      }
+
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
@@ -93,13 +110,12 @@ function UploadImage() {
       let list = new DataTransfer();
       list.items.add(file);
       setEncryptedSinteticBaseEvent(originalFile);
+
       setOriginalFile(() => {
-        // let newState = e;
-        // newState.target.files = null;
         let newState = e;
         newState.target.files = list.files;
         return newState;
-      });;
+      });
 
       setSinteticBaseEvent(() => {
         // let newState = e;
@@ -257,7 +273,6 @@ function UploadImage() {
     if (encryptedSinteticBaseEvent) {
       mergeImageForSale();
       deployEncrypted();
-
 
       // return await deploy();
     }
