@@ -162,9 +162,9 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     const amount = ethers.utils.parseEther(price);
     console.log(amount.toString());
     try {
-      const tx = await contract.buyFile(id, { gasLimit: 200000, value: amount });
+      const tx = await contract.buyFile(id, {  value: amount });
       await tx.wait();
-      console.log(tx);
+      console.log("buyfile",tx);
     } catch (error) {
       console.error("Transaction failed: ", error);
     }

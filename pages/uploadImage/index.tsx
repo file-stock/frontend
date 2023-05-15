@@ -9,6 +9,8 @@ import StepThree from "./stepThree";
 
 function UploadImage() {
   const [selectedFile, setSelectedFile] = useState<any>("");
+  const [originalFile, setOriginalFile] = useState<any>(null);
+
   // const [preview, setPreview] = useState<string>("");
   const [step, setStep] = useState<1 | 2 | 3 | number>(1);
   const [sinteticBaseEvent, setSinteticBaseEvent] = useState<any>();
@@ -47,7 +49,9 @@ function UploadImage() {
   }, [selectedFile]);
 
   async function modifyFile(e: any) {
-    const file = e.target.files[0];
+    let originalFile = e.target.files[0];
+    let file = e.target.files[0];  
+
 
     console.log("event", e);
     const fileName = file.name;
@@ -88,7 +92,14 @@ function UploadImage() {
       //new FileList which is the type of target.files
       let list = new DataTransfer();
       list.items.add(file);
-      setEncryptedSinteticBaseEvent(e);
+      setEncryptedSinteticBaseEvent(originalFile);
+      setOriginalFile(() => {
+        // let newState = e;
+        // newState.target.files = null;
+        let newState = e;
+        newState.target.files = list.files;
+        return newState;
+      });;
 
       setSinteticBaseEvent(() => {
         // let newState = e;
@@ -191,7 +202,7 @@ function UploadImage() {
     // Push file to lighthouse node
     console.log("run deploy", sinteticBaseEvent);
     const output = await lighthouse.upload(
-      sinteticBaseEvent,
+      originalFile,
       LIGHTHOUSE_API_KEY,
       progressCallback
     );
@@ -246,6 +257,7 @@ function UploadImage() {
     if (encryptedSinteticBaseEvent) {
       mergeImageForSale();
       deployEncrypted();
+
 
       // return await deploy();
     }
