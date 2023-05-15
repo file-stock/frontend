@@ -173,7 +173,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         value: amount,
       });
       await tx.wait();
-      console.log(tx);
+      console.log("buyfile",tx);
     } catch (error) {
       console.error("Transaction failed: ", error);
     }
