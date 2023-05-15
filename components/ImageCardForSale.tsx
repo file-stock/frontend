@@ -34,7 +34,9 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
             <Image src={filecoinIcon} width={15} height={15} alt="filecoin" />
             {price}
           </div>
-          <div>{tags} - {tagsId}</div>
+          <div>
+            {tags} - {tagsId}
+          </div>
           <div className="text-md max-w-[420px]">{description}</div>
           <div>
             <div className="flex items-center gap-3">

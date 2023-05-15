@@ -61,7 +61,7 @@ export default function Home() {
       </div>
       <Main />
       <CreatorOfTheMonth />
-      <div className="flex mt-8">
+      <div className="grid grid-cols-4 m-2 gap-2 mt-10">
         {selectedImages.map((file: any, index: any) => (
           <Gallery key={index} cid={file[0]} />
         ))}
