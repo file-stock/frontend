@@ -105,6 +105,12 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       setProvider(new ethers.providers.Web3Provider(provider, "any"));
       setUserAddress(accounts[0].address);
       setIsConnected(true);
+    } else {
+      // wallet is null or undefined, user is likely disconnected
+      setIsConnected(false);
+      setUserAddress("");
+      setProvider(null);
+      window.localStorage.removeItem("connectedWallets");
     }
   }, [wallet]);
 
@@ -162,14 +168,16 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     const amount = ethers.utils.parseEther(price);
     console.log(amount.toString());
     try {
-      const tx = await contract.buyFile(id, { gasLimit: 200000, value: amount });
+      const tx = await contract.buyFile(id, {
+        gasLimit: 200000,
+        value: amount,
+      });
       await tx.wait();
       console.log(tx);
     } catch (error) {
       console.error("Transaction failed: ", error);
     }
   };
-  
 
   return (
     <ThemeContext.Provider

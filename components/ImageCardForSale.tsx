@@ -42,7 +42,9 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
             <div className="flex items-center gap-3">
               {downloadButton && (
                 <div className="bg-main text-white py-2 px-4 cursor-pointer rounded-lg font-semibold text-lg">
-                  Download Image
+                  <a href={img} download>
+                    Download Image
+                  </a>
                 </div>
               )}
               <div className="border border-border rounded-lg py-3.5 px-4 cursor-pointer">

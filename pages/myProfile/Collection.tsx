@@ -14,7 +14,7 @@ const Collection = () => {
           description={card.description}
           price={card.price}
           downloadButton={true}
-          />
+        />
       ))}
     </div>
   );

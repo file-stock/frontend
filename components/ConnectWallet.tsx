@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { ThemeContext } from "../context/context";
 type connecttype = {
   className?: string;
-}
-const ConnectWallet = ({className}:connecttype) => {
+};
+const ConnectWallet = ({ className }: connecttype) => {
   const { connect, disconnect, wallet, connecting } = useContext(ThemeContext);
   return (
     <>
