@@ -1,20 +1,22 @@
 import Link from "next/link";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useContext } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 import lighthouse from "@lighthouse-web3/sdk";
+import { ThemeContext } from "../../context/context";
 
 type StepThreeProps = {
   imageForSale: any[];
 };
 
 const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
+  const { userAddress } = useContext(ThemeContext);
   useEffect(() => {
     const getFiles = async () => {
       // const lighthouse = require("@lighthouse-web3/sdk");
       try {
         const uploads = await lighthouse.getUploads(
           //"310ae584-7656-4940-b42f-397d73cfca5f"
-          "0xe832cf443356A229636EdBa5799F4B24A662b31A"
+          userAddress
         );
         console.log("UPLOADS", uploads);
       } catch (error) {
@@ -22,7 +24,7 @@ const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
       }
     };
     getFiles();
-  }, []);
+  }, [userAddress]);
 
   return (
     <div className="pb-[128px]">

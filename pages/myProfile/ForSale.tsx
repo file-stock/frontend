@@ -1,12 +1,15 @@
 import { FC, useEffect, useState, useContext } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
-import { ThemeContext } from "../../context/context";
+
+import { ethers } from "ethers";
 
 interface ForSaleProps {
   cids: string;
+  price: number;
 }
-const ForSale: FC<ForSaleProps> = ({ cids }) => {
+const ForSale: FC<ForSaleProps> = ({ cids, price }) => {
   const [imagesForSale, setImagesForSale] = useState("");
+  const priceInEther = price ? ethers.utils.formatEther(price.toString()) : "0";
 
   useEffect(() => {
     async function fetchImageData() {
@@ -19,16 +22,17 @@ const ForSale: FC<ForSaleProps> = ({ cids }) => {
       }
     }
     fetchImageData();
-  }, [cids]);
+  }, [cids, price]);
+
   return (
-    <div className="mb-6">
-      <div className="">
+    <div>
+      <div className="mb-6">
         {imagesForSale && (
           <ImageCardForSale
             img={imagesForSale}
             title={""}
             description={""}
-            price={"2"}
+            price={priceInEther}
             downloadButton={true}
           />
         )}
