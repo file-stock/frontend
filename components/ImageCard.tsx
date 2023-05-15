@@ -45,7 +45,7 @@ const ImageCard: FC<ImageCardProps> = ({
     fetchImageData();
   }, [cid]);
   return (
-    <div className="relative w-[480px] group h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg">
+    <div className={`relative ${cid? "w-[390px] group h-[460px]" : "w-[480px] group h-[460px]"}  transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg`}>
       <Link href={`/detail?id=${id}`}>
         {cid ? (
           <Image
