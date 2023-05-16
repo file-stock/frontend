@@ -21,8 +21,8 @@ module.exports = {
         },
       },
       transitionProperty: {
-        'height': 'height',
-        'spacing': 'margin, padding',
+        height: "height",
+        spacing: "margin, padding",
       },
     },
     colors: {

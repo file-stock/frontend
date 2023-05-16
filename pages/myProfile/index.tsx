@@ -67,7 +67,7 @@ const MyProfile = () => {
             For sale
           </div>
         </div>
-        <div className="flex items-center justify-start mb-10 bg-main text-white font-bold text-[20px] rounded-lg py-3 px-10 mt-[75px] mb-[45px]">
+        <div className="flex items-center justify-start mb-10 bg-main text-white font-bold text-[20px] rounded-lg py-3 px-10 mt-[75px] mb-[45px] cursor-pointer">
           <div className="mr-4">Filter by:</div>
           <div>
             <select
