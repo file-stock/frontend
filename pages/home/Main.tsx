@@ -51,13 +51,15 @@ const Main = () => {
         })}
       </div>
       <div className="flex justify-center my-20">
-        <Link href={"/explore"}> <GenericButton
-          label="View all"
-          variant="mainFull"
-          size="md"
-          onclick={() => null}
-        /></Link>
-       
+        <Link href={"/explore"}>
+          {" "}
+          <GenericButton
+            label="View all"
+            variant="mainFull"
+            size="md"
+            onclick={() => null}
+          />
+        </Link>
       </div>
     </div>
   );

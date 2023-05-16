@@ -46,7 +46,6 @@ const Explore = () => {
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allFiles, selectedTagNumbers, selectedFilters]);
-  
 
   useEffect(() => {
     // controllo dell'url al refresh

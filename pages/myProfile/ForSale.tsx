@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useContext } from "react";
+import { FC, useEffect, useState } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 
 import { ethers } from "ethers";

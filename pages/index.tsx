@@ -7,7 +7,6 @@ import { utils } from "ethers";
 import { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../context/context";
 
-
 // function getRandomIndices(arrLength, numIndices) {
 //   const indices = new Set();
 //   while (indices.size < numIndices) {
@@ -17,7 +16,13 @@ import { ThemeContext } from "../context/context";
 // }
 
 export default function Home() {
-  const { allFiles, selectedTags, setSelectedTags, selectedTagNumbers, setSelectedTagNumbers } = useContext(ThemeContext);
+  const {
+    allFiles,
+    selectedTags,
+    setSelectedTags,
+    selectedTagNumbers,
+    setSelectedTagNumbers,
+  } = useContext(ThemeContext);
   console.log("allfileshome", allFiles);
   const [selectedImages, setSelectedImages] = useState<any>([]);
   //console.log("allFiles", allFiles);
@@ -50,13 +55,13 @@ export default function Home() {
         <Header />
         <div className="flex items-center absolute -bottom-14 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <TagSearch
-          selectedTags={selectedTags}
-          setSelectedTags={setSelectedTags}
-          selectedTagNumbers={selectedTagNumbers}
-          setSelectedTagNumbers={setSelectedTagNumbers}
-          btn={true}
-          size="lg"
-        />
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            selectedTagNumbers={selectedTagNumbers}
+            setSelectedTagNumbers={setSelectedTagNumbers}
+            btn={true}
+            size="lg"
+          />
         </div>
       </div>
       <Main />
