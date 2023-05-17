@@ -1,13 +1,39 @@
-import { useState } from "react";
+import { FC, useState, useEffect } from "react";
 import GenericButton from "../../components/GenericButton";
 import Link from "next/link";
 import ImageCard from "../../components/ImageCard";
 import { homePageImages } from "../../constants/constants";
 import React from "react";
 
-const Main = () => {
+interface MainProps {
+  selectedImagesMain: any;
+}
+
+const Main: FC<MainProps> = ({ selectedImagesMain }) => {
   const [favorite, setFavorite] = useState<any[]>([]);
-  const cards = homePageImages;
+  const cards = selectedImagesMain;
+  const [imageData, setImageData] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchImageData() {
+      const allData = [];
+      for (let i = 0; i < cards.length; i++) {
+        console.log("cards[i].watermarkedCid", cards[i].watermarkedCid);
+        try {
+          const response = await fetch(
+            `https://ipfs.io/ipfs/${cards[i].watermarkedCid}`
+          );
+          const data = await response.text();
+          allData.push(data);
+        } catch (error) {
+          console.error("Error fetching image data:", error);
+        }
+      }
+      setImageData(allData);
+    }
+
+    fetchImageData();
+  }, [cards]);
 
   const updateFavorite = (cardId: any) => {
     let updatedFavorite = [...favorite];
@@ -36,11 +62,11 @@ const Main = () => {
         </div>
       </div>
       <div className="flex justify-between mt-20">
-        {cards.map((card: any, i: any) => {
+        {imageData.map((card: any, i: any) => {
           return (
             <div key={i}>
               <ImageCard
-                img={card.img}
+                img={card}
                 title={card.title}
                 onClick={() => updateFavorite(card.id)}
                 id={i}
