@@ -25,18 +25,25 @@ export default function Home() {
   } = useContext(ThemeContext);
   console.log("allfileshome", allFiles);
   const [selectedImages, setSelectedImages] = useState<any>([]);
-  //console.log("allFiles", allFiles);
+  const [selectedImagesMain, setSelectedImagesMain] = useState<any>([]);
+
   useEffect(() => {
     const getRandomImages = () => {
       if (!allFiles || allFiles.length === 0) {
         return;
       }
       const randomImages = [];
+      const randomImagesMain = [];
       for (let i = 0; i < 8; i++) {
         const randomIndex = Math.floor(Math.random() * allFiles.length);
         randomImages.push(allFiles[randomIndex]);
       }
       setSelectedImages(randomImages);
+      for (let i = 0; i < 4; i++) {
+        const randomIndex = Math.floor(Math.random() * allFiles.length);
+        randomImagesMain.push(allFiles[randomIndex]);
+      }
+      setSelectedImagesMain(randomImagesMain);
     };
 
     getRandomImages();
@@ -64,7 +71,8 @@ export default function Home() {
           />
         </div>
       </div>
-      <Main />
+      <Main selectedImagesMain={selectedImagesMain} />
+
       <CreatorOfTheMonth />
       <div className="grid grid-cols-4 m-2 gap-2 mt-10">
         {selectedImages.map((file: any, index: any) => (
