@@ -12,28 +12,6 @@ interface MainProps {
 const Main: FC<MainProps> = ({ selectedImagesMain }) => {
   const [favorite, setFavorite] = useState<any[]>([]);
   const cards = selectedImagesMain;
-  const [imageData, setImageData] = useState<string[]>([]);
-
-  useEffect(() => {
-    async function fetchImageData() {
-      const allData = [];
-      for (let i = 0; i < cards.length; i++) {
-        console.log("cards[i].watermarkedCid", cards[i].watermarkedCid);
-        try {
-          const response = await fetch(
-            `https://ipfs.io/ipfs/${cards[i].watermarkedCid}`
-          );
-          const data = await response.text();
-          allData.push(data);
-        } catch (error) {
-          console.error("Error fetching image data:", error);
-        }
-      }
-      setImageData(allData);
-    }
-
-    fetchImageData();
-  }, [cards]);
 
   const updateFavorite = (cardId: any) => {
     let updatedFavorite = [...favorite];
@@ -62,19 +40,21 @@ const Main: FC<MainProps> = ({ selectedImagesMain }) => {
         </div>
       </div>
       <div className="flex justify-between mt-20">
-        {imageData.map((card: any, i: any) => {
-          return (
-            <div key={i}>
-              <ImageCard
-                img={card}
-                title={card.title}
-                onClick={() => updateFavorite(card.id)}
-                id={i}
-                favorite={favorite}
-              />
-            </div>
-          );
-        })}
+        {cards &&
+          cards.map((card: any, i: any) => {
+            //console.log("card", card);
+            return (
+              <div key={i}>
+                <ImageCard
+                  cid={cards[i].watermarkedCid}
+                  title={card.title}
+                  onClick={() => updateFavorite(card.tokenId)}
+                  id={card.tokenId}
+                  favorite={favorite}
+                />
+              </div>
+            );
+          })}
       </div>
       <div className="flex justify-center my-20">
         <Link href={"/explore"}>

@@ -23,7 +23,7 @@ export default function Home() {
     selectedTagNumbers,
     setSelectedTagNumbers,
   } = useContext(ThemeContext);
-  console.log("allfileshome", allFiles);
+  //console.log("allfileshome", allFiles);
   const [selectedImages, setSelectedImages] = useState<any>([]);
   const [selectedImagesMain, setSelectedImagesMain] = useState<any>([]);
 

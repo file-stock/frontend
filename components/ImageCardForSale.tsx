@@ -1,7 +1,9 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Image from "next/image";
 
 import { filecoinIcon, deleteIcon, imageLicenzeIcon } from "../public";
+import { ethers } from "ethers";
+import lighthouse from "@lighthouse-web3/sdk";
 
 type ImageCardForSaleProps = {
   img: any;
