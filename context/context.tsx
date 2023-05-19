@@ -10,6 +10,7 @@ import {
 } from "react";
 import { ethers } from "ethers";
 import ContractAbi from "../lib/contractAbi.json";
+import nftRightsAbi from "../lib/nftRightsAbi.json";
 import { myCardSale } from "../constants/constants";
 
 import lighthouse from "@lighthouse-web3/sdk";
@@ -47,6 +48,8 @@ type ContextType = {
   allFiles: any[];
   contract: any;
   userAddress: string;
+  provider: any;
+  contractRights: any;
 };
 
 const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
@@ -91,7 +94,9 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [allFiles, setAllFiles] = useState<any[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
-  const CONTRACT_ADDRESS = "0x307c87ff1e333ad5cc193e2fe0a13c3d27fa2d60";
+  const [contractRights, setContractRights] = useState<any>();
+  const CONTRACT_ADDRESS = "0x808c13Dc217174268385A5eC50F44c5c62C822F6";
+  const CONTRACT_RIGHTS = "0x9F6b44cb29099ADBc7dD34fF62b2f046c71BE895";
 
   useEffect(() => {
     const hProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
@@ -123,8 +128,13 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (!signer) return;
     const contract = new ethers.Contract(CONTRACT_ADDRESS, ContractAbi, signer);
-
+    const contractRights = new ethers.Contract(
+      CONTRACT_RIGHTS,
+      nftRightsAbi,
+      signer
+    );
     setContract(contract);
+    setContractRights(contractRights);
   }, [signer]);
 
   useEffect(() => {
@@ -141,22 +151,22 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       } catch (error) {
         console.error("Error fetching files: ", error);
       }
-      console.log("fetchedFiles", allFiles);
     };
     fetchFiles();
+    console.log("fetchedFiles", allFiles);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
   const startUpload = async (hash: any, tags: any) => {
     if (!contract || !price) return;
-    const tx = await contract.storeFile(
+    const tx = await contract.startUpload(
       hash,
       ethers.utils.parseEther(price.toString()),
       tags
     );
     await tx.wait();
-    console.log("after transaction", imgForSale);
-    contract.on("StoreFile", (value1: any, value2: any, value3: any) => {
+    console.log("after transaction", tx);
+    contract.on("StartUpload", (value1: any, value2: any, value3: any) => {
       console.log("Value 1:", value1);
       console.log("Value 2:", value2);
       console.log("Value 3:", value3);
@@ -207,6 +217,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setSelectedTags,
         selectedTagNumbers,
         setSelectedTagNumbers,
+        provider,
+        contractRights: contractRights,
       }}
     >
       {children}

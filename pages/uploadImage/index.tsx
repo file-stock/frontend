@@ -32,6 +32,8 @@ function UploadImage() {
     setPreview,
     selectedTags,
     selectedTagNumbers,
+    contract,
+    contractRights,
   } = useContext(ThemeContext);
 
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
@@ -261,8 +263,12 @@ function UploadImage() {
       sig.signedMessage,
       progressCallback
     );
-    console.log(response);
+    console.log("response index upload", response);
     setAccessConditionCid(response.data.Hash);
+    const tokenId = await contractRights.rightsNFTCount();
+    //await contract.finalizeUpload(tokenId, accessConditionCid);
+    console.log("tokenId", tokenId);
+
     modifyFile(encryptedSinteticBaseEvent);
   };
 

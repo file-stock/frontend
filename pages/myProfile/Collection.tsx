@@ -1,11 +1,13 @@
 import { ThemeContext } from "../../context/context";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 import { myCardSale } from "../../constants/constants";
+import { ethers } from "ethers";
 
 const Collection = () => {
   const [myImage, setMyImage] = useState(myCardSale);
-  const { isConnected } = useContext(ThemeContext);
+  const { isConnected, provider, contractRights } = useContext(ThemeContext); // assuming provider is passed in context
+
   return (
     <div className="flex flex-wrap gap-14">
       {isConnected &&

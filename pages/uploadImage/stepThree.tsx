@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FC, useEffect, useContext } from "react";
+import { FC, useEffect, useContext, useState } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 import lighthouse from "@lighthouse-web3/sdk";
 import { ThemeContext } from "../../context/context";
@@ -10,6 +10,7 @@ type StepThreeProps = {
 
 const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
   const { userAddress } = useContext(ThemeContext);
+
   useEffect(() => {
     const getFiles = async () => {
       // const lighthouse = require("@lighthouse-web3/sdk");

@@ -71,6 +71,44 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "BuyFile",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "FinalizeUpload",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "creator",
         "type": "address"
       },
@@ -83,11 +121,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "rightsId",
+        "name": "tokenId",
         "type": "uint256"
       }
     ],
-    "name": "StoreFile",
+    "name": "StartUpload",
     "type": "event"
   },
   {
@@ -207,6 +245,11 @@
         "type": "string"
       },
       {
+        "internalType": "string",
+        "name": "encryptedCid",
+        "type": "string"
+      },
+      {
         "internalType": "address",
         "name": "creator",
         "type": "address"
@@ -220,9 +263,32 @@
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "finalized",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_encryptedCid",
+        "type": "string"
+      }
+    ],
+    "name": "finalizeUpload",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -234,6 +300,11 @@
           {
             "internalType": "string",
             "name": "watermarkedCid",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "encryptedCid",
             "type": "string"
           },
           {
@@ -255,6 +326,11 @@
             "internalType": "uint256[]",
             "name": "fileTags",
             "type": "uint256[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "finalized",
+            "type": "bool"
           }
         ],
         "internalType": "struct FileStock.File[]",
@@ -302,6 +378,11 @@
             "type": "string"
           },
           {
+            "internalType": "string",
+            "name": "encryptedCid",
+            "type": "string"
+          },
+          {
             "internalType": "address",
             "name": "creator",
             "type": "address"
@@ -320,6 +401,11 @@
             "internalType": "uint256[]",
             "name": "fileTags",
             "type": "uint256[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "finalized",
+            "type": "bool"
           }
         ],
         "internalType": "struct FileStock.File",
@@ -486,7 +572,7 @@
         "type": "uint256[]"
       }
     ],
-    "name": "storeFile",
+    "name": "startUpload",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

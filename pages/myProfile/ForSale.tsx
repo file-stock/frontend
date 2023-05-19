@@ -23,7 +23,7 @@ const ForSale: FC<ForSaleProps> = ({ cids, price }) => {
     }
     fetchImageData();
   }, [cids, price]);
-
+  //console.log("cids", cids); //works fine
   return (
     <div>
       <div className="mb-6">
