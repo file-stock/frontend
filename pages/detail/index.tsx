@@ -81,7 +81,7 @@ const Detail = () => {
 
   return (
     <>
-      <div className="flex flex-col pb-[180px] px-[140px] pt-10">
+      <div className="flex flex-col lg:pb-[180px] pb-[100px] px-[60px] lg:px-[140px] pt-10 ">
         <div className="flex justify-center">
           {/* <Watermark
           content="File-Stock"
@@ -90,7 +90,7 @@ const Detail = () => {
          // style={style}
           className="w-fit "
         > */}
-          <div className="relative flex items-center  justify-center mb-[40px] h-[500px]">
+          <div className="relative flex items-center  justify-center mb-[40px]  h-[500px]">
             <img
               src={imageData}
               alt="Selected image"
@@ -108,13 +108,13 @@ const Detail = () => {
               size="md"
               onclick={() => callBuyFile(id, price)}
             />
-            <div className="flex items-center justify-between ml-4 gap-4 py-2 px-6 border border-main rounded-lg cursor-pointer text-lg font-bold">
+            {/* <div className="flex items-center justify-between ml-4 gap-4 py-2 px-6 border border-main rounded-lg cursor-pointer text-lg font-bold">
               <Image src={uploadIcon} height={15} width={15} alt="upload" />
               <div className="text-main font-bold">Try Photo</div>
             </div>
             <div className="flex items-center justify-between ml-4 gap-2 py-4 px-6 border border-main rounded-lg cursor-pointer text-lg font-bold">
               <Image src={downloadIcon} height={15} width={15} alt="download" />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="flex flex-col gap-1 mb-[30px]">

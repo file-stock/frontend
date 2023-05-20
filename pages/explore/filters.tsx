@@ -36,11 +36,11 @@ const FiltersDropdown = ({ options, defaultOption, onChange }: FiltersDropdownPr
   }, []);
 
   return (
-    <div ref={menuRef} className="relative shadow-md">
+    <div ref={menuRef} className="relative shadow-md w-fit">
       <button
         onClick={() => setIsOpen(!isOpen)}
         type="button"
-        className="border border-border rounded-md py-2 px-4 flex items-center justify-between w-[280px] text-black"
+        className="border border-border rounded-md py-2 px-4 flex items-center justify-between w-72 text-black"
       >
         <span className="text-sm font-medium">{selectedOption}</span>
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" className="w-[16px]">
