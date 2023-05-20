@@ -9,7 +9,7 @@ const ConnectWallet = ({ className }: connecttype) => {
     <>
       <button
         onClick={() => (wallet ? disconnect(wallet) : connect())}
-        className={`${className} text-white border border-main bg-main rounded-lg py-2 px-4 font-bold cursor-pointer `}
+        className={`${className} text-white border border-main bg-main rounded-lg py-2 px-4 font-bold cursor-pointer sm:p-2 sm:text-xs`}
       >
         {connecting ? "Connecting" : wallet ? "Disconnect" : "Connect Wallet"}
       </button>

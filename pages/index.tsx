@@ -74,7 +74,7 @@ export default function Home() {
       <Main selectedImagesMain={selectedImagesMain} />
 
       <CreatorOfTheMonth />
-      <div className="grid grid-cols-4 m-2 gap-2 mt-10">
+      <div className="grid 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
         {selectedImages.map((file: any, index: any) => (
           <Gallery key={index} cid={file[0]} />
         ))}

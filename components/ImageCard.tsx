@@ -51,16 +51,12 @@ const ImageCard: FC<ImageCardProps> = ({
       }  transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg`}
     >
       <Link href={`/detail?id=${id}`}>
-        {cid ? (
-          <Image
-            src={imageData}
-            fill={true}
-            alt="myImages"
-            className="rounded-lg object-fit"
-          />
-        ) : (
-          <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
-        )}
+        <Image
+          src={imageData}
+          fill={true}
+          alt="myImages"
+          className="rounded-lg object-fit"
+        />
       </Link>
       <div>
         <div className="flex flec-col text-white">

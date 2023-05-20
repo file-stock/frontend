@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
-
+import Image from "next/image";
+import ImageCard from "../../components/ImageCard";
 interface GalleryProps {
   cid: string;
+  key: any;
 }
 
-const Gallery: FC<GalleryProps> = ({ cid }) => {
+const Gallery: FC<GalleryProps> = ({ cid, key }) => {
   const [imageData, setImageData] = useState("");
 
   useEffect(() => {
@@ -22,16 +24,9 @@ const Gallery: FC<GalleryProps> = ({ cid }) => {
   }, [cid]);
   return (
     <div className="h-full">
-      <div className="">
-        {imageData && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            className="rounded-lg w-[480px] h-[460px]"
-            src={imageData}
-            alt="image"
-          />
-        )}
-      </div>
+      {imageData && (
+        <img className="rounded-lg" src={imageData} alt="myImages" />
+      )}
     </div>
   );
 };
