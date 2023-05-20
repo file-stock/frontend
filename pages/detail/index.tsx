@@ -38,6 +38,7 @@ const Detail = () => {
   //   background: "#fff",
   // };
 
+
   const liscenses = [
     "For commercial and personal projects",
     "On digital or printed media",

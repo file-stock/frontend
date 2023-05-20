@@ -4,9 +4,10 @@ import Collection from "./Collection";
 import ForSale from "./ForSale";
 import { useContext } from "react";
 import { ThemeContext } from "../../context/context";
-
+import ImageCard from "../../components/ImageCard";
 const MyProfile = () => {
-  const { allFiles, wallet, isConnected } = useContext(ThemeContext);
+  const { allFiles, wallet, isConnected, contractRights, userAddress } =
+    useContext(ThemeContext);
   const [currenView, setCurrentView] = useState<"collection" | "forsale">(
     "collection"
   );
@@ -15,6 +16,51 @@ const MyProfile = () => {
     "higherPrice" | "lowerPrice" | "newer" | "older" | ""
   >("");
   const [sortedImages, setSortedImages] = useState(myImages);
+  const [nftData, setNftData] = useState<any[]>([]);
+  const id = nftData.map((data) => data.tokenId.toString());
+  const [nftBalances, setNftBalances] = useState<any[]>([]);
+
+  async function getBalances() {
+    const balances = await Promise.all(
+      id.map(async (ids) => {
+        try {
+          const balance = await contractRights.balanceOf(userAddress, ids);
+          return { tokenId: ids, balance };
+        } catch (error) {
+          console.error("Errore durante la chiamata a balanceOf:", error);
+          return { tokenId: ids, balance: 0 };
+        }
+      })
+    );
+    setNftBalances(balances);
+  }
+
+  useEffect(() => {
+    getBalances();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nftData])
+  useEffect(() => {
+    const fetchRightsNFTData = async () => {
+        try {
+            const data = [];
+            const count = await contractRights.rightsNFTCount();
+            for (let i = 1; i <= count; i++) {
+                const nftData = await contractRights.rightsNFT(i);
+                const balance = await contractRights.balanceOf(userAddress, nftData.tokenId.toString());
+                if (balance > 0) {
+                    data.push(nftData);
+                }
+            }
+            setNftData(data);
+        } catch (error) {
+            console.error("Error fetching NFT data: ", error);
+        }
+    };
+    if (contractRights) {
+        fetchRightsNFTData();
+    }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [contractRights]);
 
   let walletAddress = "";
   if (isConnected && wallet && wallet.accounts && wallet.accounts[0]) {
@@ -43,9 +89,22 @@ const MyProfile = () => {
   useEffect(() => {
     setSortedImages(sortImages(myImages, filterBy));
   }, [filterBy, myImages]);
+
   return (
-    <div className="px-[140px] pb-[150px]">
-      <div className="mt-[75px]">
+    <div className="px-[140px] pb-[150px] flex justify-between">
+       {nftData.map((data, index) => {
+        const balanceData = nftBalances.find(b => b.tokenId === data.tokenId.toString());
+        const balance = balanceData ? balanceData.balance : 0;
+        return (
+          <div key={index} className="">
+            <ImageCard cid={data.cid} id={data.tokenId} />
+            <p>Creator: {data.creator}</p>
+            <p>Token ID: {data.tokenId.toString()}</p>
+            <p>Quantity: {balance.toString()}</p>
+          </div>
+        );
+      })}
+      {/* <div className="mt-[75px]">
         <ProfileUserPicture />
       </div>
       <div className="flex justify-between">
@@ -113,7 +172,7 @@ const MyProfile = () => {
                 ))}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
