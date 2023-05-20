@@ -17,8 +17,8 @@ const ProfileUserPicture = () => {
   return (
     <>
       <div onClick={handleAddressClick} className="cursor-pointer flex">
-        <div className="font-bold">User address: </div>
-        <span className="ml-2">{displayAddress}</span>
+        <div className="font-bold text-lg">User address: </div>
+        <span className="ml-2 text-lg">{displayAddress}</span>
       </div>
     </>
   );

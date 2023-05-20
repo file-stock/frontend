@@ -53,7 +53,8 @@ const MyProfile = () => {
           <div
             onClick={() => setCurrentView("collection")}
             className={`py-1.5 px-5 rounded-full text-greyText text-md cursor-pointer ${
-              currenView === "collection" && "bg-main text-white font-bold"
+              currenView === "collection" &&
+              "bg-main text-white font-bold sm:pt-5"
             }`}
           >
             Collection
@@ -61,7 +62,8 @@ const MyProfile = () => {
           <div
             onClick={() => setCurrentView("forsale")}
             className={`py-1.5 px-5 rounded-full text-greyText text-lg cursor-pointer ${
-              currenView === "forsale" && "bg-main text-white font-bold"
+              currenView === "forsale" &&
+              "bg-main text-white font-bold sm:px-10 sm:text-lg sm:leading-5"
             }`}
           >
             For sale
@@ -95,7 +97,7 @@ const MyProfile = () => {
         <Collection />
       ) : (
         <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mb-6">
+          <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 mb-6 sm:mt-20">
             {isConnected &&
               sortedImages
                 // .slice()

@@ -39,10 +39,9 @@ const Main: FC<MainProps> = ({ selectedImagesMain }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between mt-20">
+      <div className="grid 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
         {cards &&
           cards.map((card: any, i: any) => {
-            //console.log("card", card);
             return (
               <div key={i}>
                 <ImageCard

@@ -9,7 +9,7 @@ const Collection = () => {
   const { isConnected, provider, contractRights } = useContext(ThemeContext); // assuming provider is passed in context
 
   return (
-    <div className="flex flex-wrap gap-14">
+    <div className="flex flex-wrap gap-14 sm:mt-20">
       {isConnected &&
         myCardSale.map((card, i) => (
           <ImageCardForSale
