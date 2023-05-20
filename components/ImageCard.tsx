@@ -72,14 +72,15 @@ const ImageCard: FC<ImageCardProps> = ({
             {description}
           </div>
         </div>
-        <div
+        {favorite && <div
           className={`absolute opacity-0 group-hover:opacity-100 right-2 top-2 w-5 h-5 p-2 rounded-full ${
             favorite.includes(id) ? "bg-error" : ""
           }`}
           onClick={onClick}
         >
           <Image src={favouriteIcon} fill={true} alt="fav" />
-        </div>
+        </div>}
+       
       </div>
     </div>
   );
