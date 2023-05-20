@@ -148,7 +148,7 @@ const TagSearch: FC<TagSearchProps> = ({
           </div>
         )}
       </div>
-      <div className="flex relative">
+      <div className="flex relative justify-center">
         <div>
           <input
             type="text"
@@ -159,9 +159,9 @@ const TagSearch: FC<TagSearchProps> = ({
             }
             className={`border border-border rounded-md text-[#0A001F] shadow-md ${
               size === "lg" && !btn
-                ? "py-4 px-4 w-[600px] mt-3"
+                ? "py-4 px-4 md:w-[600px] w-[390px] mt-3"
                 : size === "lg"
-                ? "py-4 px-4 w-[600px]"
+                ? "py-4 px-4 md:w-[600px] w-[300px]"
                 : "py-2 px-4"
             }`}
             required

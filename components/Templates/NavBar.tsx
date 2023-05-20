@@ -79,7 +79,6 @@ import { ThemeContext } from "../../context/context";
 import { useRouter } from "next/router";
 
 const NavBar = () => {
-  const [isLogged, setIsLogged] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuRef2 = useRef<HTMLDivElement>(null);
@@ -123,8 +122,10 @@ const NavBar = () => {
   return (
     <div className="flex justify-between py-5 px-[140px] items-center sticky top-0 z-50 bg-white opacity-90 hover:opacity-100">
       <div className="flex items-center">
-        <div className="relative mr-[70px] font-extrabold w-[180px] h-10">
-          <Image src={logoBlack} fill={true} alt="logo" />
+        <div className="relative font-extrabold w-52 h-10 mr-5">
+          <Link href={"/"}>
+            <Image src={logoBlack} fill={true} alt="logo" />
+          </Link>
         </div>
         <div className="flex items-center">
           <button
@@ -150,10 +151,7 @@ const NavBar = () => {
           </button>
         </div>
         <div
-          className={`flex items-center ${
-            isMenuOpen ? "flex" : "hidden"
-          } md:flex`}
-          ref={menuRef}
+          className={`flex items-center hidden md:flex`}    
         >
           <TagSearch
             selectedTags={selectedTags}
@@ -168,7 +166,7 @@ const NavBar = () => {
       <div
         className={`flex justify-between items-center w-1/3 ${
           isMenuOpen
-            ? "flex border-2 flex-col justify-around bg-main absolute right-0 top-0 w-[500px] h-[300px]"
+            ? "flex border-2 flex-col justify-around bg-main absolute right-0 top-0 w-[100vw] h-[300px]"
             : "hidden"
         } xl:flex `}
         ref={menuRef2}
@@ -212,6 +210,7 @@ const NavBar = () => {
           className={`${isMenuOpen ? "border-border mb-5" : ""}`}
         />
         {isConnected && <UserDropDownIcon />}
+        {isMenuOpen && isConnected && <Link href="/myProfile">My profile</Link>}
       </div>
     </div>
   );

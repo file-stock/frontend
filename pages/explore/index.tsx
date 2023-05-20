@@ -141,26 +141,28 @@ const Explore = () => {
   return (
     <div>
       <div className="relative flex justify-between gap-6 w-[87%] mx-auto">
-        <TagSearch
-          selectedTags={selectedTags}
-          setSelectedTags={setSelectedTags}
-          selectedTagNumbers={selectedTagNumbers}
-          setSelectedTagNumbers={setSelectedTagNumbers}
-          btn={false}
-          size="lg"
-        />
-        {filterOptions.map(({ label, options }) => (
-          <div key={label} className="my-auto">
-            <h3 className="text-lg font-semibold">{label}</h3>
-            <FilterDropdown
-              options={options}
-              defaultOption={"All"}
-              onChange={(value) => handleFilterChange(label, value)}
-            />
-          </div>
-        ))}
+        <div className="flex flex-col lg:flex-row w-full justify-between">
+          <TagSearch
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            selectedTagNumbers={selectedTagNumbers}
+            setSelectedTagNumbers={setSelectedTagNumbers}
+            btn={false}
+            size="lg"
+          />
+          {filterOptions.map(({ label, options }) => (
+            <div key={label} className="my-auto mt-5 lg:mt-8 flex flex-col items-center lg:items-start">
+              <h3 className="text-lg font-semibold">{label}</h3>
+              <FilterDropdown
+                options={options}
+                defaultOption={"All"}
+                onChange={(value) => handleFilterChange(label, value)}
+              />
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="grid xl:grid-cols-3 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
+      <div className="grid xl:grid-cols-3 2xl:grid-cols-4 lg:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
         {isLoading ? (
           <p className="text-lg text-center">Loading...</p>
         ) : visibleImages.length > 0 ? (

@@ -28,18 +28,18 @@ const Main: FC<MainProps> = ({ selectedImagesMain }) => {
   return (
     <div className="pt-[60px] pb-[100px]">
       <div className="flex flex-col justify-center items-center">
-        <div className="-ml-[360px]">
+        <div className="md:-ml-[360px] md:mr-[0px] mr-[60px]">
           <span className="text-greyText">Popular</span>: Rain, Nature, Moutains
         </div>
         <div className="mt-[90px] text-center">
           <div className="text-4xl font-extrabold mb-5">Featured Images</div>
-          <div className="text-md text-greyText w-[580px]">
+          <div className="text-md text-greyText max-w-[580px]">
             Lorem ipsum doarl sit delaka it timarnadrer er aslwe csderd vcd
             Lorem ipsum doarl sit delaka it timarnadrer er as
           </div>
         </div>
       </div>
-      <div className="grid 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
+      <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
         {cards &&
           cards.map((card: any, i: any) => {
             return (
