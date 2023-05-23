@@ -35,7 +35,7 @@ const Explore = () => {
 
   useEffect(() => {
     const filtered = allFiles
-      .filter((file: any) => file.fileTags && file.fileTags.length > 0)
+      .filter((file: any) => file.watermarkedCid)
       .filter(filterImagesByTags)
       .filter(filterImagesByPrice);
     setFilteredImages(filtered);
@@ -151,7 +151,10 @@ const Explore = () => {
             size="lg"
           />
           {filterOptions.map(({ label, options }) => (
-            <div key={label} className="my-auto mt-5 lg:mt-8 flex flex-col items-center lg:items-start">
+            <div
+              key={label}
+              className="my-auto mt-5 lg:mt-8 flex flex-col items-center lg:items-start"
+            >
               <h3 className="text-lg font-semibold">{label}</h3>
               <FilterDropdown
                 options={options}
@@ -168,7 +171,7 @@ const Explore = () => {
         ) : visibleImages.length > 0 ? (
           visibleImages.map((file: any, index: any) => {
             return (
-              <div key={index} className="shadow-2xl rounded-xl">
+              <div key={index}>
                 <ImageCard
                   cid={file[0]}
                   onClick={() => updateFavorite(file.tokenId)}

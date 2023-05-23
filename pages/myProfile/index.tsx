@@ -4,7 +4,12 @@ import Collection from "./Collection";
 import ForSale from "./ForSale";
 import { useContext } from "react";
 import { ThemeContext } from "../../context/context";
-import ImageCard from "../../components/ImageCard";
+import FiltersDropdown from "../explore/filters";
+import { utils } from "ethers";
+import priceFilters from "../../components/filters_data";
+
+const filterOptions = [{ label: "Price ranges", options: priceFilters }];
+
 const MyProfile = () => {
   const { allFiles, wallet, isConnected, contractRights, userAddress } =
     useContext(ThemeContext);
@@ -12,55 +17,11 @@ const MyProfile = () => {
     "collection"
   );
   const [myImages, setMyImages] = useState<any>([]);
-  const [filterBy, setFilterBy] = useState<
-    "higherPrice" | "lowerPrice" | "newer" | "older" | ""
-  >("");
-  const [sortedImages, setSortedImages] = useState(myImages);
-  const [nftData, setNftData] = useState<any[]>([]);
-  const id = nftData.map((data) => data.tokenId.toString());
-  const [nftBalances, setNftBalances] = useState<any[]>([]);
-
-  async function getBalances() {
-    const balances = await Promise.all(
-      id.map(async (ids) => {
-        try {
-          const balance = await contractRights.balanceOf(userAddress, ids);
-          return { tokenId: ids, balance };
-        } catch (error) {
-          console.error("Errore durante la chiamata a balanceOf:", error);
-          return { tokenId: ids, balance: 0 };
-        }
-      })
-    );
-    setNftBalances(balances);
-  }
-
-  useEffect(() => {
-    getBalances();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nftData])
-  useEffect(() => {
-    const fetchRightsNFTData = async () => {
-        try {
-            const data = [];
-            const count = await contractRights.rightsNFTCount();
-            for (let i = 1; i <= count; i++) {
-                const nftData = await contractRights.rightsNFT(i);
-                const balance = await contractRights.balanceOf(userAddress, nftData.tokenId.toString());
-                if (balance > 0) {
-                    data.push(nftData);
-                }
-            }
-            setNftData(data);
-        } catch (error) {
-            console.error("Error fetching NFT data: ", error);
-        }
-    };
-    if (contractRights) {
-        fetchRightsNFTData();
-    }
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, [contractRights]);
+  const [selectedFilters, setSelectedFilters] = useState({
+    "Price ranges": "All",
+  });
+  const [filteredImages, setFilteredImages] = useState<any[]>([]);
+  const [sortedImages, setSortedImages] = useState<any[]>([]);
 
   let walletAddress = "";
   if (isConnected && wallet && wallet.accounts && wallet.accounts[0]) {
@@ -75,8 +36,39 @@ const MyProfile = () => {
       setMyImages(imagesCreatedByUser);
     }
   }, [allFiles, walletAddress]);
-  //console.log("myimages in my profile", myImages[0].price);
-  const sortImages = (images: any, filter: any) => {
+
+  useEffect(() => {
+    const filtered = myImages.filter(filterImagesByPrice);
+    setFilteredImages(filtered);
+    setSortedImages(sortImages(filtered, selectedFilters["Price ranges"]));
+  }, [myImages, selectedFilters]);
+
+  const filterImagesByPrice = (file: any) => {
+    const selectedPrice = selectedFilters["Price ranges"];
+
+    if (!selectedPrice || selectedPrice === "All") return true;
+
+    const etherValue = parseInt(utils.formatEther(file.price.toString()), 10);
+
+    if (selectedPrice === "0") {
+      return etherValue >= 0 && etherValue <= 10;
+    } else if (selectedPrice === "10") {
+      return etherValue >= 11 && etherValue <= 50;
+    } else if (selectedPrice === "50") {
+      return etherValue >= 51;
+    }
+
+    return false;
+  };
+
+  const handleFilterChange = (label: string, value: string) => {
+    setSelectedFilters({
+      ...selectedFilters,
+      [label]: value,
+    });
+  };
+
+  const sortImages = (images: any[], filter: string) => {
     switch (filter) {
       case "higherPrice":
         return [...images].sort((a, b) => b.price - a.price);
@@ -86,71 +78,46 @@ const MyProfile = () => {
         return images;
     }
   };
-  useEffect(() => {
-    setSortedImages(sortImages(myImages, filterBy));
-  }, [filterBy, myImages]);
 
   return (
-    <div className="px-[140px] pb-[150px] flex justify-between">
-       {nftData.map((data, index) => {
-        const balanceData = nftBalances.find(b => b.tokenId === data.tokenId.toString());
-        const balance = balanceData ? balanceData.balance : 0;
-        return (
-          <div key={index} className="">
-            <ImageCard cid={data.cid} id={data.tokenId} />
-            <p>Creator: {data.creator}</p>
-            <p>Token ID: {data.tokenId.toString()}</p>
-            <p>Quantity: {balance.toString()}</p>
-          </div>
-        );
-      })}
-      {/* <div className="mt-[75px]">
+    <div className="pb-[50px] pl-3">
+      <div className="mt-[75px]">
         <ProfileUserPicture />
       </div>
-      <div className="flex justify-between">
+      <div className="sm:flex sm:justify-between md:flex md:justify-between lg:flex lg:justify-between xl:flex xl:justify-between 2xl:flex 2xl:justify-between">
         <div className="flex justify-between w-1/5 mt-[75px] mb-[45px]">
           <div
             onClick={() => setCurrentView("collection")}
             className={`py-1.5 px-5 rounded-full text-greyText text-md cursor-pointer ${
               currenView === "collection" &&
-              "bg-main text-white font-bold sm:pt-5"
+              "bg-main text-white font-bold sm:px-5 sm:py-2 sm:text-lg md:px-5 md:py-2 md:text-lg lg:px-5 md:mb-2 lg:py-2 lg:text-lg xl:px-5 xl:py-2 xl:text-lg 2xl:px-10 2xl:py-5 2xl:text-lg 2xl:h-20 px-5 py-2 h-10"
             }`}
           >
             Collection
           </div>
           <div
             onClick={() => setCurrentView("forsale")}
-            className={`py-1.5 px-5 rounded-full text-greyText text-lg cursor-pointer ${
+            className={`py-1.5 px-5 rounded-full text-greyText text-lg cursor-pointer whitespace-nowrap ${
               currenView === "forsale" &&
-              "bg-main text-white font-bold sm:px-10 sm:text-lg sm:leading-5"
+              "bg-main text-white font-bold sm:px-10 sm:text-lg md:px-10 md:text-lg lg:px-10 lg:text-lg xl:px-10 xl:text-lg 2xl:px-10 2xl:py-5 2xl:text-lg 2xl:h-20 px-7 py-1 h-10"
             }`}
           >
             For sale
           </div>
         </div>
-        <div className="flex items-center justify-start mb-10 bg-main text-white font-bold text-[20px] rounded-lg py-3 px-10 mt-[75px] mb-[45px] cursor-pointer">
-          <div className="mr-4">Filter by:</div>
-          <div>
-            <select
-              className="bg-main text-white outline-none"
-              value={filterBy}
-              onChange={(e) =>
-                setFilterBy(
-                  e.target.value as
-                    | "higherPrice"
-                    | "lowerPrice"
-                    | "newer"
-                    | "older"
-                )
-              }
-            >
-              <option value="higherPrice">Higher Price</option>
-              <option value="lowerPrice">Lower Price</option>
-              <option value="newer">Newer</option>
-              <option value="older">Older</option>
-            </select>
+        {filterOptions.map(({ label, options }) => (
+          <div
+            key={label}
+            className="mt-12 lg:mt-8 mb-20 mr-10 sm:ml-0 flex flex-col items-center lg:items-start"
+          >
+            <h3 className="text-lg font-semibold">{label}</h3>
+            <FiltersDropdown
+              options={options}
+              defaultOption="All"
+              onChange={(value) => handleFilterChange(label, value)}
+            />
           </div>
-        </div>
+        ))}
       </div>
       {currenView === "collection" ? (
         <Collection />
@@ -158,21 +125,18 @@ const MyProfile = () => {
         <div>
           <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 mb-6 sm:mt-20">
             {isConnected &&
-              sortedImages
-                // .slice()
-                // .sort((a: any, b: any) => (b.price.gt(a.price) ? 1 : -1))
-                .map((file: any, index: any) => (
-                  <div key={index}>
-                    <ForSale
-                      key={index}
-                      cids={file.watermarkedCid}
-                      price={file.price}
-                    />
-                  </div>
-                ))}
+              sortedImages.map((file: any, index: any) => (
+                <div key={index}>
+                  <ForSale
+                    key={index}
+                    cids={file.watermarkedCid}
+                    price={file.price}
+                  />
+                </div>
+              ))}
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 };

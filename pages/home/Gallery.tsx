@@ -1,32 +1,65 @@
-import React, { FC, useEffect, useState } from "react";
-import Image from "next/image";
+import React, { useEffect, useState, useContext } from "react";
+import { ThemeContext } from "../../context/context";
 import ImageCard from "../../components/ImageCard";
-interface GalleryProps {
-  cid: string;
-  key: any;
-}
 
-const Gallery: FC<GalleryProps> = ({ cid, key }) => {
-  const [imageData, setImageData] = useState("");
+const Gallery = () => {
+  const { allFiles } = useContext(ThemeContext);
 
+  const [selectedImages, setSelectedImages] = useState<any>([]);
   useEffect(() => {
-    async function fetchImageData() {
-      try {
-        const response = await fetch(`https://ipfs.io/ipfs/${cid}`);
-        const data = await response.text();
-        setImageData(data);
-      } catch (error) {
-        console.error("Error fetching image data:", error);
+    const getRandomImages = () => {
+      if (!allFiles || allFiles.length === 0) {
+        return;
       }
-    }
 
-    fetchImageData();
-  }, [cid]);
+      const randomImagesMain = [];
+      const numImagesToDisplay = 8;
+      const filteredImages = allFiles.filter(
+        (file) => file.watermarkedCid !== ""
+      );
+
+      for (let i = 0; i < numImagesToDisplay; i++) {
+        const randomIndex = Math.floor(Math.random() * filteredImages.length);
+        randomImagesMain.push(filteredImages[randomIndex]);
+      }
+
+      setSelectedImages(randomImagesMain);
+    };
+
+    getRandomImages();
+
+    const interval = setInterval(() => {
+      getRandomImages();
+    }, 3600000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [allFiles]);
+
+  // useEffect(() => {
+  //   async function fetchImageData() {
+  //     try {
+  //       const response = await fetch(`https://ipfs.io/ipfs/${cid}`);
+  //       const data = await response.text();
+  //       setImageData(data);
+  //     } catch (error) {
+  //       console.error("Error fetching image data:", error);
+  //     }
+  //   }
+
+  //   fetchImageData();
+  // }, [cid]);
   return (
-    <div className="h-full">
-      {imageData && (
-        <img className="rounded-lg" src={imageData} alt="myImages" />
-      )}
+    <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20">
+      {selectedImages &&
+        selectedImages.map((card: any, i: any) => {
+          return (
+            <div key={i} className="w-[690px] mx-1 pr-0">
+              <ImageCard cid={card.watermarkedCid} id={i} />
+            </div>
+          );
+        })}
     </div>
   );
 };

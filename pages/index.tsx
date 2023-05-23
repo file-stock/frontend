@@ -4,7 +4,7 @@ import CreatorOfTheMonth from "./home/CreatorOfTheMonth";
 import Gallery from "./home/Gallery";
 import TagSearch from "../components/TagSearch";
 import { utils } from "ethers";
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { ThemeContext } from "../context/context";
 
 // function getRandomIndices(arrLength, numIndices) {
@@ -17,45 +17,12 @@ import { ThemeContext } from "../context/context";
 
 export default function Home() {
   const {
-    allFiles,
     selectedTags,
     setSelectedTags,
     selectedTagNumbers,
     setSelectedTagNumbers,
   } = useContext(ThemeContext);
-  //console.log("allfileshome", allFiles);
-  const [selectedImages, setSelectedImages] = useState<any>([]);
-  const [selectedImagesMain, setSelectedImagesMain] = useState<any>([]);
 
-  useEffect(() => {
-    const getRandomImages = () => {
-      if (!allFiles || allFiles.length === 0) {
-        return;
-      }
-      const randomImages = [];
-      const randomImagesMain = [];
-      for (let i = 0; i < 8; i++) {
-        const randomIndex = Math.floor(Math.random() * allFiles.length);
-        randomImages.push(allFiles[randomIndex]);
-      }
-      setSelectedImages(randomImages);
-      for (let i = 0; i < 4; i++) {
-        const randomIndex = Math.floor(Math.random() * allFiles.length);
-        randomImagesMain.push(allFiles[randomIndex]);
-      }
-      setSelectedImagesMain(randomImagesMain);
-    };
-
-    getRandomImages();
-
-    const interval = setInterval(() => {
-      getRandomImages();
-    }, 3600000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [allFiles]);
   return (
     <>
       <div className="relative">
@@ -71,14 +38,10 @@ export default function Home() {
           />
         </div>
       </div>
-      <Main selectedImagesMain={selectedImagesMain} />
+      <Main />
 
       <CreatorOfTheMonth />
-      <div className="grid 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-10 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
-        {selectedImages.map((file: any, index: any) => (
-          <Gallery key={index} cid={file[0]} />
-        ))}
-      </div>
+      <Gallery />
     </>
   );
 }

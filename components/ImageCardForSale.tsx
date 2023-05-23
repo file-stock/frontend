@@ -1,9 +1,7 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import Image from "next/image";
 
 import { filecoinIcon, deleteIcon, imageLicenzeIcon } from "../public";
-import { ethers } from "ethers";
-import lighthouse from "@lighthouse-web3/sdk";
 
 type ImageCardForSaleProps = {
   img: any;
@@ -26,7 +24,7 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
 }) => {
   return (
     <>
-      <div className="flex gap-5">
+      <div className="sm:flex sm:gap-5 md:flex md:gap-5 lg:flex lg:gap-5 xl:flex xl:gap-5 2xl:flex 2xl:gap-5">
         <div className="relative w-[330px] h-[280px]">
           <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
         </div>
@@ -54,7 +52,7 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-3">
             <Image
               src={imageLicenzeIcon}
               width={10}

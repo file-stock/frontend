@@ -14,7 +14,6 @@ import GenericModal from "../../components/GenericModal";
 import { tags } from "../../public/tags";
 
 type StepTwoProps = {
-  
   onSelectFile: any;
   fileInputRef: React.MutableRefObject<null>;
   selectedFile: string;
@@ -28,7 +27,6 @@ type StepTwoProps = {
 };
 
 const StepTwo: FC<StepTwoProps> = ({
-
   onSelectFile,
   fileInputRef,
   selectedFile,
@@ -39,7 +37,14 @@ const StepTwo: FC<StepTwoProps> = ({
   setDescription,
   hashValue,
 }) => {
-  const { startUpload, setPrice, selectedTags, setSelectedTags, selectedTagNumbers, setSelectedTagNumbers  } = useContext(ThemeContext);
+  const {
+    startUpload,
+    setPrice,
+    selectedTags,
+    setSelectedTags,
+    selectedTagNumbers,
+    setSelectedTagNumbers,
+  } = useContext(ThemeContext);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const forms = [
     /*{ label: "Title of the image", type: "text", required: true},
@@ -49,6 +54,7 @@ const StepTwo: FC<StepTwoProps> = ({
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [pendingTransaction, setPendingTransaction] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const filteredTags = Object.values(tags).filter(
@@ -100,20 +106,22 @@ const StepTwo: FC<StepTwoProps> = ({
     };
   }, []);
 
-  
-
-  const uploadImage = async () => {
+  const uploadImage = () => {
     handleFileChange();
+    setPendingTransaction(true);
+
     // const hash = await handleFileChange();
-    const hash = hashValue;
+    //const hash = hashValue;
     //setStep(3)
   };
-
+  console.log("pendingTransaction", pendingTransaction);
+  console.log("hashValue", hashValue);
   useEffect(() => {
     if (hashValue) {
       const completeUpload = async () => {
         setIsPopUpOpen(true);
         await startUpload(hashValue, selectedTagNumbers);
+        console.log("startUpload 3");
         setIsPopUpOpen(false);
         setStep(3);
       };
