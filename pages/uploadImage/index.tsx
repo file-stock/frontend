@@ -34,6 +34,7 @@ function UploadImage() {
     selectedTagNumbers,
     contract,
     contractRights,
+    userAddress,
   } = useContext(ThemeContext);
 
   const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
@@ -51,7 +52,6 @@ function UploadImage() {
   }, [selectedFile]);
 
   async function modifyFile(e: any) {
-    let originalFile = e.target.files[0];
     let file = e.target.files[0];
 
     console.log("event", e);
@@ -107,17 +107,12 @@ function UploadImage() {
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
       });
+      console.log("file", file);
 
       //new FileList which is the type of target.files
       let list = new DataTransfer();
       list.items.add(file);
-      setEncryptedSinteticBaseEvent(originalFile);
-
-      setOriginalFile(() => {
-        let newState = e;
-        newState.target.files = list.files;
-        return newState;
-      });
+      setEncryptedSinteticBaseEvent(sinteticBaseEvent);
 
       setSinteticBaseEvent(() => {
         // let newState = e;
@@ -133,6 +128,7 @@ function UploadImage() {
     if (sinteticBaseEvent) {
       const handleSynthetic = async () => {
         setHashValue(await deploy());
+        console.log("hashValue uploadImage", hashValue);
       };
       handleSynthetic();
     }
@@ -220,7 +216,7 @@ function UploadImage() {
     // Push file to lighthouse node
     console.log("run deploy", sinteticBaseEvent);
     const output = await lighthouse.upload(
-      originalFile,
+      sinteticBaseEvent,
       LIGHTHOUSE_API_KEY,
       progressCallback
     );
@@ -244,10 +240,46 @@ function UploadImage() {
     console.log("prezzo", price);
   };
 
-  const deployEncrypted = async () => {
+  // const deployEncrypted = async (
+  //   encryptedCID: string,
+  //   decryptedCID: string
+  // ) => {
+  //   if (encryptedSinteticBaseEvent) {
+  //     console.log("from deployEncrypted", encryptedSinteticBaseEvent);
+  //   }
+  //   await contract.storeFile(decryptedCID, price, selectedTagNumbers);
+
+  //   /*
+  //      uploadEncrypted(e, publicKey, accessToken, uploadProgressCallback)
+  //      - publicKey: wallets public key
+  //      - accessToken: your api key
+  //      - signedMessage: message signed by the owner of publicKey
+  //   */
+  //   const sig = await encryptionSignature();
+  //   console.log();
+  //   const response = await lighthouse.uploadEncrypted(
+  //     encryptedSinteticBaseEvent,
+  //     sig.publicKey,
+  //     LIGHTHOUSE_API_KEY,
+  //     sig.signedMessage,
+  //     progressCallback
+  //   );
+  //   console.log("response index upload", response);
+  //   setAccessConditionCid(response.data.Hash);
+  //   const tokenId = await contractRights.rightsNFTCount();
+  //   await contract.finalizeUpload(tokenId, encryptedCID);
+  //   console.log("tokenId", tokenId);
+
+  //   modifyFile(encryptedSinteticBaseEvent);
+  // };
+  const deployEncrypted = async (
+    encryptedCID: string,
+    decryptedCID: string
+  ) => {
     if (encryptedSinteticBaseEvent) {
       console.log("from deployEncrypted", encryptedSinteticBaseEvent);
     }
+
     /*
        uploadEncrypted(e, publicKey, accessToken, uploadProgressCallback)
        - publicKey: wallets public key
@@ -263,13 +295,23 @@ function UploadImage() {
       sig.signedMessage,
       progressCallback
     );
-    console.log("response index upload", response);
+    //console.log("response index upload", response);
     setAccessConditionCid(response.data.Hash);
-    const tokenId = await contractRights.rightsNFTCount();
-    //await contract.finalizeUpload(tokenId, accessConditionCid);
-    console.log("tokenId", tokenId);
+    console.log("response data hash", response.data.Hash);
+    let weiPrice = ethers.utils.parseEther(price.toString());
 
+    // Assuming that contract is already an ethers.js Contract instance
+    let result = await contract.startUpload(
+      decryptedCID,
+      weiPrice,
+      selectedTagNumbers
+    );
+    console.log("startUpload 2");
+    console.log("Store file result", result);
+    const tokenId = await contractRights.rightsNFTCount();
     modifyFile(encryptedSinteticBaseEvent);
+    await contract.finalizeUpload(tokenId, encryptedCID);
+    console.log("tokenId", tokenId);
   };
 
   const handleFileChange = async () => {
@@ -278,7 +320,7 @@ function UploadImage() {
     // }
     if (encryptedSinteticBaseEvent) {
       mergeImageForSale();
-      deployEncrypted();
+      await deployEncrypted(hashValue, accessConditionCid);
 
       // return await deploy();
     }

@@ -12,7 +12,7 @@ type ImageCardProps = {
   id: number;
   favorite?: any;
   className?: string;
-
+  downloadButton?: boolean;
   cid?: string;
 };
 
@@ -24,8 +24,8 @@ const ImageCard: FC<ImageCardProps> = ({
   id,
   favorite,
   className,
-
   cid,
+  downloadButton,
 }) => {
   const [imageData, setImageData] = useState("");
 
@@ -47,7 +47,7 @@ const ImageCard: FC<ImageCardProps> = ({
   return (
     <div
       className={`relative ${
-        cid ? "w-[390px] group h-[460px]" : "w-[480px] group h-[460px]"
+        cid ? "w-[420px] group h-[460px]" : "w-[480px] group h-[460px]"
       }  transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg`}
     >
       <Link href={`/detail?id=${id}`}>
@@ -58,29 +58,32 @@ const ImageCard: FC<ImageCardProps> = ({
           className="rounded-lg object-fit"
         />
       </Link>
+
       <div>
         <div className="flex flec-col text-white">
           <div className="absolute bottom-24 left-5 text-2xl font-bold">
             {title}
           </div>
           {/* {buyLink ? (
-            <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
-              <Link href={buyLink}>Buy</Link>
-            </div>
-          ) : ( */}
+      <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
+        <Link href={buyLink}>Buy</Link>
+      </div>
+    ) : ( */}
           <div className="absolute bottom-10 left-5 text-sm font-normal">
             {description}
           </div>
         </div>
-        {favorite && <div
-          className={`absolute opacity-0 group-hover:opacity-100 right-2 top-2 w-5 h-5 p-2 rounded-full ${
-            favorite.includes(id) ? "bg-error" : ""
-          }`}
-          onClick={onClick}
-        >
-          <Image src={favouriteIcon} fill={true} alt="fav" />
-        </div>}
-       
+
+        {favorite && (
+          <div
+            className={`absolute opacity-0 group-hover:opacity-100 right-2 top-2 w-5 h-5 p-2 rounded-full ${
+              favorite.includes(id) ? "bg-error" : ""
+            }`}
+            onClick={onClick}
+          >
+            <Image src={favouriteIcon} fill={true} alt="fav" />
+          </div>
+        )}
       </div>
     </div>
   );

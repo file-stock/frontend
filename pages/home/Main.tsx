@@ -1,17 +1,45 @@
-import { FC, useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { ThemeContext } from "../../context/context";
 import GenericButton from "../../components/GenericButton";
 import Link from "next/link";
 import ImageCard from "../../components/ImageCard";
-import { homePageImages } from "../../constants/constants";
 import React from "react";
 
-interface MainProps {
-  selectedImagesMain: any;
-}
-
-const Main: FC<MainProps> = ({ selectedImagesMain }) => {
+const Main = () => {
   const [favorite, setFavorite] = useState<any[]>([]);
-  const cards = selectedImagesMain;
+  const [selectedImagesMain, setSelectedImagesMain] = useState<any[]>([]);
+  const { allFiles } = useContext(ThemeContext);
+
+  useEffect(() => {
+    const getRandomImages = () => {
+      if (!allFiles || allFiles.length === 0) {
+        return;
+      }
+
+      const randomImagesMain = [];
+      const numImagesToDisplay = 4;
+      const filteredImages = allFiles.filter(
+        (file) => file.watermarkedCid !== ""
+      );
+
+      for (let i = 0; i < numImagesToDisplay; i++) {
+        const randomIndex = Math.floor(Math.random() * filteredImages.length);
+        randomImagesMain.push(filteredImages[randomIndex]);
+      }
+
+      setSelectedImagesMain(randomImagesMain);
+    };
+
+    getRandomImages();
+
+    const interval = setInterval(() => {
+      getRandomImages();
+    }, 3600000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [allFiles]);
 
   const updateFavorite = (cardId: any) => {
     let updatedFavorite = [...favorite];
@@ -39,13 +67,15 @@ const Main: FC<MainProps> = ({ selectedImagesMain }) => {
           </div>
         </div>
       </div>
-      <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
-        {cards &&
-          cards.map((card: any, i: any) => {
+      <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20 min-h-[460px]">
+        {selectedImagesMain &&
+          selectedImagesMain.map((card: any, i: any) => {
+            console.log("card", card);
+            console.log("card watermarkedCid", card[i].watermarkedCid);
             return (
               <div key={i}>
                 <ImageCard
-                  cid={cards[i].watermarkedCid}
+                  cid={card.watermarkedCid}
                   title={card.title}
                   onClick={() => updateFavorite(card.tokenId)}
                   id={card.tokenId}

@@ -158,6 +158,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
   const startUpload = async (hash: any, tags: any) => {
+    console.log("startUpload 1");
     if (!contract || !price) return;
     const tx = await contract.startUpload(
       hash,
