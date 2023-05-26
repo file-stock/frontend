@@ -107,7 +107,7 @@ function UploadImage() {
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
       });
-      console.log("file", file);
+      console.log("file", file); //console.log
 
       //new FileList which is the type of target.files
       let list = new DataTransfer();
@@ -272,57 +272,74 @@ function UploadImage() {
 
   //   modifyFile(encryptedSinteticBaseEvent);
   // };
-  const deployEncrypted = async (
-    encryptedCID: string,
-    decryptedCID: string
-  ) => {
-    if (encryptedSinteticBaseEvent) {
-      console.log("from deployEncrypted", encryptedSinteticBaseEvent);
-    }
+  const deployEncrypted = async () =>
+    // encryptedCID: string,
+    // decryptedCID: string
+    {
+      if (encryptedSinteticBaseEvent) {
+        console.log("from deployEncrypted", encryptedSinteticBaseEvent);
+      }
 
-    /*
+      /*
        uploadEncrypted(e, publicKey, accessToken, uploadProgressCallback)
        - publicKey: wallets public key
        - accessToken: your api key
        - signedMessage: message signed by the owner of publicKey
     */
-    const sig = await encryptionSignature();
-    console.log();
-    const response = await lighthouse.uploadEncrypted(
-      encryptedSinteticBaseEvent,
-      sig.publicKey,
-      LIGHTHOUSE_API_KEY,
-      sig.signedMessage,
-      progressCallback
-    );
-    //console.log("response index upload", response);
-    setAccessConditionCid(response.data.Hash);
-    console.log("response data hash", response.data.Hash);
-    let weiPrice = ethers.utils.parseEther(price.toString());
+      const sig = await encryptionSignature();
+      console.log();
+      const response = await lighthouse.uploadEncrypted(
+        encryptedSinteticBaseEvent,
+        sig.publicKey,
+        LIGHTHOUSE_API_KEY,
+        sig.signedMessage,
+        progressCallback
+      );
+      console.log("response index upload", response);
+      //console.log("response index upload", response);
+      //setAccessConditionCid(response.data.Hash);
 
-    // Assuming that contract is already an ethers.js Contract instance
-    let result = await contract.startUpload(
-      decryptedCID,
-      weiPrice,
-      selectedTagNumbers
-    );
-    console.log("startUpload 2");
-    console.log("Store file result", result);
-    const tokenId = await contractRights.rightsNFTCount();
-    modifyFile(encryptedSinteticBaseEvent);
-    await contract.finalizeUpload(tokenId, encryptedCID);
-    console.log("tokenId", tokenId);
-  };
+      console.log("accessConditionCid", accessConditionCid);
+      console.log("response data hash", response.data.Hash);
+      //let weiPrice = ethers.utils.parseEther(price.toString());
+
+      // Assuming that contract is already an ethers.js Contract instance
+      // let result = await contract.startUpload(
+      //   decryptedCID,
+      //   weiPrice,
+      //   selectedTagNumbers
+      // );
+      // console.log("startUpload 2");
+      // console.log("Store file result", result);
+      // try {
+      //const tokenId = await contractRights.rightsNFTCount();
+      //await contract.finalizeUpload(tokenId, response.data.Hash);
+      //   console.log("tokenId", tokenId);
+      // } catch (error) {
+      //   console.error("There was an error finalizing the upload:", error);
+      // }
+
+      modifyFile(encryptedSinteticBaseEvent);
+      return response.data.Hash;
+    };
+
+  useEffect(() => {
+    const finalizeUpload = async () => {
+      const tokenId = await contractRights.rightsNFTCount();
+      await contract.finalizeUpload(tokenId, "hello hellooooooooooo");
+      console.log("tokenId", tokenId);
+    };
+
+    if (accessConditionCid) {
+      finalizeUpload();
+    }
+  }, [accessConditionCid]);
 
   const handleFileChange = async () => {
-    // if (title.length < 1) {
-    //   return;
-    // }
     if (encryptedSinteticBaseEvent) {
       mergeImageForSale();
-      await deployEncrypted(hashValue, accessConditionCid);
-
-      // return await deploy();
+      const newAccessConditionCid = await deployEncrypted();
+      setAccessConditionCid(newAccessConditionCid);
     }
   };
 

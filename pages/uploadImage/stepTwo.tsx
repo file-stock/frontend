@@ -120,10 +120,15 @@ const StepTwo: FC<StepTwoProps> = ({
     if (hashValue) {
       const completeUpload = async () => {
         setIsPopUpOpen(true);
-        await startUpload(hashValue, selectedTagNumbers);
-        console.log("startUpload 3");
-        setIsPopUpOpen(false);
-        setStep(3);
+        try {
+          await startUpload(hashValue, selectedTagNumbers);
+          console.log("startUpload 3");
+          setIsPopUpOpen(false);
+          setStep(3);
+        } catch (error) {
+          console.error("There was an error uploading:", error);
+          // Qui puoi impostare uno stato di errore o eseguire altre operazioni per gestire l'errore.
+        }
       };
       completeUpload();
     }

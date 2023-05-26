@@ -17,12 +17,13 @@ import { ThemeContext } from "../context/context";
 
 export default function Home() {
   const {
+    allFiles,
     selectedTags,
     setSelectedTags,
     selectedTagNumbers,
     setSelectedTagNumbers,
   } = useContext(ThemeContext);
-
+  console.log("allFiles", allFiles);
   return (
     <>
       <div className="relative">
