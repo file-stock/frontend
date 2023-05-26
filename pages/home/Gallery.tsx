@@ -36,20 +36,6 @@ const Gallery = () => {
       clearInterval(interval);
     };
   }, [allFiles]);
-
-  // useEffect(() => {
-  //   async function fetchImageData() {
-  //     try {
-  //       const response = await fetch(`https://ipfs.io/ipfs/${cid}`);
-  //       const data = await response.text();
-  //       setImageData(data);
-  //     } catch (error) {
-  //       console.error("Error fetching image data:", error);
-  //     }
-  //   }
-
-  //   fetchImageData();
-  // }, [cid]);
   return (
     <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20">
       {selectedImages &&
