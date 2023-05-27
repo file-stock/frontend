@@ -158,7 +158,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
   const startUpload = async (hash: any, tags: any) => {
-    console.log("startUpload 1");
+    console.log("startUpload 1", hash);
     if (!contract || !price) return;
     const tx = await contract.startUpload(
       hash,
@@ -174,11 +174,12 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const callBuyFile = async (id: any, price: any) => {
+  const callBuyFile = async (id: any) => {
     console.log("callBuyFile");
-    const amount = ethers.utils.parseEther(price);
-    console.log(amount.toString());
+
     try {
+      const amount = ethers.utils.parseEther(price);
+      console.log(amount.toString());
       const tx = await contract.buyFile(id, {
         value: amount,
       });

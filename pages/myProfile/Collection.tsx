@@ -89,7 +89,8 @@ const Collection = () => {
           (b) => b.tokenId === data.tokenId.toString()
         );
         const balance = balanceData ? balanceData.balance : 0;
-        return (
+        console.log(data)
+        return  (
           <div key={index} className="">
             <ImageCard cid={data.cid} id={data.tokenId} />
             <button
