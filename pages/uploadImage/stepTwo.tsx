@@ -54,7 +54,7 @@ const StepTwo: FC<StepTwoProps> = ({
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [pendingTransaction, setPendingTransaction] = useState(false);
+
 
   const menuRef = useRef<HTMLDivElement>(null);
   const filteredTags = Object.values(tags).filter(
@@ -106,15 +106,15 @@ const StepTwo: FC<StepTwoProps> = ({
     };
   }, []);
 
-  const uploadImage = () => {
-    handleFileChange();
-    setPendingTransaction(true);
+  const uploadImage = async () => {
+     await handleFileChange();
+
 
     // const hash = await handleFileChange();
     //const hash = hashValue;
     //setStep(3)
   };
-  console.log("pendingTransaction", pendingTransaction);
+
   console.log("hashValue", hashValue);
   useEffect(() => {
     if (hashValue) {
@@ -122,18 +122,16 @@ const StepTwo: FC<StepTwoProps> = ({
         setIsPopUpOpen(true);
         try {
           await startUpload(hashValue, selectedTagNumbers);
-          console.log("startUpload 3");
           setIsPopUpOpen(false);
           setStep(3);
         } catch (error) {
           console.error("There was an error uploading:", error);
-          // Qui puoi impostare uno stato di errore o eseguire altre operazioni per gestire l'errore.
         }
       };
       completeUpload();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hashValue]);
+  }, [hashValue, setStep, selectedTagNumbers, startUpload]);
 
   return (
     <>

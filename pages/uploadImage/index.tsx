@@ -9,8 +9,6 @@ import StepThree from "./stepThree";
 
 function UploadImage() {
   const [selectedFile, setSelectedFile] = useState<any>("");
-  const [originalFile, setOriginalFile] = useState<any>(null);
-
   // const [preview, setPreview] = useState<string>("");
   const [step, setStep] = useState<1 | 2 | 3 | number>(1);
   const [sinteticBaseEvent, setSinteticBaseEvent] = useState<any>();
@@ -20,6 +18,7 @@ function UploadImage() {
   const [description, setDescription] = useState("");
   const [accessConditionCid, setAccessConditionCid] = useState("");
   const [hashValue, setHashValue] = useState("");
+  const [tokenId, setTokenId] = useState<any>();
 
   const fileInputRef = useRef(null);
 
@@ -45,7 +44,7 @@ function UploadImage() {
       return;
     }
     const objectUrl = URL.createObjectURL(selectedFile);
-    console.log("OBJ", objectUrl);
+  //  console.log("OBJ", objectUrl);
     setPreview(objectUrl);
     return () => URL.revokeObjectURL(objectUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,7 +53,7 @@ function UploadImage() {
   async function modifyFile(e: any) {
     let file = e.target.files[0];
 
-    console.log("event", e);
+  //  console.log("event", e);
     const fileName = file.name;
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -107,7 +106,7 @@ function UploadImage() {
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
       });
-      console.log("file", file); //console.log
+    // console.log("file", file); //console.log
 
       //new FileList which is the type of target.files
       let list = new DataTransfer();
@@ -128,7 +127,7 @@ function UploadImage() {
     if (sinteticBaseEvent) {
       const handleSynthetic = async () => {
         setHashValue(await deploy());
-        console.log("hashValue uploadImage", hashValue);
+       // console.log("hashValue uploadImage", hashValue);
       };
       handleSynthetic();
     }
@@ -204,7 +203,7 @@ function UploadImage() {
       aggregator
     );
 
-    console.log(response);
+   // console.log(response);
   };
 
   const progressCallback = (progressData: any) => {
@@ -214,16 +213,16 @@ function UploadImage() {
 
   const deploy = async () => {
     // Push file to lighthouse node
-    console.log("run deploy", sinteticBaseEvent);
+   // console.log("run deploy", sinteticBaseEvent);
     const output = await lighthouse.upload(
       sinteticBaseEvent,
       LIGHTHOUSE_API_KEY,
       progressCallback
     );
-    console.log("File Status:", output);
-    console.log(
-      "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
-    );
+   // console.log("File Status:", output);
+    // console.log(
+    //   "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
+    // );
     return output.data.Hash;
   };
 
@@ -237,57 +236,16 @@ function UploadImage() {
       tagsId: selectedTagNumbers,
     };
     setImgForSale((prev: any) => [...prev, newImgObject]);
-    console.log("prezzo", price);
   };
 
-  // const deployEncrypted = async (
-  //   encryptedCID: string,
-  //   decryptedCID: string
-  // ) => {
-  //   if (encryptedSinteticBaseEvent) {
-  //     console.log("from deployEncrypted", encryptedSinteticBaseEvent);
-  //   }
-  //   await contract.storeFile(decryptedCID, price, selectedTagNumbers);
-
-  //   /*
-  //      uploadEncrypted(e, publicKey, accessToken, uploadProgressCallback)
-  //      - publicKey: wallets public key
-  //      - accessToken: your api key
-  //      - signedMessage: message signed by the owner of publicKey
-  //   */
-  //   const sig = await encryptionSignature();
-  //   console.log();
-  //   const response = await lighthouse.uploadEncrypted(
-  //     encryptedSinteticBaseEvent,
-  //     sig.publicKey,
-  //     LIGHTHOUSE_API_KEY,
-  //     sig.signedMessage,
-  //     progressCallback
-  //   );
-  //   console.log("response index upload", response);
-  //   setAccessConditionCid(response.data.Hash);
-  //   const tokenId = await contractRights.rightsNFTCount();
-  //   await contract.finalizeUpload(tokenId, encryptedCID);
-  //   console.log("tokenId", tokenId);
-
-  //   modifyFile(encryptedSinteticBaseEvent);
-  // };
   const deployEncrypted = async () =>
-    // encryptedCID: string,
-    // decryptedCID: string
     {
       if (encryptedSinteticBaseEvent) {
-        console.log("from deployEncrypted", encryptedSinteticBaseEvent);
+       // console.log("from deployEncrypted", encryptedSinteticBaseEvent);
       }
 
-      /*
-       uploadEncrypted(e, publicKey, accessToken, uploadProgressCallback)
-       - publicKey: wallets public key
-       - accessToken: your api key
-       - signedMessage: message signed by the owner of publicKey
-    */
       const sig = await encryptionSignature();
-      console.log();
+      //console.log();
       const response = await lighthouse.uploadEncrypted(
         encryptedSinteticBaseEvent,
         sig.publicKey,
@@ -295,53 +253,32 @@ function UploadImage() {
         sig.signedMessage,
         progressCallback
       );
-      console.log("response index upload", response);
-      //console.log("response index upload", response);
-      //setAccessConditionCid(response.data.Hash);
-
-      console.log("accessConditionCid", accessConditionCid);
-      console.log("response data hash", response.data.Hash);
-      //let weiPrice = ethers.utils.parseEther(price.toString());
-
-      // Assuming that contract is already an ethers.js Contract instance
-      // let result = await contract.startUpload(
-      //   decryptedCID,
-      //   weiPrice,
-      //   selectedTagNumbers
-      // );
-      // console.log("startUpload 2");
-      // console.log("Store file result", result);
-      // try {
-      //const tokenId = await contractRights.rightsNFTCount();
-      //await contract.finalizeUpload(tokenId, response.data.Hash);
-      //   console.log("tokenId", tokenId);
-      // } catch (error) {
-      //   console.error("There was an error finalizing the upload:", error);
-      // }
-
+    
       modifyFile(encryptedSinteticBaseEvent);
       return response.data.Hash;
     };
 
-  useEffect(() => {
-    const finalizeUpload = async () => {
-      const tokenId = await contractRights.rightsNFTCount();
-      await contract.finalizeUpload(tokenId, "hello hellooooooooooo");
-      console.log("tokenId", tokenId);
+    const handleFileChange = async () => {
+      if (encryptedSinteticBaseEvent) {
+        mergeImageForSale();
+        const encryptedHash = await deployEncrypted();
+    
+        const rightsNFTCount = await contractRights.rightsNFTCount();
+        const tokenId = rightsNFTCount;
+       // console.log("token id ", tokenId.toString());
+        console.log("encryptedHash", encryptedHash);
+    
+        if (encryptedHash) {
+          try {
+            const tx = await contract.finalizeUpload(tokenId, encryptedHash); // il cid risulta una stringa vuota, perchè?
+            await tx.wait();
+         //   console.log("Transaction:", tx);
+          } catch (error) {
+            console.error("Transaction failed: ", error);
+          }
+        }
+      }
     };
-
-    if (accessConditionCid) {
-      finalizeUpload();
-    }
-  }, [accessConditionCid]);
-
-  const handleFileChange = async () => {
-    if (encryptedSinteticBaseEvent) {
-      mergeImageForSale();
-      const newAccessConditionCid = await deployEncrypted();
-      setAccessConditionCid(newAccessConditionCid);
-    }
-  };
 
   return (
     <div className="px-[140px] pt-[60px]">
