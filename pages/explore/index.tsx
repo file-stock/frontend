@@ -170,6 +170,7 @@ const Explore = () => {
           <p className="text-lg text-center">Loading...</p>
         ) : visibleImages.length > 0 ? (
           visibleImages.map((file: any, index: any) => {
+            console.log("file",file)
             return (
               <div key={index}>
                 <ImageCard

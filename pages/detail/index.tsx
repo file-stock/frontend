@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import { ThemeContext } from "../../context/context";
 import { utils } from "ethers";
+import GenericModal from "../../components/GenericModal";
 import GenericButton from "../../components/GenericButton";
 import Watermark from "@uiw/react-watermark";
 import {
@@ -15,29 +16,16 @@ import {
 import ProfileUserPicture from "../../components/ProfileUserPicture";
 import Image from "next/image";
 import { tags } from "../../public/tags";
+import { ethers } from "ethers";
 
 const Detail = () => {
   const router = useRouter();
   const { id } = router.query;
-  const {
-    allFiles,
-    callBuyFile,
-    price,
-    setPrice,
-    selectedTags,
-    setSelectedTags,
-  } = useContext(ThemeContext);
+  const { allFiles, price, setPrice, selectedTags, setSelectedTags, contract } =
+    useContext(ThemeContext);
   const [imageData, setImageData] = useState("");
   const [cid, setCid] = useState(null);
-  // const [price, setPrice] = useState<any>();
-  // const style = {
-  //   width: "100%",
-  //   maxWidth: "100%",
-  //   height: 500,
-  //   display: "block",
-  //   background: "#fff",
-  // };
-
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
   const liscenses = [
     "For commercial and personal projects",
@@ -80,9 +68,32 @@ const Detail = () => {
     fetchImageData();
   }, [cid]);
 
+  const callBuyFile = async (id: any) => {
+    console.log("callBuyFile", id);
+    setIsPopUpOpen(true);
+    try {
+      const amount = ethers.utils.parseEther(price);
+      console.log(amount.toString());
+      const tx = await contract.buyFile(id, {
+        value: amount,
+      });
+      await tx.wait();
+      setIsPopUpOpen(false);
+      console.log("buyfile", tx);
+    } catch (error) {
+      console.error("Transaction failed: ", error);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col lg:pb-[180px] pb-[100px] px-[60px] lg:px-[140px] pt-10 ">
+        <GenericModal
+          open={isPopUpOpen}
+          loader={true}
+          label="Loading..."
+          description="the operation may take a few seconds"
+        />
         <div className="flex justify-center">
           {/* <Watermark
           content="File-Stock"
@@ -107,7 +118,7 @@ const Detail = () => {
               label="Buy Image"
               variant="mainFull"
               size="md"
-              onclick={() => callBuyFile(id, price)}
+              onclick={() => callBuyFile(id)}
             />
             {/* <div className="flex items-center justify-between ml-4 gap-4 py-2 px-6 border border-main rounded-lg cursor-pointer text-lg font-bold">
               <Image src={uploadIcon} height={15} width={15} alt="upload" />
