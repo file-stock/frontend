@@ -31,7 +31,7 @@ type ContextType = {
   wallet: any;
   disconnect: any;
   connecting: any;
-  callBuyFile: (id: any, price: any) => Promise<void>;
+
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;
   setImgForSale: Dispatch<SetStateAction<any>>;
@@ -165,21 +165,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
-  const callBuyFile = async (id: any) => {
-    console.log("callBuyFile");
 
-    try {
-      const amount = ethers.utils.parseEther(price);
-      console.log(amount.toString());
-      const tx = await contract.buyFile(id, {
-        value: amount,
-      });
-      await tx.wait();
-      console.log("buyfile", tx);
-    } catch (error) {
-      console.error("Transaction failed: ", error);
-    }
-  };
 
   return (
     <ThemeContext.Provider
@@ -192,7 +178,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         disconnect,
         wallet,
         connecting,
-        callBuyFile,
+    
         setHash,
         setPrice,
         price,

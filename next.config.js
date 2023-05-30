@@ -6,7 +6,7 @@ const nextConfig = {
   },
   swcMinify: true,
   images: {
-    domains: ["ipfs.io"],
+    domains: ["ipfs.io", 'gateway.lighthouse.storage'],
   },
   webpack: (config, options) => {
     if (options.isServer) {
