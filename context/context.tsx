@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { init, useConnectWallet } from "@web3-onboard/react";
 import injectedModule from "@web3-onboard/injected-wallets";
 import {
@@ -12,7 +12,7 @@ import { ethers } from "ethers";
 import ContractAbi from "../lib/contractAbi.json";
 import nftRightsAbi from "../lib/nftRightsAbi.json";
 import { myCardSale } from "../constants/constants";
-
+import creatorAbi from "../lib/creatorAbi.json"
 import lighthouse from "@lighthouse-web3/sdk";
 
 declare global {
@@ -31,7 +31,6 @@ type ContextType = {
   wallet: any;
   disconnect: any;
   connecting: any;
-  startUpload: (hash: any, tags: number[]) => Promise<void>;
   callBuyFile: (id: any, price: any) => Promise<void>;
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;
@@ -50,6 +49,7 @@ type ContextType = {
   userAddress: string;
   provider: any;
   contractRights: any;
+  contractCreator: any;
 };
 
 const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
@@ -95,9 +95,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
   const [contractRights, setContractRights] = useState<any>();
-  const CONTRACT_ADDRESS = "0x808c13Dc217174268385A5eC50F44c5c62C822F6";
-  const CONTRACT_RIGHTS = "0x9F6b44cb29099ADBc7dD34fF62b2f046c71BE895";
+  const [contractCreator, setContractCreator] = useState<any>()
 
+  const CONTRACT_ADDRESS = "0xDFeeE88440d7e7Bd773611fa5949c8318dfbaFa4";
+  const CONTRACT_RIGHTS = "0x9aA74DfF5e1A74e6b1c3e7A500ed581E74247461";
+  const CONTRACT_CREATOR = "0x15814D0519D1EFcdC600C9a18fD9705c1A38be57";
   useEffect(() => {
     const hProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
     setHyperProvider(hProvider);
@@ -133,6 +135,12 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       nftRightsAbi,
       signer
     );
+    const contractCreator = new ethers.Contract(
+      CONTRACT_CREATOR,
+      creatorAbi,
+      signer
+    );
+    setContractCreator(contractCreator)
     setContract(contract);
     setContractRights(contractRights);
   }, [signer]);
@@ -157,23 +165,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
-  const startUpload = async (hash: any, tags: any) => {
-    console.log("startUpload 1", hash);
-    if (!contract || !price) return;
-    const tx = await contract.startUpload(
-      hash,
-      ethers.utils.parseEther(price.toString()),
-      tags
-    );
-    await tx.wait();
-    console.log("after transaction", tx);
-    contract.on("StartUpload", (value1: any, value2: any, value3: any) => {
-      console.log("Value 1:", value1);
-      console.log("Value 2:", value2);
-      console.log("Value 3:", value3);
-    });
-  };
-
   const callBuyFile = async (id: any) => {
     console.log("callBuyFile");
 
@@ -193,6 +184,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeContext.Provider
       value={{
+        contractCreator,
         contract,
         userAddress,
         isConnected,
@@ -200,7 +192,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         disconnect,
         wallet,
         connecting,
-        startUpload,
         callBuyFile,
         setHash,
         setPrice,

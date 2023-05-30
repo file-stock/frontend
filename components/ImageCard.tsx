@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { FC } from "react";
 import Image from "next/image";
 import { favouriteIcon } from "../public";
@@ -46,16 +47,14 @@ const ImageCard: FC<ImageCardProps> = ({
   }, [cid]);
   return (
     <div
-      className={`relative ${
-        cid ? "w-[420px] group h-[460px]" : "w-[480px] group h-[460px]"
-      }  transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg`}
+      className={`relative w-[420px] group h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg`}
     >
       <Link href={`/detail?id=${id}`}>
-        <Image
+        <img
           src={imageData}
-          fill={true}
+          //fill={true}
           alt="myImages"
-          className="rounded-lg object-fit"
+          className="rounded-lg h-full"
         />
       </Link>
 
