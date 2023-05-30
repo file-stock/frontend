@@ -6,6 +6,7 @@ import { ThemeContext } from "../../context/context";
 import StepOne from "./stepOne";
 import StepTwo from "./stepTwo";
 import StepThree from "./stepThree";
+import GenericModal from "../../components/GenericModal";
 
 function UploadImage() {
   const [selectedFile, setSelectedFile] = useState<any>("");
@@ -18,7 +19,8 @@ function UploadImage() {
   const [description, setDescription] = useState("");
   const [accessConditionCid, setAccessConditionCid] = useState("");
   const [hashValue, setHashValue] = useState("");
-  const [tokenId, setTokenId] = useState<any>();
+  const [encryptedHash, setEncryptedHash] = useState<string>("");
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
   const fileInputRef = useRef(null);
 
@@ -44,7 +46,7 @@ function UploadImage() {
       return;
     }
     const objectUrl = URL.createObjectURL(selectedFile);
-  //  console.log("OBJ", objectUrl);
+    //  console.log("OBJ", objectUrl);
     setPreview(objectUrl);
     return () => URL.revokeObjectURL(objectUrl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,7 +55,7 @@ function UploadImage() {
   async function modifyFile(e: any) {
     let file = e.target.files[0];
 
-  //  console.log("event", e);
+    //  console.log("event", e);
     const fileName = file.name;
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -63,27 +65,6 @@ function UploadImage() {
       const watermarkedImg = await Jimp.read(
         `${window.location.origin}/images/imageSample/filestockwm2.png`
       );
-      // image.resize(800, 600);
-      // image.composite(watermarkedImg, 10, 10);
-      // image.composite(
-      //   watermarkedImg,
-      //   image.bitmap.width - watermarkedImg.bitmap.width - 10,
-      //   10
-      // );
-      // image.composite(
-      //   watermarkedImg,
-      //   10,
-      //   image.bitmap.height - watermarkedImg.bitmap.height - 10
-      // );
-      // image.composite(
-      //   watermarkedImg,
-      //   image.bitmap.width - watermarkedImg.bitmap.width - 10,
-      //   image.bitmap.height - watermarkedImg.bitmap.height - 10
-      // );
-      // const centerX = image.bitmap.width / 2 - watermarkedImg.bitmap.width / 2;
-      // const centerY = image.bitmap.height / 2 - watermarkedImg.bitmap.height / 2;
-      // image.composite(watermarkedImg, centerX, centerY);
-      // image.resize(800, Jimp.AUTO);
       image.resize(800, Jimp.AUTO);
 
       const watermarkWidth = watermarkedImg.bitmap.width;
@@ -106,7 +87,7 @@ function UploadImage() {
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
       });
-    // console.log("file", file); //console.log
+      // console.log("file", file); //console.log
 
       //new FileList which is the type of target.files
       let list = new DataTransfer();
@@ -127,7 +108,7 @@ function UploadImage() {
     if (sinteticBaseEvent) {
       const handleSynthetic = async () => {
         setHashValue(await deploy());
-       // console.log("hashValue uploadImage", hashValue);
+        // console.log("hashValue uploadImage", hashValue);
       };
       handleSynthetic();
     }
@@ -203,7 +184,7 @@ function UploadImage() {
       aggregator
     );
 
-   // console.log(response);
+    // console.log(response);
   };
 
   const progressCallback = (progressData: any) => {
@@ -213,13 +194,13 @@ function UploadImage() {
 
   const deploy = async () => {
     // Push file to lighthouse node
-   // console.log("run deploy", sinteticBaseEvent);
+    // console.log("run deploy", sinteticBaseEvent);
     const output = await lighthouse.upload(
       sinteticBaseEvent,
       LIGHTHOUSE_API_KEY,
       progressCallback
     );
-   // console.log("File Status:", output);
+    // console.log("File Status:", output);
     // console.log(
     //   "Visit at https://gateway.lighthouse.storage/ipfs/" + output.data.Hash
     // );
@@ -238,50 +219,101 @@ function UploadImage() {
     setImgForSale((prev: any) => [...prev, newImgObject]);
   };
 
-  const deployEncrypted = async () =>
-    {
-      if (encryptedSinteticBaseEvent) {
-       // console.log("from deployEncrypted", encryptedSinteticBaseEvent);
-      }
+  const deployEncrypted = async () => {
+    if (encryptedSinteticBaseEvent) {
+      // console.log("from deployEncrypted", encryptedSinteticBaseEvent);
+    }
 
-      const sig = await encryptionSignature();
-      //console.log();
-      const response = await lighthouse.uploadEncrypted(
-        encryptedSinteticBaseEvent,
-        sig.publicKey,
-        LIGHTHOUSE_API_KEY,
-        sig.signedMessage,
-        progressCallback
-      );
+    const sig = await encryptionSignature();
+    //console.log();
+    const response = await lighthouse.uploadEncrypted(
+      encryptedSinteticBaseEvent,
+      sig.publicKey,
+      LIGHTHOUSE_API_KEY,
+      sig.signedMessage,
+      progressCallback
+    );
+
+    modifyFile(encryptedSinteticBaseEvent);
+    return response.data.Hash;
+  };
+
+  const handleFileChange = async () => {
+    if (encryptedSinteticBaseEvent) {
+      mergeImageForSale();
     
-      modifyFile(encryptedSinteticBaseEvent);
-      return response.data.Hash;
+      setEncryptedHash(await deployEncrypted());
+      console.log("encryptedHash fuori evento", encryptedHash);
+      // const rightsNFTCount = await contractRights.rightsNFTCount();
+      // const tokenId = rightsNFTCount.add(1);
+      // console.log("token id ", tokenId.toString());
+    }
+  };
+
+  useEffect(() => {
+    const startUploadListener = async (value1: any, value2: any, value3: any) => {
+      console.log("encryptedHash nell'evento", encryptedHash);
+      try {
+        const tx = await contract.finalizeUpload(value3, encryptedHash);
+        await tx.wait();
+        setStep(3);
+        setIsPopUpOpen(false);
+        console.log("Transaction:", tx);
+      } catch (error) {
+        console.error("Transaction failed: ", error);
+      }
     };
 
-    const handleFileChange = async () => {
-      if (encryptedSinteticBaseEvent) {
-        mergeImageForSale();
-        const encryptedHash = await deployEncrypted();
-    
-        const rightsNFTCount = await contractRights.rightsNFTCount();
-        const tokenId = rightsNFTCount;
-       // console.log("token id ", tokenId.toString());
-        console.log("encryptedHash", encryptedHash);
-    
-        if (encryptedHash) {
-          try {
-            const tx = await contract.finalizeUpload(tokenId, encryptedHash); // il cid risulta una stringa vuota, perchè?
-            await tx.wait();
-         //   console.log("Transaction:", tx);
-          } catch (error) {
-            console.error("Transaction failed: ", error);
-          }
+    if (contract) {
+      contract.on("StartUpload", startUploadListener);
+    }
+
+    // Ritorna una funzione di cleanup per rimuovere il listener quando il componente si smonta
+    return () => {
+      if (contract) {
+        contract.off("StartUpload", startUploadListener);
+      }
+    };
+  }, [contract, encryptedHash]);
+
+  const startUpload = async (hash: any, tags: any) => {
+    console.log("startUpload 1", hash);
+    if (!contract || !price) return;
+    const tx = await contract.startUpload(
+      hash,
+      ethers.utils.parseEther(price.toString()),
+      tags
+    );
+    await tx.wait();
+    console.log("after transaction", tx);
+    console.log("encrypted hash dopo transazione", encryptedHash);
+  };
+
+
+  useEffect(() => {
+    if (hashValue) {
+      const completeUpload = async () => {
+       setIsPopUpOpen(true);
+        try {
+          await startUpload(hashValue, selectedTagNumbers);
+          
+        } catch (error) {
+          console.error("There was an error uploading:", error);
         }
-      }
-    };
+      };
+      completeUpload();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hashValue]);
 
   return (
     <div className="px-[140px] pt-[60px]">
+       <GenericModal
+          open={isPopUpOpen}
+          loader={true}
+          label="Loading..."
+          description="the operation may take a few seconds"
+        />
       {step === 1 ? (
         <>
           <StepOne

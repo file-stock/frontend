@@ -10,7 +10,7 @@ import {
 } from "react";
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
-import GenericModal from "../../components/GenericModal";
+
 import { tags } from "../../public/tags";
 
 type StepTwoProps = {
@@ -38,14 +38,13 @@ const StepTwo: FC<StepTwoProps> = ({
   hashValue,
 }) => {
   const {
-    startUpload,
     setPrice,
     selectedTags,
     setSelectedTags,
     selectedTagNumbers,
     setSelectedTagNumbers,
   } = useContext(ThemeContext);
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+ 
   const forms = [
     /*{ label: "Title of the image", type: "text", required: true},
   { label: "Description", type: "text"},*/
@@ -77,7 +76,6 @@ const StepTwo: FC<StepTwoProps> = ({
     }
     setSearchTerm("");
   };
-  console.log(selectedTagNumbers, selectedTags);
 
   const handleTagRemove = (tag: string) => {
     setSelectedTags(selectedTags.filter((t: string) => t !== tag));
@@ -108,40 +106,13 @@ const StepTwo: FC<StepTwoProps> = ({
 
   const uploadImage = async () => {
      await handleFileChange();
-
-
-    // const hash = await handleFileChange();
-    //const hash = hashValue;
-    //setStep(3)
   };
 
-  console.log("hashValue", hashValue);
-  useEffect(() => {
-    if (hashValue) {
-      const completeUpload = async () => {
-        setIsPopUpOpen(true);
-        try {
-          await startUpload(hashValue, selectedTagNumbers);
-          setIsPopUpOpen(false);
-          setStep(3);
-        } catch (error) {
-          console.error("There was an error uploading:", error);
-        }
-      };
-      completeUpload();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hashValue, setStep, selectedTagNumbers, startUpload]);
 
   return (
     <>
       <div className="flex gap-6 pb-[175px]">
-        <GenericModal
-          open={isPopUpOpen}
-          loader={true}
-          label="Loading..."
-          description="the operation may take a few seconds"
-        />
+       
         <div className="flex flex-col gap-3 mr-4">
           {selectedFile && (
             <>

@@ -50,7 +50,7 @@ const TagSearch: FC<TagSearchProps> = ({
     setInputValue("");
   };
 
-  //console.log("selectedTags", selectedTags);
+
 
   const handleTagClick = (tag: string) => {
     if (selectedTags.length < 10) {
