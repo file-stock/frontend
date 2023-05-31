@@ -13,23 +13,19 @@ module.exports = {
       "2xl": "1536px",
     },
     extend: {
-      animation: {
-        scrollLeft: "scrollLeft 10s linear infinite",
-        scrollRight: "scrollRight 10s linear infinite",
-      },
       keyframes: {
-        scrollLeft: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
-        scrollRight: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(50%)" },
+        fadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
         },
       },
-      transitionProperty: {
-        height: "height",
-        spacing: "margin, padding",
+      animation: {
+        fadeIn: "fadeIn 0.5s ease-in-out",
+        fadeOut: "fadeOut 0.5s ease-in-out",
       },
     },
     colors: {
