@@ -78,25 +78,28 @@ const Collection = () => {
       publicKey: address,
     };
   };
+
+  
   const decrypted = async (tokenId: string) => {
     const { publicKey, signedMessage } = await encryptionSignature();
-    const correspondingFile = allFiles.find(file => file.tokenId.toString() === tokenId);
+    const correspondingFile = allFiles.find(
+      (file) => file.tokenId.toString() === tokenId
+    );
     const cid = correspondingFile.encryptedCid;
-    console.log("cid", cid);
+  //  console.log("cid", cid);
 
     const keyObject = await lighthouse.fetchEncryptionKey(
       cid,
       publicKey,
       signedMessage
     );
-    // const fileType = "image/jpeg";
     try {
       const decrypted = await lighthouse.decryptFile(cid, keyObject.data.key);
       console.log("decrypted", decrypted);
-      
+
       const url = URL.createObjectURL(decrypted);
-      console.log(url);
-      setFileURL(url)
+   //   console.log(url);
+      setFileURL(url);
 
       let a = document.createElement("a");
       a.style.display = "none";
@@ -105,7 +108,6 @@ const Collection = () => {
       a.setAttribute("download", "image.jpeg");
       a.click();
       document.body.removeChild(a);
-      
     } catch (error) {
       console.error("Errore durante la decifratura del file:", error);
     }
@@ -117,7 +119,7 @@ const Collection = () => {
           (b) => b.tokenId === data.tokenId.toString()
         );
         const balance = balanceData ? balanceData.balance : 0;
-        console.log(data);
+   //     console.log(data);
         return (
           <div key={index} className="">
             <ImageCard cid={data.cid} id={data.tokenId} />

@@ -41,6 +41,7 @@ const MyProfile = () => {
     const filtered = myImages.filter(filterImagesByPrice);
     setFilteredImages(filtered);
     setSortedImages(sortImages(filtered, selectedFilters["Price ranges"]));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myImages, selectedFilters]);
 
   const filterImagesByPrice = (file: any) => {
