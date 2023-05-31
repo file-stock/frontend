@@ -43,6 +43,7 @@ const StepTwo: FC<StepTwoProps> = ({
     setSelectedTags,
     selectedTagNumbers,
     setSelectedTagNumbers,
+    isConnected,
   } = useContext(ThemeContext);
 
   const forms = [
@@ -54,6 +55,8 @@ const StepTwo: FC<StepTwoProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
 
   const menuRef = useRef<HTMLDivElement>(null);
   const filteredTags = Object.values(tags).filter(
@@ -106,6 +109,21 @@ const StepTwo: FC<StepTwoProps> = ({
 
   const uploadImage = async () => {
     await handleFileChange();
+  };
+
+  const handleButtonClick = () => {
+    if (!isConnected) {
+      setPopupMessage("Connect your wallet");
+      setIsErrorPopupVisible(true);
+    } else if (isButtonDisabled) {
+      setPopupMessage("Wrong price");
+      setIsErrorPopupVisible(true);
+    } else {
+      uploadImage();
+    }
+    setTimeout(() => {
+      setIsErrorPopupVisible(false);
+    }, 2500);
   };
 
   return (
@@ -173,7 +191,9 @@ const StepTwo: FC<StepTwoProps> = ({
                     placeholder={
                       form.label === "Tags"
                         ? "Example: Rain, Nature, Moutains"
-                        : form.label === "Price" ? "Price between 0.1 and 1000" : "type here"
+                        : form.label === "Price"
+                        ? "Price between 0.1 and 1000"
+                        : "type here"
                     }
                     className="border border-border rounded-md p-3 mb-[35px] mt-[12px] text-[#0A001F]"
                     required
@@ -241,18 +261,28 @@ const StepTwo: FC<StepTwoProps> = ({
               </form>
             );
           })}
+          {isErrorPopupVisible && (
+            <div className="absolute top-5 left-5 z-50 border rounded-lg w-[300px] h-[100px] flex justify-center items-center bg-main text-white animate-fadeIn">
+              <span>{popupMessage}</span>
+              <button
+                onClick={() => setIsErrorPopupVisible(false)}
+                className="absolute top-0 right-2"
+              >
+                X
+              </button>
+            </div>
+          )}
           <div className="mt-[40px]">
-            <button
-              onClick={() => {
-                uploadImage();
-              }}
-              disabled={isButtonDisabled}
-              className={`text-white font-bold mr-4 px-5 py-2.5 ${
-                isButtonDisabled ? "bg-[#622774]" : "bg-main"
-              } border border-main rounded-md`}
-            >
-              Upload
-            </button>
+            <div onClick={handleButtonClick} className="button-wrapper w-fit">
+              <button
+                //  disabled={!isConnected || isButtonDisabled}
+                className={`text-white font-bold mr-4 px-5 py-2.5  ${
+                  isButtonDisabled || !isConnected ? "bg-[#622774]" : "bg-main"
+                } border border-main rounded-md`}
+              >
+                Upload
+              </button>
+            </div>
           </div>
         </div>
       </div>
