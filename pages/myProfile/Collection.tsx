@@ -55,7 +55,7 @@ const Collection = () => {
     if (contractRights && userAddress) {
       fetchRightsNFTData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [contractRights, userAddress]);
 
   const encryptionSignature = async () => {
