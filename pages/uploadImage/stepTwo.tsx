@@ -44,7 +44,7 @@ const StepTwo: FC<StepTwoProps> = ({
     selectedTagNumbers,
     setSelectedTagNumbers,
   } = useContext(ThemeContext);
- 
+
   const forms = [
     /*{ label: "Title of the image", type: "text", required: true},
   { label: "Description", type: "text"},*/
@@ -53,7 +53,7 @@ const StepTwo: FC<StepTwoProps> = ({
   ];
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const menuRef = useRef<HTMLDivElement>(null);
   const filteredTags = Object.values(tags).filter(
@@ -105,14 +105,12 @@ const StepTwo: FC<StepTwoProps> = ({
   }, []);
 
   const uploadImage = async () => {
-     await handleFileChange();
+    await handleFileChange();
   };
-
 
   return (
     <>
       <div className="flex gap-6 pb-[175px]">
-       
         <div className="flex flex-col gap-3 mr-4">
           {selectedFile && (
             <>
@@ -175,7 +173,7 @@ const StepTwo: FC<StepTwoProps> = ({
                     placeholder={
                       form.label === "Tags"
                         ? "Example: Rain, Nature, Moutains"
-                        : "type here"
+                        : form.label === "Price" ? "Price between 0.1 and 1000" : "type here"
                     }
                     className="border border-border rounded-md p-3 mb-[35px] mt-[12px] text-[#0A001F]"
                     required
@@ -187,7 +185,9 @@ const StepTwo: FC<StepTwoProps> = ({
                       } else*/
                       }
                       if (form.label === "Price") {
-                        setPrice(Number(e.target.value));
+                        const price = Number(e.target.value);
+                        setPrice(price);
+                        setIsButtonDisabled(price < 0.1 || price > 1000);
                       } else if (form.label === "Tags") {
                         setSearchTerm(e.target.value);
                         if (e.target.value?.length >= 2) {
@@ -246,7 +246,10 @@ const StepTwo: FC<StepTwoProps> = ({
               onClick={() => {
                 uploadImage();
               }}
-              className="text-white font-bold mr-4 px-5 py-2.5 bg-main border border-main rounded-md"
+              disabled={isButtonDisabled}
+              className={`text-white font-bold mr-4 px-5 py-2.5 ${
+                isButtonDisabled ? "bg-[#622774]" : "bg-main"
+              } border border-main rounded-md`}
             >
               Upload
             </button>
