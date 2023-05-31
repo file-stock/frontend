@@ -151,7 +151,7 @@ function UploadImage() {
     // Only the owner of the file can apply access conditions
 
 console.log("cid di applyAccessConditions", encryptedHash)
-console.log("tokenId di applyaccessconditions", tokenId)
+console.log("tokenId di applyaccessconditions", tokenId.toString())
     // Conditions to add
     const conditions = [
       {
@@ -161,7 +161,7 @@ console.log("tokenId di applyaccessconditions", tokenId)
         standardContractType: "ERC1155",
         contractAddress: "0x9aA74DfF5e1A74e6b1c3e7A500ed581E74247461",
         returnValueTest: { comparator: ">=", value: "1" },
-        parameters: [userAddress, tokenId],
+        parameters: [":userAddress", tokenId],
     }
     ];
 
@@ -252,6 +252,7 @@ console.log("tokenId di applyaccessconditions", tokenId)
   useEffect(() => {
     const startUploadListener = async (value1: any, value2: any, value3: any) => {
       console.log("encryptedHash nell'evento", encryptedHash);
+      console.log("value3 nell'evento", value3.toString());
       try {
         const tx = await contract.finalizeUpload(value3, encryptedHash);
         await tx.wait();
@@ -274,10 +275,11 @@ console.log("tokenId di applyaccessconditions", tokenId)
         contract.off("StartUpload", startUploadListener);
       }
     };
-  }, [applyAccessConditions, contract, encryptedHash]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contract, encryptedHash]);
 
   const startUpload = async (hash: any, tags: any) => {
-    console.log("startUpload 1", hash);
+    console.log("startUpload", hash);
     if (!contract || !price) return;
     const tx = await contract.startUpload(
       hash,
