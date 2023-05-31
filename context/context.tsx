@@ -12,7 +12,7 @@ import { ethers } from "ethers";
 import ContractAbi from "../lib/contractAbi.json";
 import nftRightsAbi from "../lib/nftRightsAbi.json";
 import { myCardSale } from "../constants/constants";
-import creatorAbi from "../lib/creatorAbi.json"
+import creatorAbi from "../lib/creatorAbi.json";
 import lighthouse from "@lighthouse-web3/sdk";
 
 declare global {
@@ -52,7 +52,7 @@ type ContextType = {
   contractCreator: any;
 };
 
-const rpcUrl = "https://api.hyperspace.node.glif.io/rpc/v1";
+const rpcUrl = "https://filecoin-hyperspace.chainstacklabs.com/rpc/v1";
 const injected = injectedModule();
 
 init({
@@ -95,7 +95,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
   const [contractRights, setContractRights] = useState<any>();
-  const [contractCreator, setContractCreator] = useState<any>()
+  const [contractCreator, setContractCreator] = useState<any>();
 
   const CONTRACT_ADDRESS = "0xDFeeE88440d7e7Bd773611fa5949c8318dfbaFa4";
   const CONTRACT_RIGHTS = "0x9aA74DfF5e1A74e6b1c3e7A500ed581E74247461";
@@ -140,7 +140,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       creatorAbi,
       signer
     );
-    setContractCreator(contractCreator)
+    setContractCreator(contractCreator);
     setContract(contract);
     setContractRights(contractRights);
   }, [signer]);
@@ -165,8 +165,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [CONTRACT_ADDRESS, rpcUrl]);
 
-
-
   return (
     <ThemeContext.Provider
       value={{
@@ -178,7 +176,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         disconnect,
         wallet,
         connecting,
-    
+
         setHash,
         setPrice,
         price,
