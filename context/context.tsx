@@ -105,21 +105,46 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     setHyperProvider(hProvider);
   }, []);
 
+  // useEffect(() => {
+  //   if (wallet) {
+  //     const { label, provider, accounts } = wallet;
+  //     window.localStorage.setItem("connectedWallets", JSON.stringify(label));
+  //     setProvider(new ethers.providers.Web3Provider(provider, "any"));
+  //     setUserAddress(accounts[0].address);
+  //     setIsConnected(true);
+  //   } else {
+  //     // wallet is null or undefined, user is likely disconnected
+  //     setIsConnected(false);
+  //     setUserAddress("");
+  //     setProvider(null);
+  //     window.localStorage.removeItem("connectedWallets");
+  //   }
+  // }, [wallet]);
+
   useEffect(() => {
-    if (wallet) {
-      const { label, provider, accounts } = wallet;
-      window.localStorage.setItem("connectedWallets", JSON.stringify(label));
-      setProvider(new ethers.providers.Web3Provider(provider, "any"));
-      setUserAddress(accounts[0].address);
-      setIsConnected(true);
-    } else {
-      // wallet is null or undefined, user is likely disconnected
-      setIsConnected(false);
-      setUserAddress("");
-      setProvider(null);
-      window.localStorage.removeItem("connectedWallets");
+    const walletData = window.localStorage.getItem("ConnectedWallets");
+    if (walletData) {
+        const pastConnectedWallet = JSON.parse(walletData);
+        if (pastConnectedWallet) connect({ autoSelect: { label: pastConnectedWallet, disableModals: true } });
     }
-  }, [wallet]);
+}, []);
+
+useEffect(() => {
+    if (wallet) {
+        const { label } = wallet;
+        window.localStorage.setItem("ConnectedWallets", JSON.stringify(label));
+        const ethersProvider = new ethers.providers.Web3Provider(wallet.provider, "any");
+        setProvider(ethersProvider);
+        setUserAddress(wallet.accounts[0].address);
+        setIsConnected(true);
+    } else {
+        setIsConnected(false);
+        setUserAddress("");
+        setProvider(null);
+        window.localStorage.removeItem("ConnectedWallets");
+    }
+}, [wallet, connect]);
+
 
   useEffect(() => {
     if (provider) {
