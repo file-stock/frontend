@@ -40,10 +40,7 @@ const Explore = () => {
       .filter(filterImagesByPrice);
     setFilteredImages(filtered);
     setVisibleImages(filtered.slice(0, 16));
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2500);
-    return () => clearTimeout(timer);
+   setIsLoading(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allFiles, selectedTagNumbers, selectedFilters]);
 

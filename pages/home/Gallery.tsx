@@ -41,7 +41,7 @@ const Gallery = () => {
       {selectedImages &&
         selectedImages.map((card: any, i: any) => {
           return (
-            <div key={i} className="w-[690px] mx-1 pr-0">
+            <div key={i} className="mx-1 pr-0">
               <ImageCard cid={card.watermarkedCid} id={card.tokenId} />
             </div>
           );

@@ -207,7 +207,7 @@ const NavBar = () => {
           );
         })}
         <ConnectWallet
-          className={`${isMenuOpen ? "border-border mb-5" : ""}`}
+          className={`${isMenuOpen && "border-border mb-5"}`}
         />
         {isConnected && <UserDropDownIcon />}
         {isMenuOpen && isConnected && <Link href="/myProfile">My profile</Link>}
