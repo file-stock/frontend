@@ -5,6 +5,8 @@ import Image from "next/image";
 import TagSearch from "../TagSearch";
 import { logoBlack } from "../../public/index";
 import UserDropDownIcon from "../UserDropDownIcon";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ThemeContext } from "../../context/context";
 import { useRouter } from "next/router";
 
@@ -19,6 +21,7 @@ const NavBar = () => {
     setSelectedTags,
     selectedTagNumbers,
     setSelectedTagNumbers,
+    cart,
   } = useContext(ThemeContext);
   const router = useRouter();
 
@@ -49,6 +52,10 @@ const NavBar = () => {
     };
   }, []);
 
+  const handleaddToCartClick = () => {
+    router.push("/cart");
+  };
+  console.log("cart lengh", cart.length);
   return (
     <div className="flex justify-between py-5 px-[140px] items-center sticky top-0 z-50 bg-white opacity-90 hover:opacity-100">
       <div className="flex items-center">
@@ -80,9 +87,7 @@ const NavBar = () => {
             )}
           </button>
         </div>
-        <div
-          className={`flex items-center hidden md:flex`}    
-        >
+        <div className={`flex items-center hidden md:flex`}>
           <TagSearch
             selectedTags={selectedTags}
             setSelectedTags={setSelectedTags}
@@ -136,9 +141,22 @@ const NavBar = () => {
             </div>
           );
         })}
-        <ConnectWallet
-          className={`${isMenuOpen && "border-border mb-5"}`}
-        />
+        <div
+          onClick={handleaddToCartClick}
+          className="text-xl cursor-pointer relative"
+        >
+          <FontAwesomeIcon
+            icon={faCartShopping}
+            size="2x"
+            className="text-2xl"
+          />
+          {cart.length > 0 && (
+            <span className="text-white bg-error text-sm rounded-full px-2 py-1 absolute left-5 bottom-4">
+              {cart.length}
+            </span>
+          )}
+        </div>
+        <ConnectWallet className={`${isMenuOpen && "border-border mb-5"}`} />
         {isConnected && <UserDropDownIcon />}
         {isMenuOpen && isConnected && <Link href="/myProfile">My profile</Link>}
       </div>

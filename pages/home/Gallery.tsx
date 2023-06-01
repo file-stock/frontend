@@ -42,7 +42,12 @@ const Gallery = () => {
         selectedImages.map((card: any, i: any) => {
           return (
             <div key={i} className="mx-1 pr-0">
-              <ImageCard cid={card.watermarkedCid} id={card.tokenId} />
+              <ImageCard
+                cid={card.watermarkedCid}
+                id={card.tokenId}
+                addToCartButton={true}
+                buyNowButton={true}
+              />
             </div>
           );
         })}

@@ -40,7 +40,7 @@ const Explore = () => {
       .filter(filterImagesByPrice);
     setFilteredImages(filtered);
     setVisibleImages(filtered.slice(0, 16));
-   setIsLoading(false)
+    setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allFiles, selectedTagNumbers, selectedFilters]);
 
@@ -167,7 +167,7 @@ const Explore = () => {
           <p className="text-lg text-center">Loading...</p>
         ) : visibleImages.length > 0 ? (
           visibleImages.map((file: any, index: any) => {
-          //  console.log("file",file)
+            //  console.log("file",file)
             return (
               <div key={index}>
                 <ImageCard
@@ -175,6 +175,9 @@ const Explore = () => {
                   onClick={() => updateFavorite(file.tokenId)}
                   id={file.tokenId}
                   favorite={favorite}
+                  buyNowButton={true}
+                  addToCartButton={true}
+                  price={file.price}
                 />
               </div>
             );
