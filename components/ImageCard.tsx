@@ -3,8 +3,10 @@ import { FC } from "react";
 import Image from "next/image";
 import { favouriteIcon } from "../public";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import GenericModal from "./GenericModal";
+import { useRouter } from "next/router";
+import { ThemeContext } from "../context/context";
 
 type ImageCardProps = {
   title?: string;
@@ -16,6 +18,9 @@ type ImageCardProps = {
   className?: string;
   downloadButton?: boolean;
   cid?: string;
+  buyNowButton?: boolean;
+  addToCartButton?: boolean;
+  price?: any;
 };
 
 const ImageCard: FC<ImageCardProps> = ({
@@ -28,9 +33,15 @@ const ImageCard: FC<ImageCardProps> = ({
   className,
   cid,
   downloadButton,
+  buyNowButton,
+  addToCartButton,
+  price,
 }) => {
+  const { cart, setCart } = useContext(ThemeContext);
   const [imageData, setImageData] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchImageData() {
@@ -47,9 +58,31 @@ const ImageCard: FC<ImageCardProps> = ({
     }
     fetchImageData();
   }, [cid]);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  const handleBuyNowClick = () => {
+    router.push(`/detail?id=${id}`);
+  };
+
+  const addToCart = (imageId: number, cid: any, price: any) => {
+    console.log("imageId", imageId);
+    console.log("cid", cid);
+    console.log("price", price);
+    const newCart = [...cart, { imageId, cid, price }];
+    setCart(newCart);
+  };
   return (
     <div
       className={`relative w-[420px] group h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Link href={`/detail?id=${id}`}>
         <img
@@ -105,6 +138,26 @@ const ImageCard: FC<ImageCardProps> = ({
             onClick={onClick}
           >
             <Image src={favouriteIcon} fill={true} alt="fav" />
+          </div>
+        )}
+        {isHovered && addToCartButton && (
+          <div className="absolute flex justify-center items-center group-hover:opacity-100 inset-0 bg-black bg-opacity-70 transition-opacity duration-300 opacity-0">
+            {buyNowButton && (
+              <button
+                className="mx-2 py-2 px-4 bg-green-500 text-white rounded hover:text-lg hover:underline"
+                onClick={handleBuyNowClick}
+              >
+                Buy Now
+              </button>
+            )}
+            {addToCartButton && (
+              <button
+                className="mx-2 py-2 px-4 bg-blue-500 text-white rounded hover:text-lg hover:underline"
+                onClick={() => addToCart(id, cid, price)}
+              >
+                Add to Cart
+              </button>
+            )}
           </div>
         )}
       </div>

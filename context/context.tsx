@@ -50,16 +50,18 @@ type ContextType = {
   provider: any;
   contractRights: any;
   contractCreator: any;
+  cart: any[];
+  setCart: Dispatch<SetStateAction<any[]>>;
 };
 
-const rpcUrl = "https://filecoin-hyperspace.chainstacklabs.com/rpc/v1";
+const rpcUrl = "https://api.calibration.node.glif.io/rpc/v1";
 const injected = injectedModule();
 
 init({
   wallets: [injected],
   chains: [
     {
-      id: "0xC49", //correspond to 3141
+      id: "0xc45", //correspond to 3141
       token: "tFIL",
       label: "Filecoin Hyperspace",
       rpcUrl,
@@ -96,10 +98,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedTagNumbers, setSelectedTagNumbers] = useState<number[]>([]);
   const [contractRights, setContractRights] = useState<any>();
   const [contractCreator, setContractCreator] = useState<any>();
+  const [cart, setCart] = useState<any[]>([]);
 
-  const CONTRACT_ADDRESS = "0xDFeeE88440d7e7Bd773611fa5949c8318dfbaFa4";
-  const CONTRACT_RIGHTS = "0x9aA74DfF5e1A74e6b1c3e7A500ed581E74247461";
-  const CONTRACT_CREATOR = "0x15814D0519D1EFcdC600C9a18fD9705c1A38be57";
+  const CONTRACT_ADDRESS = "0x307C87ff1E333ad5CC193e2Fe0A13c3d27FA2d60";
+  const CONTRACT_RIGHTS = "0x4B10f9699B33686aBc694D35E09f698cD02688b2";
+  const CONTRACT_CREATOR = "0x52480B3fA8B136B86D824BD31DC9512909528E86";
   useEffect(() => {
     const hProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
     setHyperProvider(hProvider);
@@ -124,27 +127,32 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const walletData = window.localStorage.getItem("ConnectedWallets");
     if (walletData) {
-        const pastConnectedWallet = JSON.parse(walletData);
-        if (pastConnectedWallet) connect({ autoSelect: { label: pastConnectedWallet, disableModals: true } });
+      const pastConnectedWallet = JSON.parse(walletData);
+      if (pastConnectedWallet)
+        connect({
+          autoSelect: { label: pastConnectedWallet, disableModals: true },
+        });
     }
-}, []);
+  }, []);
 
-useEffect(() => {
+  useEffect(() => {
     if (wallet) {
-        const { label } = wallet;
-        window.localStorage.setItem("ConnectedWallets", JSON.stringify(label));
-        const ethersProvider = new ethers.providers.Web3Provider(wallet.provider, "any");
-        setProvider(ethersProvider);
-        setUserAddress(wallet.accounts[0].address);
-        setIsConnected(true);
+      const { label } = wallet;
+      window.localStorage.setItem("ConnectedWallets", JSON.stringify(label));
+      const ethersProvider = new ethers.providers.Web3Provider(
+        wallet.provider,
+        "any"
+      );
+      setProvider(ethersProvider);
+      setUserAddress(wallet.accounts[0].address);
+      setIsConnected(true);
     } else {
-        setIsConnected(false);
-        setUserAddress("");
-        setProvider(null);
-        window.localStorage.removeItem("ConnectedWallets");
+      setIsConnected(false);
+      setUserAddress("");
+      setProvider(null);
+      window.localStorage.removeItem("ConnectedWallets");
     }
-}, [wallet, connect]);
-
+  }, [wallet, connect]);
 
   useEffect(() => {
     if (provider) {
@@ -221,6 +229,8 @@ useEffect(() => {
         setSelectedTagNumbers,
         provider,
         contractRights: contractRights,
+        cart,
+        setCart,
       }}
     >
       {children}

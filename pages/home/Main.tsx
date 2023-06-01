@@ -78,6 +78,8 @@ const Main = () => {
                   onClick={() => updateFavorite(card.tokenId)}
                   id={card.tokenId}
                   favorite={favorite}
+                  addToCartButton={true}
+                  buyNowButton={true}
                 />
               </div>
             );
