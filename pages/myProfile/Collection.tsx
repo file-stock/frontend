@@ -6,12 +6,37 @@ import ImageCard from "../../components/ImageCard";
 import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
 
+interface AccessCondition {
+  data: {
+    conditions: {
+      returnValueTest: any;
+      method: string;
+      aggregator: string;
+      cid: string;
+      conditions: Array<{
+        chain: string;
+        contractAddress: string;
+        id: number;
+        method: string;
+        parameters: Array<any>;
+        returnValueTest: { comparator: string; value: number };
+        standardContractType: string;
+      }>;
+      conditionsSolana: any[];
+      owner: string;
+      sharedTo: any[];
+    }[];
+  };
+}
+
+
 const Collection = () => {
   const [nftData, setNftData] = useState<any[]>([]);
   const id = nftData.map((data) => data.tokenId.toString());
   const [nftBalances, setNftBalances] = useState<any[]>([]);
   const [fileURL, setFileURL] = useState("");
-  const { contractRights, userAddress, allFiles } = useContext(ThemeContext);
+  const { contractRights, userAddress, allFiles, contract } =
+    useContext(ThemeContext);
 
   async function getBalances() {
     const balances = await Promise.all(
@@ -55,7 +80,6 @@ const Collection = () => {
     if (contractRights && userAddress) {
       fetchRightsNFTData();
     }
-
   }, [contractRights, userAddress]);
 
   const encryptionSignature = async () => {
@@ -79,35 +103,39 @@ const Collection = () => {
     };
   };
 
-  
   const decrypted = async (tokenId: string) => {
     const { publicKey, signedMessage } = await encryptionSignature();
-    const correspondingFile = allFiles.find(
-      (file) => file.tokenId.toString() === tokenId
-    );
-    const cid = correspondingFile.encryptedCid;
-  //  console.log("cid", cid);
-
-    const keyObject = await lighthouse.fetchEncryptionKey(
-      cid,
-      publicKey,
-      signedMessage
-    );
     try {
-      const decrypted = await lighthouse.decryptFile(cid, keyObject.data.key);
-      console.log("decrypted", decrypted);
+      const correspondingFile = allFiles.find(
+        (file) => file.tokenId.toString() === tokenId
+      );
+      const cid = correspondingFile.encryptedCid;
+      const accessCondition = await lighthouse.getAccessConditions(cid) as AccessCondition;
+console.log(accessCondition)
+      const balance = await contractRights.balanceOf(userAddress, tokenId);
+      const condition = accessCondition.data.conditions[0];
+      if (condition.method === "balanceOf" && balance.toNumber() >= condition.returnValueTest.value) {
+      const keyObject = await lighthouse.fetchEncryptionKey(
+        cid,
+        publicKey,
+        signedMessage
+      );
+      if (balance.toNumber() > 0) {
+        const decrypted = await lighthouse.decryptFile(cid, keyObject.data.key);
+        console.log("decrypted", decrypted);
 
-      const url = URL.createObjectURL(decrypted);
-   //   console.log(url);
-      setFileURL(url);
+        const url = URL.createObjectURL(decrypted);
+        //   console.log(url);
+        setFileURL(url);
 
-      let a = document.createElement("a");
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.href = url;
-      a.setAttribute("download", "image.jpeg");
-      a.click();
-      document.body.removeChild(a);
+        let a = document.createElement("a");
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.href = url;
+        a.setAttribute("download", "image.jpeg");
+        a.click();
+        document.body.removeChild(a);
+      }}
     } catch (error) {
       console.error("Errore durante la decifratura del file:", error);
     }
@@ -119,7 +147,7 @@ const Collection = () => {
           (b) => b.tokenId === data.tokenId.toString()
         );
         const balance = balanceData ? balanceData.balance : 0;
-   //     console.log(data);
+        //     console.log(data);
         return (
           <div key={index} className="">
             <ImageCard cid={data.cid} id={data.tokenId} />
