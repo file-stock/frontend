@@ -160,7 +160,7 @@ function UploadImage() {
         standardContractType: "ERC1155",
         contractAddress: "0x4B10f9699B33686aBc694D35E09f698cD02688b2",
         returnValueTest: { comparator: ">=", value: "1" },
-        parameters: [userAddress, tokenId],
+        parameters: [":userAddress", tokenId],
       },
     ];
 
