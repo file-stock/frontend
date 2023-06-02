@@ -29,7 +29,6 @@ interface AccessCondition {
   };
 }
 
-
 const Collection = () => {
   const [nftData, setNftData] = useState<any[]>([]);
   const id = nftData.map((data) => data.tokenId.toString());
@@ -110,32 +109,41 @@ const Collection = () => {
         (file) => file.tokenId.toString() === tokenId
       );
       const cid = correspondingFile.encryptedCid;
-      const accessCondition = await lighthouse.getAccessConditions(cid) as AccessCondition;
-console.log(accessCondition)
+      const accessCondition = (await lighthouse.getAccessConditions(
+        cid
+      )) as AccessCondition;
+      console.log(accessCondition);
       const balance = await contractRights.balanceOf(userAddress, tokenId);
       const condition = accessCondition.data.conditions[0];
-      if (condition.method === "balanceOf" && balance.toNumber() >= condition.returnValueTest.value) {
-      const keyObject = await lighthouse.fetchEncryptionKey(
-        cid,
-        publicKey,
-        signedMessage
-      );
-      if (balance.toNumber() > 0) {
-        const decrypted = await lighthouse.decryptFile(cid, keyObject.data.key);
-        console.log("decrypted", decrypted);
+      if (
+        condition.method === "balanceOf" &&
+        balance.toNumber() >= condition.returnValueTest.value
+      ) {
+        const keyObject = await lighthouse.fetchEncryptionKey(
+          cid,
+          publicKey,
+          signedMessage
+        );
+        if (balance.toNumber() > 0) {
+          const decrypted = await lighthouse.decryptFile(
+            cid,
+            keyObject.data.key
+          );
+          console.log("decrypted", decrypted);
 
-        const url = URL.createObjectURL(decrypted);
-        //   console.log(url);
-        setFileURL(url);
+          const url = URL.createObjectURL(decrypted);
+          //   console.log(url);
+          setFileURL(url);
 
-        let a = document.createElement("a");
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.href = url;
-        a.setAttribute("download", "image.jpeg");
-        a.click();
-        document.body.removeChild(a);
-      }}
+          let a = document.createElement("a");
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.href = url;
+          a.setAttribute("download", "image.jpeg");
+          a.click();
+          document.body.removeChild(a);
+        }
+      }
     } catch (error) {
       console.error("Errore durante la decifratura del file:", error);
     }
