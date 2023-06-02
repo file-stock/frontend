@@ -47,6 +47,7 @@ const Gallery = () => {
                 id={card.tokenId}
                 addToCartButton={true}
                 buyNowButton={true}
+                price={card.price}
               />
             </div>
           );
