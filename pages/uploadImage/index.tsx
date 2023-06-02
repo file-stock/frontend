@@ -17,7 +17,6 @@ function UploadImage() {
     useState<any>();
   const [title, setTitile] = useState<string>("");
   const [description, setDescription] = useState("");
-  const [accessConditionCid, setAccessConditionCid] = useState("");
   const [hashValue, setHashValue] = useState("");
   const [encryptedHash, setEncryptedHash] = useState<string>("");
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
@@ -161,7 +160,7 @@ function UploadImage() {
         standardContractType: "ERC1155",
         contractAddress: "0x4B10f9699B33686aBc694D35E09f698cD02688b2",
         returnValueTest: { comparator: ">=", value: "1" },
-        parameters: [":userAddress", tokenId],
+        parameters: [userAddress, tokenId],
       },
     ];
 
