@@ -30,6 +30,8 @@ const NavBar = () => {
     { label: "Explore", href: "/explore" },
   ];
 
+  const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+
   const handleClickOutside = (event: MouseEvent) => {
     if (
       (menuRef.current && !menuRef.current.contains(event.target as Node)) ||
@@ -55,7 +57,7 @@ const NavBar = () => {
   const handleaddToCartClick = () => {
     router.push("/cart");
   };
-  console.log("cart lengh", cart.length);
+
   return (
     <div className="flex justify-between py-5 px-[140px] items-center sticky top-0 z-50 bg-white opacity-90 hover:opacity-100">
       <div className="flex items-center">
@@ -150,9 +152,9 @@ const NavBar = () => {
             size="2x"
             className="text-2xl"
           />
-          {cart.length > 0 && (
+          {totalQuantity > 0 && (
             <span className="text-white bg-error text-sm rounded-full px-2 py-1 absolute left-5 bottom-4">
-              {cart.length}
+              {totalQuantity}
             </span>
           )}
         </div>

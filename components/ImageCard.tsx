@@ -37,7 +37,7 @@ const ImageCard: FC<ImageCardProps> = ({
   addToCartButton,
   price,
 }) => {
-  const { cart, setCart } = useContext(ThemeContext);
+  const { cart, setCart, isConnected } = useContext(ThemeContext);
   const [imageData, setImageData] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
@@ -60,11 +60,11 @@ const ImageCard: FC<ImageCardProps> = ({
   }, [cid]);
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
+    if (isConnected) setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
+    if (isConnected) setIsHovered(false);
   };
 
   const handleBuyNowClick = () => {
@@ -72,12 +72,16 @@ const ImageCard: FC<ImageCardProps> = ({
   };
 
   const addToCart = (imageId: number, cid: any, price: any) => {
-    console.log("imageId", imageId);
-    console.log("cid", cid);
-    console.log("price", price);
-    const newCart = [...cart, { imageId, cid, price }];
-    setCart(newCart);
+    const existingItem = cart.find((item) => item.imageId === imageId);
+    if (existingItem) {
+      existingItem.quantity += 1;
+      setCart([...cart]);
+    } else {
+      const newItem = { imageId, cid, price, quantity: 1, selected: false };
+      setCart([...cart, newItem]);
+    }
   };
+
   return (
     <div
       className={`relative w-[420px] group h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg`}

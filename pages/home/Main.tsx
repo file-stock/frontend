@@ -80,6 +80,7 @@ const Main = () => {
                   favorite={favorite}
                   addToCartButton={true}
                   buyNowButton={true}
+                  price={card.price}
                 />
               </div>
             );
