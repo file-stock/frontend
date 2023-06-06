@@ -247,12 +247,13 @@ function UploadImage() {
     }
   };
 
+
   useEffect(() => {
-    const startUploadListener = async (
-      value1: any,
-      value2: any,
-      value3: any
-    ) => {
+    let isHandlingEvent = false;
+  
+    const handleStartUpload = async (value1: any, value2: any, value3: any) => {
+      if (isHandlingEvent) return;
+      isHandlingEvent = true;
       console.log("encryptedHash nell'evento", encryptedHash);
       console.log("value3 nell'evento", value3.toString());
       try {
@@ -264,22 +265,23 @@ function UploadImage() {
         console.log("Transaction:", tx);
       } catch (error) {
         console.error("Transaction failed: ", error);
+      } finally {
+        isHandlingEvent = false;
       }
     };
-
+  
     if (contract) {
-      contract.on("StartUpload", startUploadListener);
+      contract.on("StartUpload", handleStartUpload);
     }
-
-    // Ritorna una funzione di cleanup per rimuovere il listener quando il componente si smonta
+  
     return () => {
       if (contract) {
-        contract.off("StartUpload", startUploadListener);
+        contract.off("StartUpload", handleStartUpload);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, encryptedHash]);
-
+  
   const startUpload = async (hash: any, tags: any) => {
     console.log("startUpload", hash);
     if (!contract || !price) return;
