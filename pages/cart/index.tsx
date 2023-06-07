@@ -14,7 +14,6 @@ const Cart = () => {
     console.log("checkout");
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateTotalAmount = (cartItems: any[]) => {
     let sum = 0;
     cartItems.forEach((item) => {
@@ -88,9 +87,10 @@ const Cart = () => {
             ) : (
               cart.map((item, index) => {
                 const { cid, imageId, price } = item;
-                const priceInEther = price
-                  ? ethers.utils.formatEther(price.toString())
-                  : "0";
+                const priceInEther =
+                  price && ethers.BigNumber.isBigNumber(price)
+                    ? ethers.utils.formatEther(price)
+                    : "0";
                 return (
                   <div className="grid grid-row-4 gap-4 m-4" key={index}>
                     <div>
