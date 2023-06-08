@@ -60,6 +60,8 @@ type ContextType = {
   contractCreator: any;
   cart: any[];
   setCart: Dispatch<SetStateAction<any[]>>;
+  savedForLater: any[];
+  setSavedForLater: Dispatch<SetStateAction<any[]>>;
 };
 
 const rpcUrl = "https://api.calibration.node.glif.io/rpc/v1";
@@ -107,6 +109,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [contractRights, setContractRights] = useState<any>();
   const [contractCreator, setContractCreator] = useState<any>();
   const [cart, setCart] = useState<any[]>([]);
+  const [savedForLater, setSavedForLater] = useState<any[]>([]);
 
   const CONTRACT_ADDRESS = "0x307C87ff1E333ad5CC193e2Fe0A13c3d27FA2d60";
   const CONTRACT_RIGHTS = "0x4B10f9699B33686aBc694D35E09f698cD02688b2";
@@ -146,6 +149,24 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       window.localStorage.removeItem("cart");
     }
   }, [cart]);
+
+  useEffect(() => {
+    const savedForLater = window.localStorage.getItem("savedForLater");
+    if (savedForLater) {
+      setSavedForLater(JSON.parse(savedForLater));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (savedForLater.length > 0) {
+      window.localStorage.setItem(
+        "savedForLater",
+        JSON.stringify(savedForLater)
+      );
+    } else {
+      window.localStorage.removeItem("savedForLater");
+    }
+  }, [savedForLater]);
 
   useEffect(() => {
     const walletData = window.localStorage.getItem("ConnectedWallets");
@@ -254,6 +275,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         contractRights: contractRights,
         cart,
         setCart,
+        savedForLater,
+        setSavedForLater,
       }}
     >
       {children}
