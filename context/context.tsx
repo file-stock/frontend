@@ -21,6 +21,14 @@ declare global {
   }
 }
 
+export type CartItemType = {
+  imageId: number;
+  cid: string;
+  price: number;
+  quantity: number;
+  selected: boolean;
+};
+
 type ContextType = {
   selectedTags: string[];
   setSelectedTags: Dispatch<SetStateAction<string[]>>;
@@ -123,6 +131,21 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   //     window.localStorage.removeItem("connectedWallets");
   //   }
   // }, [wallet]);
+
+  useEffect(() => {
+    const savedCart = window.localStorage.getItem("cart");
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      window.localStorage.setItem("cart", JSON.stringify(cart));
+    } else {
+      window.localStorage.removeItem("cart");
+    }
+  }, [cart]);
 
   useEffect(() => {
     const walletData = window.localStorage.getItem("ConnectedWallets");
