@@ -6,9 +6,9 @@ import Image from "next/image";
 import { ethers } from "ethers";
 
 const Cart = () => {
-  const { cart, setCart, isConnected } = useContext(ThemeContext);
+  const { cart, setCart, savedForLater, setSavedForLater, isConnected } =
+    useContext(ThemeContext);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [savedForLater, setSavedForLater] = useState<any[]>([]);
 
   const checkout = () => {
     console.log("checkout");
