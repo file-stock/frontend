@@ -155,7 +155,7 @@ function UploadImage() {
     const conditions = [
       {
         id: 1,
-        chain: "Hyperspace",
+        chain: "Calibration",
         method: "balanceOf",
         standardContractType: "ERC1155",
         contractAddress: "0x4B10f9699B33686aBc694D35E09f698cD02688b2",
@@ -247,10 +247,9 @@ function UploadImage() {
     }
   };
 
-
   useEffect(() => {
     let isHandlingEvent = false;
-  
+
     const handleStartUpload = async (value1: any, value2: any, value3: any) => {
       if (isHandlingEvent) return;
       isHandlingEvent = true;
@@ -269,19 +268,19 @@ function UploadImage() {
         isHandlingEvent = false;
       }
     };
-  
+
     if (contract) {
       contract.on("StartUpload", handleStartUpload);
     }
-  
+
     return () => {
       if (contract) {
         contract.off("StartUpload", handleStartUpload);
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contract, encryptedHash]);
-  
+
   const startUpload = async (hash: any, tags: any) => {
     console.log("startUpload", hash);
     if (!contract || !price) return;
