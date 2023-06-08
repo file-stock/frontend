@@ -17,8 +17,11 @@ const Cart = () => {
   const calculateTotalAmount = (cartItems: any[]) => {
     let sum = 0;
     cartItems.forEach((item) => {
+      console.log("item.price:", item.price);
+      console.log("typeof item.price:", typeof item.price);
+
       if (item.price && item.quantity) {
-        const priceInEther = ethers.utils.formatEther(item.price.toString());
+        const priceInEther = ethers.utils.formatUnits(item.price, 18);
         const priceFloat = parseFloat(priceInEther);
         sum += priceFloat * item.quantity;
       }
@@ -87,10 +90,7 @@ const Cart = () => {
             ) : (
               cart.map((item, index) => {
                 const { cid, imageId, price } = item;
-                const priceInEther =
-                  price && ethers.BigNumber.isBigNumber(price)
-                    ? ethers.utils.formatEther(price)
-                    : "0";
+                const priceInEther = ethers.utils.formatUnits(item.price, 18);
                 return (
                   <div className="grid grid-row-4 gap-4 m-4" key={index}>
                     <div>
