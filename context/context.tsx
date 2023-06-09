@@ -99,7 +99,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [contract, setContract] = useState<any>();
   const [hash, setHash] = useState<string>("");
   const [price, setPrice] = useState<any>();
-  const [imgForSale, setImgForSale] = useState<any[]>(myCardSale);
+  const [imgForSale, setImgForSale] = useState<any[]>([]);
   const [preview, setPreview] = useState<string>("");
   const [randomImages, setRandomImages] = useState<any[]>([]);
   const [readOnly, setReadOnly] = useState<any>();

@@ -1,10 +1,11 @@
 import { ThemeContext } from "../../context/context";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, use } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 import { myCardSale } from "../../constants/constants";
 import ImageCard from "../../components/ImageCard";
 import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
+import GenericModal from "../../components/GenericModal";
 
 interface AccessCondition {
   data: {
@@ -34,6 +35,7 @@ const Collection = () => {
   const id = nftData.map((data) => data.tokenId.toString());
   const [nftBalances, setNftBalances] = useState<any[]>([]);
   const [fileURL, setFileURL] = useState("");
+  const [showModal, setShowModal] = useState(true);
   const { contractRights, userAddress, allFiles, contract } =
     useContext(ThemeContext);
 
@@ -118,7 +120,7 @@ const Collection = () => {
       console.log("accessCondition", accessCondition);
       const balance = await contractRights.balanceOf(userAddress, tokenId);
       const condition = accessCondition.data.conditions[0];
-      console.log(balance.toString(), condition.returnValueTest.value)
+      console.log(balance.toString(), condition.returnValueTest.value);
       console.log("condition", condition);
       if (
         condition.method === "balanceOf" &&
@@ -144,41 +146,63 @@ const Collection = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (nftData) {
+      setShowModal(false);
+    }
+  }, [nftData]);
+
+  useEffect(() => {
+    setShowModal(true);
+  }, []);
+
   return (
-    <div className="flex flex-wrap gap-14 sm:mt-20">
-      {nftData.map((data, index) => {
-        const balanceData = nftBalances.find(
-          (b) => b.tokenId === data.tokenId.toString()
-        );
-        const balance = balanceData ? balanceData.balance : 0;
-        //     console.log(data);
-        return (
-          <div key={index} className="">
-            <ImageCard cid={data.cid} id={data.tokenId} />
-            <button
-              className="text-white bg-main m-5 p-3 rounded-lg ml-1 cursor-pointer"
-              onClick={() => decrypted(data.tokenId.toString())}
-            >
-              Download Image
-            </button>
-            <div className="sm:flex md:flex lg:flex xl:flex 2xl:flex">
-              <p className="font-bold">Creator:</p>
-              <span className="sm:ml-2 md:ml-2 lg:ml-2 xl:ml-2 2xl:ml-2">
-                {data.creator}
-              </span>
-            </div>
-            <div className="flex">
-              <p className="font-bold">Token ID:</p>
-              <span className="ml-2">{data.tokenId.toString()}</span>
-            </div>
-            <div className="flex">
-              <p className="font-bold">Quantity: </p>
-              <span className="ml-2">{balance.toString()}</span>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+    <>
+      {showModal && (
+        <GenericModal
+          open={showModal}
+          loader={true}
+          label="Loading..."
+          description="Please wait while we load your NFTs."
+        />
+      )}
+      <div className="flex flex-wrap gap-14 sm:mt-20">
+        {nftData &&
+          nftData.map((data, index) => {
+            const balanceData = nftBalances.find(
+              (b) => b.tokenId === data.tokenId.toString()
+            );
+            const balance = balanceData ? balanceData.balance : 0;
+            //     console.log(data);
+            return (
+              <div key={index} className="">
+                <ImageCard cid={data.cid} id={data.tokenId} />
+                <button
+                  className="text-white bg-main m-5 p-3 rounded-lg ml-1 cursor-pointer"
+                  onClick={() => decrypted(data.tokenId.toString())}
+                >
+                  Download Image
+                </button>
+                <div className="sm:flex md:flex lg:flex xl:flex 2xl:flex">
+                  <p className="font-bold">Creator:</p>
+                  <span className="sm:ml-2 md:ml-2 lg:ml-2 xl:ml-2 2xl:ml-2">
+                    {data.creator}
+                  </span>
+                </div>
+                <div className="flex">
+                  <p className="font-bold">Token ID:</p>
+                  <span className="ml-2">{data.tokenId.toString()}</span>
+                </div>
+                <div className="flex">
+                  <p className="font-bold">Quantity: </p>
+                  <span className="ml-2">{balance.toString()}</span>
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </>
   );
 };
 

@@ -10,7 +10,7 @@ type StepThreeProps = {
 
 const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
   const { userAddress } = useContext(ThemeContext);
-
+  console.log("IMAGE FOR SALE", imageForSale);
   useEffect(() => {
     const getFiles = async () => {
       // const lighthouse = require("@lighthouse-web3/sdk");
