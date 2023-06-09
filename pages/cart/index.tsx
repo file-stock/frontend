@@ -78,6 +78,11 @@ const Cart = () => {
     setCart(updatedCart);
   };
 
+  const handleDeleteItem = (item: any) => {
+    const updatedCart = cart.filter((cartItem) => cartItem.cid !== item.cid);
+    setCart(updatedCart);
+    calculateTotalAmount(updatedCart);
+  };
   return (
     <>
       {isConnected ? (
@@ -98,21 +103,26 @@ const Cart = () => {
                       <div className="m-4 text-xl font-bold">
                         Final price: {priceInEther}
                       </div>
-                      <div className="ml-4 font-bold mb-3">
-                        Quantity
+                      <div className="ml-4 font-bold mb-3 flex">
+                        <div className="mt-1 text-lg">Quantity</div>
                         <input
                           type="number"
-                          className="border w-12 h-5 ml-2"
+                          className="border w-12 h-5 ml-2 mt-2"
                           value={item.quantity}
                           onChange={(e) => handleQuantityChange(e, item)}
                         />
+                        <button
+                          className="ml-4"
+                          onClick={() => handleDeleteItem(item)}
+                        >
+                          <Image
+                            src={deleteIcon}
+                            width={25}
+                            height={25}
+                            alt="delete"
+                          />
+                        </button>
                       </div>
-                      {/* <Image
-                        src={deleteIcon}
-                        width={25}
-                        height={25}
-                        alt="delete"
-                      /> */}
 
                       <div className="ml-4">
                         <input
