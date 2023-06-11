@@ -6,7 +6,7 @@ import ImageCard from "../../components/ImageCard";
 import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
 import GenericModal from "../../components/GenericModal";
-
+import PopupMessage from "../../components/PopupMessage";
 interface AccessCondition {
   data: {
     conditions: {
@@ -36,7 +36,7 @@ const Collection = () => {
   const [nftBalances, setNftBalances] = useState<any[]>([]);
   const [fileURL, setFileURL] = useState("");
   const [showModal, setShowModal] = useState(true);
-  const { contractRights, userAddress, allFiles, contract } =
+  const { contractRights, userAddress, allFiles, setIsErrorPopupVisible, isErrorPopupVisible, setPopupMessage, popupMessage } =
     useContext(ThemeContext);
 
   async function getBalances() {
@@ -105,23 +105,17 @@ const Collection = () => {
   };
 
   const decrypted = async (tokenId: string) => {
-    const { publicKey, signedMessage } = await encryptionSignature();
     try {
+      const { publicKey, signedMessage } = await encryptionSignature();
       const correspondingFile = allFiles.find(
         (file) => file.tokenId.toString() === tokenId
       );
-
       const cid = correspondingFile.encryptedCid;
       const accessCondition = (await lighthouse.getAccessConditions(
         cid
       )) as AccessCondition;
-      console.log("corresponding file", correspondingFile.tokenId.toString());
-      console.log("tokenid", tokenId);
-      console.log("accessCondition", accessCondition);
       const balance = await contractRights.balanceOf(userAddress, tokenId);
       const condition = accessCondition.data.conditions[0];
-      console.log(balance.toString(), condition.returnValueTest.value);
-      console.log("condition", condition);
       if (
         condition.method === "balanceOf" &&
         balance.toString() >= condition.returnValueTest.value
@@ -142,8 +136,23 @@ const Collection = () => {
         a.click();
         document.body.removeChild(a);
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      if (error.message === "you don't have access"){
+        setPopupMessage("Error: You don't have access")
+      } else if (error.code === "INVALID_ARGUMENT"){
+        setPopupMessage("Image not found")
+      } else if (error.code === -32603) {
+        setPopupMessage("Can't load image");
+      } else if (error.code === "ACTION_REJECTED") {
+        setPopupMessage("User denied signature");
+      } else {
+        setPopupMessage("Error")
+      }
+      setIsErrorPopupVisible(true);
+    } finally {
+      setTimeout(() => {
+        setIsErrorPopupVisible(false);
+      }, 2500);
     }
   };
 
@@ -166,7 +175,12 @@ const Collection = () => {
           label="Loading..."
           description="Please wait while we load your NFTs."
         />
-      )}
+      )} 
+       <PopupMessage
+            isVisible={isErrorPopupVisible}
+            message={popupMessage}
+            onClose={() => setIsErrorPopupVisible(false)}
+          />
       <div className="flex flex-wrap gap-14 sm:mt-20">
         {nftData &&
           nftData.map((data, index) => {
