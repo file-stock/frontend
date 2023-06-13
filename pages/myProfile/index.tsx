@@ -7,14 +7,15 @@ import { ThemeContext } from "../../context/context";
 import FiltersDropdown from "../explore/filters";
 import { utils } from "ethers";
 import priceFilters from "../../components/filters_data";
+import { useRouter } from "next/router";
 
 const filterOptions = [{ label: "Price ranges", options: priceFilters }];
 
 const MyProfile = () => {
   const { allFiles, wallet, isConnected, contractRights, userAddress } =
     useContext(ThemeContext);
-  const [currenView, setCurrentView] = useState<"collection" | "forsale">(
-    "collection"
+  const [currentView, setCurrentView] = useState<"collection" | "forsale">(
+    "forsale"
   );
   const [myImages, setMyImages] = useState<any>([]);
   const [selectedFilters, setSelectedFilters] = useState({
@@ -22,6 +23,7 @@ const MyProfile = () => {
   });
   const [filteredImages, setFilteredImages] = useState<any[]>([]);
   const [sortedImages, setSortedImages] = useState<any[]>([]);
+  const router = useRouter();
 
   let walletAddress = "";
   if (isConnected && wallet && wallet.accounts && wallet.accounts[0]) {
@@ -41,7 +43,7 @@ const MyProfile = () => {
     const filtered = myImages.filter(filterImagesByPrice);
     setFilteredImages(filtered);
     setSortedImages(sortImages(filtered, selectedFilters["Price ranges"]));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myImages, selectedFilters]);
 
   const filterImagesByPrice = (file: any) => {
@@ -80,6 +82,10 @@ const MyProfile = () => {
     }
   };
 
+  useEffect(() => {
+    router.push("/myProfile");
+  }, []);
+
   return (
     <div className="pb-[50px] pl-3">
       <div className="mt-[75px]">
@@ -90,7 +96,7 @@ const MyProfile = () => {
           <div
             onClick={() => setCurrentView("collection")}
             className={`py-1.5 px-5 rounded-full text-greyText text-md cursor-pointer ${
-              currenView === "collection" &&
+              currentView === "collection" &&
               "bg-main text-white font-bold sm:px-5 sm:py-2 sm:text-lg md:px-5 md:py-2 md:text-lg lg:px-5 md:mb-2 lg:py-2 lg:text-lg xl:px-5 xl:py-2 xl:text-lg 2xl:px-10 2xl:py-5 2xl:text-lg 2xl:h-20 px-5 py-2 h-10"
             }`}
           >
@@ -99,7 +105,7 @@ const MyProfile = () => {
           <div
             onClick={() => setCurrentView("forsale")}
             className={`py-1.5 px-5 rounded-full text-greyText text-lg cursor-pointer whitespace-nowrap ${
-              currenView === "forsale" &&
+              currentView === "forsale" &&
               "bg-main text-white font-bold sm:px-10 sm:text-lg md:px-10 md:text-lg lg:px-10 lg:text-lg xl:px-10 xl:text-lg 2xl:px-10 2xl:py-5 2xl:text-lg 2xl:h-20 px-7 py-1 h-10"
             }`}
           >
@@ -120,7 +126,7 @@ const MyProfile = () => {
           </div>
         ))}
       </div>
-      {currenView === "collection" ? (
+      {currentView === "collection" ? (
         <Collection />
       ) : (
         <div>

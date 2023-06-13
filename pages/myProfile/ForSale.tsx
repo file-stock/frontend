@@ -44,7 +44,7 @@
 // export default ForSale;
 import { FC, useEffect, useState } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 
 interface ForSaleProps {
   cids: string;
@@ -53,7 +53,6 @@ interface ForSaleProps {
 
 const ForSale: FC<ForSaleProps> = ({ cids, price }) => {
   const [imagesForSale, setImagesForSale] = useState("");
-  const priceInEther = price ? ethers.utils.formatEther(price.toString()) : "0";
 
   useEffect(() => {
     async function fetchImageData() {
@@ -78,7 +77,7 @@ const ForSale: FC<ForSaleProps> = ({ cids, price }) => {
             img={imagesForSale}
             title={""}
             description={""}
-            price={priceInEther}
+            price={utils.formatEther(price)}
             downloadButton={true}
           />
         )}
