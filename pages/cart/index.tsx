@@ -89,7 +89,7 @@ const Cart = () => {
         <div className="">
           <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20">
             {cart.length === 0 ? (
-              <div className="text-2xl font-bold text-center ml-40 p-20">
+              <div className="text-2xl font-bold text-center ml-40 mb-20">
                 No items in the cart
               </div>
             ) : (
@@ -138,12 +138,12 @@ const Cart = () => {
               })
             )}
           </div>
-          <div className="m-4 text-xl font-bold border w-fit p-4 rounded-lg">
+          <div className="ml-10 mt-20 text-xl font-bold border w-fit p-4 rounded-lg">
             Total amount: {totalPrice}
           </div>
           {cart && (
             <div
-              className="bg-main text-white p-4 cursor-pointer w-fit m-10 rounded-lg hover:w-30 hover:font-bold hover:text-xl"
+              className="bg-main text-white p-4 cursor-pointer w-fit m-10 rounded-lg hover:w-30 hover:font-bold hover:text-xl ml-10 mt-20"
               onClick={checkout}
             >
               Buy now
