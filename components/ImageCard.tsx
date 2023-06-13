@@ -47,6 +47,7 @@ const ImageCard: FC<ImageCardProps> = ({
     async function fetchImageData() {
       try {
         const response = await fetch(`https://ipfs.io/ipfs/${cid}`);
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

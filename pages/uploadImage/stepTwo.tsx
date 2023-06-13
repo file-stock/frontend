@@ -10,7 +10,7 @@ import {
 } from "react";
 import Image from "next/image";
 import { ThemeContext } from "../../context/context";
-
+import PopupMessage from "../../components/PopupMessage";
 import { tags } from "../../public/tags";
 
 type StepTwoProps = {
@@ -44,6 +44,10 @@ const StepTwo: FC<StepTwoProps> = ({
     selectedTagNumbers,
     setSelectedTagNumbers,
     isConnected,
+    popupMessage,
+    setPopupMessage,
+    isErrorPopupVisible,
+    setIsErrorPopupVisible,
   } = useContext(ThemeContext);
 
   const forms = [
@@ -55,8 +59,6 @@ const StepTwo: FC<StepTwoProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
 
   const menuRef = useRef<HTMLDivElement>(null);
   const filteredTags = Object.values(tags).filter(
@@ -111,20 +113,38 @@ const StepTwo: FC<StepTwoProps> = ({
     await handleFileChange();
   };
 
-  const handleButtonClick = () => {
-    if (!isConnected) {
-      setPopupMessage("Connect your wallet");
+  const handleButtonClick = async () => {
+    try {
+      if (!isConnected) {
+        setPopupMessage("Connect your wallet");
+        setIsErrorPopupVisible(true);
+      } else if (isButtonDisabled) {
+        setPopupMessage("Wrong price");
+        setIsErrorPopupVisible(true);
+      } else {
+        await uploadImage();
+      }
+    } catch (error: any) {
+      if (error.code === "UNPREDICTABLE_GAS_LIMIT"){
+        setPopupMessage("You don't have enough funds")
+      } else if (error.code === "INVALID_ARGUMENT"){
+        setPopupMessage("Image not found")
+      } else if (error.code === -32603) {
+        setPopupMessage("Can't load image");
+      } else if (error.code === "ACTION_REJECTED") {
+        setPopupMessage("User denied signature");
+      } else {
+        setPopupMessage("Error")
+      }
+      console.log("error", error.code)
       setIsErrorPopupVisible(true);
-    } else if (isButtonDisabled) {
-      setPopupMessage("Wrong price");
-      setIsErrorPopupVisible(true);
-    } else {
-      uploadImage();
+    } finally {
+      setTimeout(() => {
+        setIsErrorPopupVisible(false);
+      }, 2500);
     }
-    setTimeout(() => {
-      setIsErrorPopupVisible(false);
-    }, 2500);
   };
+  
 
   return (
     <>
@@ -261,17 +281,11 @@ const StepTwo: FC<StepTwoProps> = ({
               </form>
             );
           })}
-          {isErrorPopupVisible && (
-            <div className="absolute top-5 left-5 z-50 border rounded-lg w-[300px] h-[100px] flex justify-center items-center bg-main text-white animate-fadeIn">
-              <span>{popupMessage}</span>
-              <button
-                onClick={() => setIsErrorPopupVisible(false)}
-                className="absolute top-0 right-2"
-              >
-                X
-              </button>
-            </div>
-          )}
+          <PopupMessage
+            isVisible={isErrorPopupVisible}
+            message={popupMessage}
+            onClose={() => setIsErrorPopupVisible(false)}
+          />
           <div className="mt-[40px]">
             <div onClick={handleButtonClick} className="button-wrapper w-fit">
               <button

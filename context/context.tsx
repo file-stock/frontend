@@ -39,7 +39,10 @@ type ContextType = {
   wallet: any;
   disconnect: any;
   connecting: any;
-
+  isErrorPopupVisible: boolean;
+  setIsErrorPopupVisible: Dispatch<SetStateAction<boolean>>;
+  popupMessage: string;
+  setPopupMessage: Dispatch<SetStateAction<string>>;
   setHash: Dispatch<SetStateAction<string>>;
   setIsConnected?: Dispatch<SetStateAction<boolean>>;
   setImgForSale: Dispatch<SetStateAction<any>>;
@@ -110,6 +113,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [contractCreator, setContractCreator] = useState<any>();
   const [cart, setCart] = useState<any[]>([]);
   const [savedForLater, setSavedForLater] = useState<any[]>([]);
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
 
   const CONTRACT_ADDRESS = "0x307C87ff1E333ad5CC193e2Fe0A13c3d27FA2d60";
   const CONTRACT_RIGHTS = "0x4B10f9699B33686aBc694D35E09f698cD02688b2";
@@ -134,6 +139,39 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   //     window.localStorage.removeItem("connectedWallets");
   //   }
   // }, [wallet]);
+
+  const changeChain = async () => {
+    const { ethereum } = window as any;
+    try {
+        await ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: "0x4cb2f" }],
+        });
+    } catch (switchError: any) {
+        if (switchError.code === 4902) {
+            try {
+                await ethereum.request({
+                    method: "wallet_addEthereumChain",
+                    params: [
+                        {
+                            chainId: "0x4cb2f",
+                            rpcUrls: ["https://api.calibration.node.glif.io/rpc/v1"],
+                            chainName: "Filecoin - Hyperspace testnet",
+                            nativeCurrency: {
+                                name: "tFIL",
+                                symbol: "tFIL",
+                                decimals: 18,
+                            },
+                            blockExplorerUrls: ["https://hyperspace.filfox.info/en"],
+                        },
+                    ],
+                });
+            } catch (addError) {
+                console.log(addError);
+            }
+        }
+    }
+};
 
   useEffect(() => {
     const savedCart = window.localStorage.getItem("cart");
@@ -177,6 +215,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
           autoSelect: { label: pastConnectedWallet, disableModals: true },
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -187,6 +226,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         wallet.provider,
         "any"
       );
+      changeChain()
       setProvider(ethersProvider);
       setUserAddress(wallet.accounts[0].address);
       setIsConnected(true);
@@ -253,7 +293,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         disconnect,
         wallet,
         connecting,
-
+        popupMessage,
+        setPopupMessage,
+        isErrorPopupVisible,
+        setIsErrorPopupVisible,
         setHash,
         setPrice,
         price,

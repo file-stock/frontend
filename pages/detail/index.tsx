@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useContext } from "react";
 import { ThemeContext } from "../../context/context";
 import { utils } from "ethers";
+import PopupMessage from "../../components/PopupMessage";
 import GenericModal from "../../components/GenericModal";
 import GenericButton from "../../components/GenericButton";
-import Watermark from "@uiw/react-watermark";
 import {
   downloadIcon,
   uploadIcon,
@@ -21,22 +21,37 @@ import { ethers } from "ethers";
 const Detail = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { allFiles, price, setPrice, selectedTags, setSelectedTags, contract } =
-    useContext(ThemeContext);
+  const {
+    allFiles,
+    price,
+    setPrice,
+    selectedTags,
+    setSelectedTags,
+    contract,
+    setIsErrorPopupVisible,
+    isErrorPopupVisible,
+    popupMessage,
+    setPopupMessage,
+  } = useContext(ThemeContext);
   const [imageData, setImageData] = useState<any>();
   const [cid, setCid] = useState(null);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const data = allFiles.find((data) => data.tokenId.toNumber() === parseInt(id as string));
+  const data = allFiles.find(
+    (data) => data.tokenId.toNumber() === parseInt(id as string)
+  );
   const [showFullAddress, setShowFullAddress] = useState(false);
 
   const handleAddressClick = () => {
     setShowFullAddress(!showFullAddress);
   };
 
-  const displayAddress = data && data.creator ? showFullAddress
-    ? data.creator
-    : data.creator.slice(0, 5) + "..." : "Loading address"
+  const displayAddress =
+    data && data.creator
+      ? showFullAddress
+        ? data.creator
+        : data.creator.slice(0, 5) + "..."
+      : "Loading address";
 
   const liscenses = [
     "For commercial and personal projects",
@@ -95,14 +110,36 @@ const Detail = () => {
       await tx.wait();
       setIsPopUpOpen(false);
       console.log("buyfile", tx);
-    } catch (error) {
-      console.error("Transaction failed: ", error);
+    } catch (error: any) {
+      if (error.code === "UNPREDICTABLE_GAS_LIMIT"){
+        setPopupMessage("You don't have enough funds")
+      } else if (error.code === "INVALID_ARGUMENT"){
+        setPopupMessage("Image not found")
+      } else if (error.code === -32603) {
+        setPopupMessage("Can't load image");
+      } else if (error.code === "ACTION_REJECTED") {
+        setPopupMessage("User denied transaction");
+      } else {
+        setPopupMessage("Error")
+      }
+      setIsPopUpOpen(false);
+      setIsErrorPopupVisible(true);
+      console.error("Transaction failed: ", error.code);
+    } finally {
+      setTimeout(() => {
+        setIsErrorPopupVisible(false);
+      }, 2500);
     }
   };
 
   return (
     <>
       <div className="flex flex-col lg:pb-[180px] pb-[100px] px-[60px] lg:px-[140px] pt-10 ">
+        <PopupMessage
+          isVisible={isErrorPopupVisible}
+          message={popupMessage}
+          onClose={() => setIsErrorPopupVisible(false)}
+        />
         <GenericModal
           open={isPopUpOpen}
           loader={true}
@@ -173,13 +210,20 @@ const Detail = () => {
           <div className="flex gap-5 items-center justify-between">
             <div className="text-xl">{/*description*/}</div>
             <div className="text-lg mr-[100px] ">
-              <div className="text-xl ">{price ? selectedTags.join(" - ") : "Loading tags"}</div>
+              <div className="text-xl ">
+                {price ? selectedTags.join(" - ") : "Loading tags"}
+              </div>
             </div>
           </div>
         </div>
         <div className="border-b border-border pb-[50px]">
           <div className="text-lg text-greyText mb-[30px]">Owned by</div>
-          <div onClick={handleAddressClick} className="text-xl font-semibold cursor-pointer w-fit">{displayAddress}</div>
+          <div
+            onClick={handleAddressClick}
+            className="text-xl font-semibold cursor-pointer w-fit"
+          >
+            {displayAddress}
+          </div>
         </div>
         <div>
           <div className="flex items-center gap-4 pt-[30px]  mb-[36px]">
