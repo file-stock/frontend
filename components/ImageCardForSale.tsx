@@ -11,6 +11,8 @@ type ImageCardForSaleProps = {
   downloadButton: boolean;
   tags?: string;
   tagsId?: number;
+  deleteButton?: boolean;
+  onDelete?: (id: any) => void;
 };
 
 const ImageCardForSale: FC<ImageCardForSaleProps> = ({
@@ -21,6 +23,8 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
   description,
   price,
   downloadButton,
+  deleteButton,
+  onDelete,
 }) => {
   return (
     <>
@@ -47,9 +51,14 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
                   </a>
                 </div>
               )}
-              <div className="border border-border rounded-lg py-3.5 px-4 cursor-pointer">
-                <Image src={deleteIcon} width={15} height={15} alt="delete" />
-              </div>
+              {deleteButton && (
+                <div
+                  className="border border-border rounded-lg py-3.5 px-4 cursor-pointer"
+                  onClick={onDelete}
+                >
+                  <Image src={deleteIcon} width={15} height={15} alt="delete" />
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2 mt-3">

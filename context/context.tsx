@@ -61,6 +61,7 @@ type ContextType = {
   provider: any;
   contractRights: any;
   contractCreator: any;
+  ContractAbi: any;
   cart: any[];
   setCart: Dispatch<SetStateAction<any[]>>;
   savedForLater: any[];
@@ -116,9 +117,9 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
 
-  const CONTRACT_ADDRESS = "0x307C87ff1E333ad5CC193e2Fe0A13c3d27FA2d60";
-  const CONTRACT_RIGHTS = "0x4B10f9699B33686aBc694D35E09f698cD02688b2";
-  const CONTRACT_CREATOR = "0x52480B3fA8B136B86D824BD31DC9512909528E86";
+  const CONTRACT_ADDRESS = "0x9E6d38507EC0A19DFA0F4dd246084738c1406E80";
+  const CONTRACT_RIGHTS = "0x0a0A14364B1d8CbC96fCDC41706715073A1C8753";
+  const CONTRACT_CREATOR = "0x172AD9326F3943b25D603F9015b13834238078ff";
   useEffect(() => {
     const hProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
     setHyperProvider(hProvider);
@@ -143,35 +144,35 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const changeChain = async () => {
     const { ethereum } = window as any;
     try {
-        await ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x4cb2f" }],
-        });
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x4cb2f" }],
+      });
     } catch (switchError: any) {
-        if (switchError.code === 4902) {
-            try {
-                await ethereum.request({
-                    method: "wallet_addEthereumChain",
-                    params: [
-                        {
-                            chainId: "0x4cb2f",
-                            rpcUrls: ["https://api.calibration.node.glif.io/rpc/v1"],
-                            chainName: "Filecoin - Hyperspace testnet",
-                            nativeCurrency: {
-                                name: "tFIL",
-                                symbol: "tFIL",
-                                decimals: 18,
-                            },
-                            blockExplorerUrls: ["https://hyperspace.filfox.info/en"],
-                        },
-                    ],
-                });
-            } catch (addError) {
-                console.log(addError);
-            }
+      if (switchError.code === 4902) {
+        try {
+          await ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0x4cb2f",
+                rpcUrls: ["https://api.calibration.node.glif.io/rpc/v1"],
+                chainName: "Filecoin - Hyperspace testnet",
+                nativeCurrency: {
+                  name: "tFIL",
+                  symbol: "tFIL",
+                  decimals: 18,
+                },
+                blockExplorerUrls: ["https://hyperspace.filfox.info/en"],
+              },
+            ],
+          });
+        } catch (addError) {
+          console.log(addError);
         }
+      }
     }
-};
+  };
 
   useEffect(() => {
     const savedCart = window.localStorage.getItem("cart");
@@ -215,7 +216,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
           autoSelect: { label: pastConnectedWallet, disableModals: true },
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -226,7 +227,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         wallet.provider,
         "any"
       );
-      changeChain()
+      changeChain();
       setProvider(ethersProvider);
       setUserAddress(wallet.accounts[0].address);
       setIsConnected(true);
@@ -320,6 +321,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setCart,
         savedForLater,
         setSavedForLater,
+        ContractAbi,
       }}
     >
       {children}

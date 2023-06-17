@@ -4,7 +4,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
 import Image from "next/image";
-import { user } from "../public/index";
+import { creatorSample } from "../public/index";
 import Link from "next/link";
 
 const UserDropDownMenu = () => {
@@ -27,7 +27,7 @@ const UserDropDownMenu = () => {
         onClick={handleClick}
       >
         <Image
-          src={user}
+          src={creatorSample}
           width={40}
           height={40}
           alt="user"
@@ -44,7 +44,6 @@ const UserDropDownMenu = () => {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleClose}>kekko@gmail.com</MenuItem>
         <MenuItem onClick={handleClose}>
           <Link href="/myProfile">My profile</Link>
         </MenuItem>

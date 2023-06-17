@@ -132,15 +132,21 @@ const MyProfile = () => {
         <div>
           <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 mb-6 sm:mt-20">
             {isConnected &&
-              sortedImages.map((file: any, index: any) => (
-                <div key={index}>
-                  <ForSale
-                    key={index}
-                    cids={file.watermarkedCid}
-                    price={file.price}
-                  />
-                </div>
-              ))}
+              sortedImages.map(
+                (file: any, index: any) => (
+                  console.log(file.tokenId.toString()),
+                  (
+                    <div key={index}>
+                      <ForSale
+                        key={index}
+                        cids={file.watermarkedCid}
+                        price={file.price}
+                        id={file.tokenId.toString()}
+                      />
+                    </div>
+                  )
+                )
+              )}
           </div>
         </div>
       )}

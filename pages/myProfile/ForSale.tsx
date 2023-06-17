@@ -42,18 +42,20 @@
 // };
 
 // export default ForSale;
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useContext } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 import { ethers, utils } from "ethers";
+import { ThemeContext } from "../../context/context";
 
 interface ForSaleProps {
   cids: string;
   price: number;
+  id: number;
 }
 
-const ForSale: FC<ForSaleProps> = ({ cids, price }) => {
+const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
   const [imagesForSale, setImagesForSale] = useState("");
-
+  const { contract } = useContext(ThemeContext);
   useEffect(() => {
     async function fetchImageData() {
       try {
@@ -69,6 +71,15 @@ const ForSale: FC<ForSaleProps> = ({ cids, price }) => {
     fetchImageData();
   }, [cids, price]);
 
+  const deleteImage = async (id: number) => {
+    console.log("id", id);
+    try {
+      await contract.deleteFile(id);
+    } catch (error) {
+      console.log("Error deleting file", error);
+    }
+  };
+
   return (
     <div>
       <div className="mb-6">
@@ -79,6 +90,8 @@ const ForSale: FC<ForSaleProps> = ({ cids, price }) => {
             description={""}
             price={utils.formatEther(price)}
             downloadButton={true}
+            deleteButton={true}
+            onDelete={() => deleteImage(id)}
           />
         )}
       </div>

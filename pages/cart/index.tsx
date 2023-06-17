@@ -1,34 +1,37 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, use } from "react";
 import { ThemeContext } from "../../context/context";
 import ImageCard from "../../components/ImageCard";
 import deleteIcon from "../../public/images/icons/delete.png";
 import Image from "next/image";
 import { ethers } from "ethers";
+import { filecoinIcon } from "../../public";
 
 const Cart = () => {
-  const { cart, setCart, savedForLater, setSavedForLater, isConnected } =
-    useContext(ThemeContext);
+  const {
+    cart,
+    setCart,
+    savedForLater,
+    setSavedForLater,
+    isConnected,
+    ContractAbi,
+  } = useContext(ThemeContext);
   const [totalPrice, setTotalPrice] = useState(0);
-
-  const checkout = () => {
-    console.log("checkout");
-  };
 
   const calculateTotalAmount = (cartItems: any[]) => {
     let sum = 0;
     cartItems.forEach((item) => {
-      console.log("item.price:", item.price);
-      console.log("typeof item.price:", typeof item.price);
+      //console.log("item.price:", item.price);
+      //console.log("typeof item.price:", typeof item.price);
 
       if (item.price && item.quantity) {
         const priceInEther = ethers.utils.formatUnits(item.price, 18);
-        const priceFloat = parseFloat(priceInEther);
+        const priceFloat = parseFloat(priceInEther.toString());
         sum += priceFloat * item.quantity;
       }
     });
     setTotalPrice(sum);
   };
-
+  console.log("totalPrice:", totalPrice);
   useEffect(() => {
     calculateTotalAmount(cart);
   }, [cart, calculateTotalAmount]);
@@ -83,6 +86,38 @@ const Cart = () => {
     setCart(updatedCart);
     calculateTotalAmount(updatedCart);
   };
+
+  async function checkout() {
+    try {
+      const selectedIds = cart.map((item) => {
+        return ethers.BigNumber.from(item.imageId.hex).toNumber();
+      });
+      console.log("selectedIds:", selectedIds);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contractAddress = "0x9E6d38507EC0A19DFA0F4dd246084738c1406E80";
+
+      const contract = new ethers.Contract(
+        contractAddress,
+        ContractAbi,
+        signer
+      );
+      console.log(
+        "ethers.utils.parseEther(totalPrice.toString()):",
+        ethers.utils.parseEther(totalPrice.toString())
+      );
+      const tx = await contract.buyBatch(selectedIds, {
+        value: ethers.utils.parseEther(totalPrice.toString()),
+      });
+
+      const receipt = await tx.wait();
+      console.log(receipt);
+    } catch (err) {
+      console.error("ERROR inside checkout:", err);
+    }
+  }
+
+  console.log("cart:", cart);
   return (
     <>
       {isConnected ? (
@@ -95,13 +130,24 @@ const Cart = () => {
             ) : (
               cart.map((item, index) => {
                 const { cid, imageId, price } = item;
-                const priceInEther = ethers.utils.formatUnits(item.price, 18);
+                console.log("price:", price);
+                const priceInEther = ethers.utils.formatUnits(price);
+                console.log("priceInEther:", priceInEther);
                 return (
                   <div className="grid grid-row-4 gap-4 m-4" key={index}>
                     <div>
                       <ImageCard cid={cid} id={imageId} />
-                      <div className="m-4 text-xl font-bold">
-                        Final price: {priceInEther}
+                      <div className="m-4 text-xl font-bold flex">
+                        Final price:
+                        <div className="flex items-center  text-3xl font-semibold gap-3 ml-2">
+                          <Image
+                            src={filecoinIcon}
+                            width={15}
+                            height={15}
+                            alt="filecoin"
+                          />
+                        </div>
+                        {priceInEther}
                       </div>
                       <div className="ml-4 font-bold mb-3 flex">
                         <div className="mt-1 text-lg">Quantity</div>
@@ -138,12 +184,21 @@ const Cart = () => {
               })
             )}
           </div>
-          <div className="ml-10 mt-20 text-xl font-bold border w-fit p-4 rounded-lg">
-            Total amount: {totalPrice}
+          <div className="ml-10 mt-20 text-xl font-bold border w-fit p-4 rounded-lg flex">
+            Total amount:{" "}
+            <div className="flex items-center  text-3xl font-semibold gap-3 ml-2">
+              <Image src={filecoinIcon} width={15} height={15} alt="filecoin" />
+            </div>
+            {totalPrice}
           </div>
           {cart && (
             <div
-              className="bg-main text-white p-4 cursor-pointer w-fit m-10 rounded-lg hover:w-30 hover:font-bold hover:text-xl ml-10 mt-20"
+              className={`text-white p-4 cursor-pointer w-fit m-10 rounded-lg ml-10 mt-20 
+              ${
+                cart.length === 0
+                  ? "bg-[#622774] cursor-not-allowed"
+                  : "bg-main hover:font-bold hover:text-xl hover:w-30"
+              }`}
               onClick={checkout}
             >
               Buy now
