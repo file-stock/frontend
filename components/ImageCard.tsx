@@ -78,7 +78,13 @@ const ImageCard: FC<ImageCardProps> = ({
       existingItem.quantity += 1;
       setCart([...cart]);
     } else {
-      const newItem = { imageId, cid, price, quantity: 1, selected: false };
+      const newItem = {
+        imageId,
+        cid,
+        price,
+        quantity: 1,
+        selected: true,
+      };
       setCart([...cart, newItem]);
     }
   };
