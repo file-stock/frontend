@@ -65,34 +65,15 @@ function UploadImage() {
       // @ts-ignore
       const image = await Jimp.read(reader.result);
       const watermarkedImg = await Jimp.read(
-        `${window.location.origin}/images/icons/logoBlack2.png`
+        `${window.location.origin}/images/icons/logoWM.png`
       );
       image.resize(800, Jimp.AUTO);
 
-      const imageWidth = image.bitmap.width;
-      const imageHeight = image.bitmap.height;
-      const watermarkWidth = watermarkedImg.bitmap.width;
-      const watermarkHeight = watermarkedImg.bitmap.height;
 
-      const numWatermarks = 9; // Numero di watermark da applicare
-      const watermarkSpacingX = Math.floor(imageWidth / 3); // Spaziatura tra le colonne dei watermark
-      const watermarkSpacingY = Math.floor(imageHeight / 3); // Spaziatura tra le righe dei watermark
+      watermarkedImg.resize(image.getWidth(), image.getHeight());
 
-      for (let i = 0; i < numWatermarks; i++) {
-        const column = i % 3; // Colonna corrente (0, 1, o 2)
-        const row = Math.floor(i / 3); // Riga corrente (0, 1, o 2)
-
-        const x = column * watermarkSpacingX;
-        const y = row * watermarkSpacingY;
-
-        if (
-          x + watermarkWidth <= imageWidth &&
-          y + watermarkHeight <= imageHeight
-        ) {
-          image.composite(watermarkedImg, x, y);
-        }
-      }
-
+      image.blit(watermarkedImg, 0, 0);
+  
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
@@ -163,7 +144,7 @@ function UploadImage() {
         chain: "Calibration",
         method: "balanceOf",
         standardContractType: "ERC1155",
-        contractAddress: "0xD41bC75571ba5E92D110799b06b6d35Cab2fb79a",
+        contractAddress: "0x4B10f9699B33686aBc694D35E09f698cD02688b2",
         returnValueTest: { comparator: ">=", value: "1" },
         parameters: [":userAddress", tokenId],
       },
@@ -254,8 +235,8 @@ function UploadImage() {
         setIsPopUpOpen(false);
         console.log("Transaction:", tx);
       } catch (error) {
-        setPopupMessage("Error: Image not finalized");
-        setIsErrorPopupVisible(true);
+        setPopupMessage("Error: Image not finalized")
+        setIsErrorPopupVisible(true)
         setIsPopUpOpen(false);
         console.error("Transaction failed: ", error);
       } finally {
@@ -299,8 +280,8 @@ function UploadImage() {
           await startUpload(hashValue, selectedTagNumbers);
         } catch (error) {
           setIsPopUpOpen(false);
-          setIsErrorPopupVisible(true);
-          setPopupMessage("User denied transaction");
+          setIsErrorPopupVisible(true)
+          setPopupMessage("User denied transaction")
           console.error("There was an error uploading:", error);
         } finally {
           setTimeout(() => {
