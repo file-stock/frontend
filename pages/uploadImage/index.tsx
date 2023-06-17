@@ -163,7 +163,7 @@ function UploadImage() {
         chain: "Calibration",
         method: "balanceOf",
         standardContractType: "ERC1155",
-        contractAddress: "0x0a0A14364B1d8CbC96fCDC41706715073A1C8753",
+        contractAddress: "0xD41bC75571ba5E92D110799b06b6d35Cab2fb79a",
         returnValueTest: { comparator: ">=", value: "1" },
         parameters: [":userAddress", tokenId],
       },

@@ -3,16 +3,15 @@ import { FC, useEffect, useContext, useState } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 import lighthouse from "@lighthouse-web3/sdk";
 import { ThemeContext } from "../../context/context";
-import ForSale from "../myProfile/ForSale";
 import { useRouter } from "next/router";
 
 type StepThreeProps = {
   imageForSale: any[];
 };
 
-const StepThree: FC<StepThreeProps> = ({ imageForSale }) => {
+const StepThree: FC<StepThreeProps> = () => {
   const { userAddress } = useContext(ThemeContext);
-  console.log("IMAGE FOR SALE", imageForSale);
+  //console.log("IMAGE FOR SALE", imageForSale);
   const router = useRouter();
   useEffect(() => {
     const getFiles = async () => {

@@ -72,16 +72,20 @@ const Main = () => {
           selectedImagesMain.map((card: any, i: any) => {
             return (
               <div key={i}>
-                <ImageCard
-                  cid={card.watermarkedCid}
-                  title={card.title}
-                  onClick={() => updateFavorite(card.tokenId)}
-                  id={card.tokenId}
-                  favorite={favorite}
-                  addToCartButton={true}
-                  buyNowButton={true}
-                  price={card.price}
-                />
+                {card && card.watermarkedCid ? (
+                  <ImageCard
+                    cid={card.watermarkedCid}
+                    title={card.title}
+                    onClick={() => updateFavorite(card.tokenId)}
+                    id={card.tokenId}
+                    favorite={favorite}
+                    addToCartButton={true}
+                    buyNowButton={true}
+                    price={card.price}
+                  />
+                ) : (
+                  "No images found. Please upload your images."
+                )}
               </div>
             );
           })}
