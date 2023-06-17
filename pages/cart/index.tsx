@@ -90,7 +90,7 @@ const Cart = () => {
   async function checkout() {
     try {
       const selectedIds = cart.map((item) => {
-        return ethers.BigNumber.from(item.imageId.hex).toNumber();
+        return ethers.BigNumber.from(item.imageId.hex);
       });
       console.log("selectedIds:", selectedIds);
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -103,7 +103,7 @@ const Cart = () => {
         signer
       );
       console.log(
-        "ethers.utils.parseEther(totalPrice.toString()):",
+        "value of transaction:",
         ethers.utils.parseEther(totalPrice.toString())
       );
       const tx = await contract.buyBatch(selectedIds, {
@@ -112,6 +112,7 @@ const Cart = () => {
 
       const receipt = await tx.wait();
       console.log(receipt);
+      setCart([]);
     } catch (err) {
       console.error("ERROR inside checkout:", err);
     }
