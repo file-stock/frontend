@@ -59,6 +59,7 @@ const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
   const [showModal, setShowModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [imagesForSale, setImagesForSale] = useState("");
+  const priceInEther = price ? ethers.utils.formatEther(price.toString()) : "0";
   const {
     contract,
     popupMessage,
@@ -123,7 +124,7 @@ const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
             img={imagesForSale}
             title={""}
             description={""}
-            price={utils.formatEther(price)}
+            price={priceInEther}
             downloadButton={true}
             deleteButton={true}
             onDelete={() => setDeleteModal(true)}
