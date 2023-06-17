@@ -14,7 +14,7 @@ const PopupMessage: React.FC<PopupMessageProps> = ({
   }
 
   return (
-    <div className="fixed top-5 left-5 z-50 border rounded-lg w-[300px] h-[100px] flex justify-center items-center bg-main text-white animate-fadeIn">
+    <div className="fixed top-5 left-5 z-50 border rounded-lg w-[300px] h-[100px] flex justify-center items-center bg-main text-white animate-fadeIn p-4">
       <span>{message}</span>
       <button onClick={onClose} className="absolute top-0 right-2">
         X

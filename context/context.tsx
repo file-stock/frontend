@@ -117,9 +117,9 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
 
-  const CONTRACT_ADDRESS = "0x9E6d38507EC0A19DFA0F4dd246084738c1406E80";
-  const CONTRACT_RIGHTS = "0x0a0A14364B1d8CbC96fCDC41706715073A1C8753";
-  const CONTRACT_CREATOR = "0x172AD9326F3943b25D603F9015b13834238078ff";
+  const CONTRACT_ADDRESS = "0xD41bC75571ba5E92D110799b06b6d35Cab2fb79a";
+  const CONTRACT_RIGHTS = "0x55fB5906165121D845650850c849545752291181";
+  const CONTRACT_CREATOR = "0x808c13Dc217174268385A5eC50F44c5c62C822F6";
   useEffect(() => {
     const hProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
     setHyperProvider(hProvider);

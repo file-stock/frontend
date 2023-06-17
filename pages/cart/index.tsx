@@ -95,7 +95,7 @@ const Cart = () => {
       console.log("selectedIds:", selectedIds);
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contractAddress = "0x9E6d38507EC0A19DFA0F4dd246084738c1406E80";
+      const contractAddress = "0xD41bC75571ba5E92D110799b06b6d35Cab2fb79a";
 
       const contract = new ethers.Contract(
         contractAddress,

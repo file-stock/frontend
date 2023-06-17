@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { on } from "process";
 import { FC } from "react";
 
 const style = {
@@ -19,9 +20,18 @@ type ModalProps = {
   loader: boolean;
   label: string;
   description?: string;
+  onCancel?: () => void;
+  onConfirm?: () => void;
 };
 
-const GenericModal: FC<ModalProps> = ({ open, loader, label, description }) => {
+const GenericModal: FC<ModalProps> = ({
+  open,
+  loader,
+  label,
+  description,
+  onCancel,
+  onConfirm,
+}) => {
   return (
     <div>
       <Modal
@@ -54,6 +64,22 @@ const GenericModal: FC<ModalProps> = ({ open, loader, label, description }) => {
               <div className="text.lg font-semibold">{description}</div>
             </div>
           </div>
+          {onCancel && onConfirm && (
+            <div className="flex gap-8 mt-10">
+              <button
+                onClick={onCancel}
+                className="px-4 py-2 text-sm font-medium text-white bg-main rounded-md hover:bg-opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={onConfirm}
+                className="px-4 py-2 text-sm font-medium text-white bg-main rounded-md hover:bg-opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+              >
+                Confirm
+              </button>
+            </div>
+          )}
         </Box>
       </Modal>
     </div>

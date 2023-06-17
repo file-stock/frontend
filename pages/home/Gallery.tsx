@@ -42,13 +42,17 @@ const Gallery = () => {
         selectedImages.map((card: any, i: any) => {
           return (
             <div key={i} className="mx-1 pr-0">
-              <ImageCard
-                cid={card.watermarkedCid}
-                id={card.tokenId}
-                addToCartButton={true}
-                buyNowButton={true}
-                price={card.price}
-              />
+              {card && card.watermarkedCid ? (
+                <ImageCard
+                  cid={card.watermarkedCid}
+                  id={card.tokenId}
+                  addToCartButton={true}
+                  buyNowButton={true}
+                  price={card.price}
+                />
+              ) : (
+                "No images found. Please upload your images."
+              )}
             </div>
           );
         })}

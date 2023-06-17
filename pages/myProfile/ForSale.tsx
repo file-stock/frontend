@@ -46,6 +46,8 @@ import { FC, useEffect, useState, useContext } from "react";
 import ImageCardForSale from "../../components/ImageCardForSale";
 import { ethers, utils } from "ethers";
 import { ThemeContext } from "../../context/context";
+import PopupMessage from "../../components/PopupMessage";
+import GenericModal from "../../components/GenericModal";
 
 interface ForSaleProps {
   cids: string;
@@ -54,8 +56,17 @@ interface ForSaleProps {
 }
 
 const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [imagesForSale, setImagesForSale] = useState("");
-  const { contract } = useContext(ThemeContext);
+  const priceInEther = price ? ethers.utils.formatEther(price.toString()) : "0";
+  const {
+    contract,
+    popupMessage,
+    setPopupMessage,
+    setIsErrorPopupVisible,
+    isErrorPopupVisible,
+  } = useContext(ThemeContext);
   useEffect(() => {
     async function fetchImageData() {
       try {
@@ -75,6 +86,12 @@ const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
     console.log("id", id);
     try {
       await contract.deleteFile(id);
+      setShowModal(true);
+      setDeleteModal(false);
+      setPopupMessage(
+        "Image deleted successfully. Wait a few seconds and then refresh the page."
+      );
+      setIsErrorPopupVisible(true);
     } catch (error) {
       console.log("Error deleting file", error);
     }
@@ -82,16 +99,35 @@ const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
 
   return (
     <div>
+      {deleteModal && (
+        <GenericModal
+          open={deleteModal}
+          loader={false}
+          label="Delete Confirmation"
+          description="Are you sure you want to delete this image? This action cannot be undone."
+          onCancel={() => setDeleteModal(false)}
+          onConfirm={() => deleteImage(id)}
+        />
+      )}
+      {showModal && (
+        <PopupMessage
+          isVisible={isErrorPopupVisible}
+          message={popupMessage}
+          onClose={() => setIsErrorPopupVisible(false)}
+        />
+      )}
       <div className="mb-6">
-        {imagesForSale && (
+        {imagesForSale && imagesForSale.length === 0 ? (
+          "Empty :("
+        ) : (
           <ImageCardForSale
             img={imagesForSale}
             title={""}
             description={""}
-            price={utils.formatEther(price)}
+            price={priceInEther}
             downloadButton={true}
             deleteButton={true}
-            onDelete={() => deleteImage(id)}
+            onDelete={() => setDeleteModal(true)}
           />
         )}
       </div>
