@@ -5,6 +5,7 @@ import deleteIcon from "../../public/images/icons/delete.png";
 import Image from "next/image";
 import { ethers } from "ethers";
 import { filecoinIcon } from "../../public";
+import GenericModal from "../../components/GenericModal";
 
 const Cart = () => {
   const {
@@ -16,6 +17,7 @@ const Cart = () => {
     ContractAbi,
   } = useContext(ThemeContext);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
   const calculateTotalAmount = (cartItems: any[]) => {
     let sum = 0;
@@ -87,7 +89,8 @@ const Cart = () => {
     calculateTotalAmount(updatedCart);
   };
 
-  async function checkout() {
+  const checkout = async () => {
+    setIsPopUpOpen(true);
     try {
       const selectedIds = cart.map((item) => {
         return ethers.BigNumber.from(item.imageId.hex);
@@ -110,19 +113,25 @@ const Cart = () => {
         value: ethers.utils.parseEther(totalPrice.toString()),
       });
 
-      const receipt = await tx.wait();
-      console.log(receipt);
+      await tx.wait();
+      setIsPopUpOpen(false);
       setCart([]);
     } catch (err) {
       console.error("ERROR inside checkout:", err);
     }
-  }
+  };
 
   console.log("cart:", cart);
   return (
     <>
       {isConnected ? (
         <div className="">
+          <GenericModal
+            open={isPopUpOpen}
+            loader={true}
+            label="Loading..."
+            description="the operation may take a few seconds"
+          />
           <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20">
             {cart.length === 0 ? (
               <div className="text-2xl font-bold text-center ml-40 mb-20">
