@@ -110,7 +110,7 @@ const StepTwo: FC<StepTwoProps> = ({
   }, []);
 
   const uploadImage = async () => {
-    await handleFileChange();
+    handleFileChange();
   };
 
   const handleButtonClick = async () => {
@@ -125,18 +125,18 @@ const StepTwo: FC<StepTwoProps> = ({
         await uploadImage();
       }
     } catch (error: any) {
-      if (error.code === "UNPREDICTABLE_GAS_LIMIT"){
-        setPopupMessage("You don't have enough funds")
-      } else if (error.code === "INVALID_ARGUMENT"){
-        setPopupMessage("Image not found")
+      if (error.code === "UNPREDICTABLE_GAS_LIMIT") {
+        setPopupMessage("You don't have enough funds");
+      } else if (error.code === "INVALID_ARGUMENT") {
+        setPopupMessage("Image not found");
       } else if (error.code === -32603) {
         setPopupMessage("Can't load image");
       } else if (error.code === "ACTION_REJECTED") {
         setPopupMessage("User denied signature");
       } else {
-        setPopupMessage("Error")
+        setPopupMessage("Error");
       }
-      console.log("error", error.code)
+      console.log("error", error.code);
       setIsErrorPopupVisible(true);
     } finally {
       setTimeout(() => {
@@ -144,7 +144,6 @@ const StepTwo: FC<StepTwoProps> = ({
       }, 2500);
     }
   };
-  
 
   return (
     <>
