@@ -17,8 +17,8 @@ function UploadImage() {
     useState<any>();
   const [title, setTitile] = useState<string>("");
   const [description, setDescription] = useState("");
-  const [hashValue, setHashValue] = useState("");
-  const [encryptedHash, setEncryptedHash] = useState<string>("");
+  const [hashValue, setHashValue] = useState<any>("");
+  const [encryptedHash, setEncryptedHash] = useState<any>("");
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
   const fileInputRef = useRef(null);
@@ -40,7 +40,7 @@ function UploadImage() {
     setPopupMessage,
   } = useContext(ThemeContext);
 
-  const LIGHTHOUSE_API_KEY = "310ae584-7656-4940-b42f-397d73cfca5f";
+  const LIGHTHOUSE_API_KEY = "163c2684.1674563421dd41fda18350496ab201a2";
 
   useEffect(() => {
     if (!selectedFile) {
@@ -69,11 +69,10 @@ function UploadImage() {
       );
       image.resize(800, Jimp.AUTO);
 
-
       watermarkedImg.resize(image.getWidth(), image.getHeight());
 
       image.blit(watermarkedImg, 0, 0);
-  
+
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
       const file = new File([base64], `${fileName}_resized`, {
         type: "image/jpeg",
@@ -144,7 +143,7 @@ function UploadImage() {
         chain: "Calibration",
         method: "balanceOf",
         standardContractType: "ERC1155",
-        contractAddress: "0x4B10f9699B33686aBc694D35E09f698cD02688b2",
+        contractAddress: "0xd99bAbF3F4b310e9D80ac396518112e552016608",
         returnValueTest: { comparator: ">=", value: "1" },
         parameters: [":userAddress", tokenId],
       },
@@ -167,13 +166,17 @@ function UploadImage() {
   };
 
   const deploy = async () => {
-    const output = await lighthouse.upload(
-      sinteticBaseEvent,
-      LIGHTHOUSE_API_KEY,
-      progressCallback
-    );
-
-    return output.data.Hash;
+    try {
+      const output = await lighthouse.upload(
+        sinteticBaseEvent,
+        LIGHTHOUSE_API_KEY,
+        progressCallback
+      );
+      console.log("output", output);
+      return output.data.Hash;
+    } catch (error) {
+      console.log("error inside deploy :", error);
+    }
   };
 
   const mergeImageForSale = () => {
@@ -188,23 +191,48 @@ function UploadImage() {
     setImgForSale((prev: any) => [...prev, newImgObject]);
   };
 
+  // const deployEncrypted = async () => {
+  //   if (encryptedSinteticBaseEvent) {
+  //     console.log("from deployEncrypted", encryptedSinteticBaseEvent);
+  //   }
+
+  //   const sig = await encryptionSignature();
+  //   //console.log();
+  //   const response = await lighthouse.uploadEncrypted(
+  //     encryptedSinteticBaseEvent,
+  //     sig.publicKey,
+  //     LIGHTHOUSE_API_KEY,
+  //     sig.signedMessage,
+  //     progressCallback
+  //   );
+
+  //   modifyFile(encryptedSinteticBaseEvent);
+  //   console.log("response", response); //failed error 500
+  //   return response.data.Hash;
+  // };
   const deployEncrypted = async () => {
     if (encryptedSinteticBaseEvent) {
-      // console.log("from deployEncrypted", encryptedSinteticBaseEvent);
+      console.log("from deployEncrypted", encryptedSinteticBaseEvent);
     }
 
     const sig = await encryptionSignature();
     //console.log();
-    const response = await lighthouse.uploadEncrypted(
-      encryptedSinteticBaseEvent,
-      sig.publicKey,
-      LIGHTHOUSE_API_KEY,
-      sig.signedMessage,
-      progressCallback
-    );
+    try {
+      const response = await lighthouse.uploadEncrypted(
+        encryptedSinteticBaseEvent,
+        sig.publicKey,
+        LIGHTHOUSE_API_KEY,
+        sig.signedMessage,
+        progressCallback
+      );
 
-    modifyFile(encryptedSinteticBaseEvent);
-    return response.data.Hash;
+      modifyFile(encryptedSinteticBaseEvent);
+      console.log("response", response); //failed error 500
+      return response.data.Hash;
+    } catch (error) {
+      console.error("Error uploading encrypted file", error);
+      // Handle or throw error accordingly
+    }
   };
 
   const handleFileChange = async () => {
@@ -235,8 +263,8 @@ function UploadImage() {
         setIsPopUpOpen(false);
         console.log("Transaction:", tx);
       } catch (error) {
-        setPopupMessage("Error: Image not finalized")
-        setIsErrorPopupVisible(true)
+        setPopupMessage("Error: Image not finalized");
+        setIsErrorPopupVisible(true);
         setIsPopUpOpen(false);
         console.error("Transaction failed: ", error);
       } finally {
@@ -277,11 +305,13 @@ function UploadImage() {
       const completeUpload = async () => {
         setIsPopUpOpen(true);
         try {
+          console.log("selectedTagNumbers", selectedTagNumbers);
+          console.log("hashValue", hashValue);
           await startUpload(hashValue, selectedTagNumbers);
         } catch (error) {
           setIsPopUpOpen(false);
-          setIsErrorPopupVisible(true)
-          setPopupMessage("User denied transaction")
+          setIsErrorPopupVisible(true);
+          setPopupMessage("User denied transaction");
           console.error("There was an error uploading:", error);
         } finally {
           setTimeout(() => {
