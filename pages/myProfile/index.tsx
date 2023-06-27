@@ -97,7 +97,7 @@ const MyProfile = () => {
             onClick={() => setCurrentView("collection")}
             className={`py-1.5 px-5 rounded-full text-greyText text-md cursor-pointer ${
               currentView === "collection" &&
-              "bg-main text-white font-bold sm:px-5 sm:py-2 sm:text-lg md:px-5 md:py-2 md:text-lg lg:px-5 md:mb-2 lg:py-2 lg:text-lg xl:px-5 xl:py-2 xl:text-lg 2xl:px-10 2xl:py-5 2xl:text-lg 2xl:h-20 px-5 py-2 h-10"
+              "bg-main text-[#FFFFFF] font-bold sm:px-5 sm:py-2 md:px-5 md:py-2 lg:px-5 2xl:px-10 2xl:py-5 2xl:h-15 px-5 py-2"
             }`}
           >
             Collection
@@ -106,7 +106,7 @@ const MyProfile = () => {
             onClick={() => setCurrentView("forsale")}
             className={`py-1.5 px-5 rounded-full text-greyText text-lg cursor-pointer whitespace-nowrap ${
               currentView === "forsale" &&
-              "bg-main text-white font-bold sm:px-10 sm:text-lg md:px-10 md:text-lg lg:px-10 lg:text-lg xl:px-10 xl:text-lg 2xl:px-10 2xl:py-5 2xl:text-lg 2xl:h-20 px-7 py-1 h-10"
+              "bg-main text-[#FFFFFF] font-bold sm:px-5 sm:py-2 md:px-5 md:py-2 lg:px-5 2xl:px-10 2xl:py-5 2xl:h-15 px-5 py-2"
             }`}
           >
             For sale
