@@ -20,6 +20,7 @@ function UploadImage() {
   const [hashValue, setHashValue] = useState<any>("");
   const [encryptedHash, setEncryptedHash] = useState<any>("");
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  const [modalText, setModalText] = useState("1/3 Loading"); 
 
   const fileInputRef = useRef(null);
 
@@ -135,6 +136,7 @@ function UploadImage() {
   };
 
   const applyAccessConditions = async (tokenId: string) => {
+    setModalText("3/3 Applying Access Conditions");
     console.log("cid di applyAccessConditions", encryptedHash);
     console.log("tokenId di applyaccessconditions", tokenId.toString());
     const conditions = [
@@ -158,6 +160,7 @@ function UploadImage() {
       aggregator
     );
     console.log("response di applyaccess", response);
+    setModalText("3/3 Access Conditions Applied");
   };
 
   const progressCallback = (progressData: any) => {
@@ -256,10 +259,12 @@ function UploadImage() {
       console.log("encryptedHash nell'evento", encryptedHash);
       console.log("value3 nell'evento", value3.toString());
       try {
+        setModalText("2/3 Finalizing");
         const tx = await contract.finalizeUpload(value3, encryptedHash);
         await tx.wait();
         await applyAccessConditions(value3);
         setStep(3);
+        
         setIsPopUpOpen(false);
         console.log("Transaction:", tx);
       } catch (error) {
@@ -289,6 +294,7 @@ function UploadImage() {
 
   const startUpload = async (hash: any, tags: any) => {
     console.log("startUpload", hash);
+    setModalText("1/3 Transaction");
     if (!contract || !price) return;
     const tx = await contract.startUpload(
       hash,
@@ -329,9 +335,10 @@ function UploadImage() {
       <GenericModal
         open={isPopUpOpen}
         loader={true}
-        label="Loading..."
+        label={modalText}
         description="the operation may take a few seconds"
       />
+
       {step === 1 ? (
         <>
           <StepOne

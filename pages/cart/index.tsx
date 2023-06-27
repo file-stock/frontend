@@ -26,6 +26,7 @@ const Cart = () => {
   const [isSuccessPopupVisible, setIsSuccessPopupVisible] = useState(false);
   const [activeBtn, setActiveBtn] = useState<any>();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const calculateTotalAmount = (cartItems: any[]) => {
     let sum = 0;
     cartItems.forEach((item) => {
