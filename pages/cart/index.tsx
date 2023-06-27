@@ -169,7 +169,7 @@ const Cart = () => {
           <GenericModal
             open={isPopUpOpen}
             loader={true}
-            label="Loading..."
+            label="Loading"
             description="the operation may take a few seconds"
           />
           <div className="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mt-6 w-fit mx-auto mt-20">

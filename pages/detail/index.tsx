@@ -143,7 +143,7 @@ const Detail = () => {
         <GenericModal
           open={isPopUpOpen}
           loader={true}
-          label="Loading..."
+          label="Loading"
           description="the operation may take a few seconds"
         />
         <div className="flex justify-center">

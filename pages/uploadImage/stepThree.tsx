@@ -11,14 +11,11 @@ type StepThreeProps = {
 
 const StepThree: FC<StepThreeProps> = () => {
   const { userAddress } = useContext(ThemeContext);
-  //console.log("IMAGE FOR SALE", imageForSale);
   const router = useRouter();
   useEffect(() => {
     const getFiles = async () => {
-      // const lighthouse = require("@lighthouse-web3/sdk");
       try {
         const uploads = await lighthouse.getUploads(
-          //"310ae584-7656-4940-b42f-397d73cfca5f"
           userAddress
         );
         console.log("UPLOADS", uploads);
@@ -28,6 +25,7 @@ const StepThree: FC<StepThreeProps> = () => {
       }
     };
     getFiles();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userAddress]);
 
   return <div></div>;
