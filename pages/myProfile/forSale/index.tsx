@@ -43,11 +43,11 @@
 
 // export default ForSale;
 import { FC, useEffect, useState, useContext } from "react";
-import ImageCardForSale from "../../components/ImageCardForSale";
+import ImageCardForSale from "../../../components/ImageCardForSale";
 import { ethers, utils } from "ethers";
-import { ThemeContext } from "../../context/context";
-import PopupMessage from "../../components/PopupMessage";
-import GenericModal from "../../components/GenericModal";
+import { ThemeContext } from "../../../context/context";
+import PopupMessage from "../../../components/PopupMessage";
+import GenericModal from "../../../components/GenericModal";
 
 interface ForSaleProps {
   cids: string;
@@ -58,6 +58,7 @@ interface ForSaleProps {
 const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
   const [showModal, setShowModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [successfullDelete, setSuccessfullDelete] = useState(false);
   const [imagesForSale, setImagesForSale] = useState("");
   const priceInEther = price ? ethers.utils.formatEther(price.toString()) : "0";
   const {
@@ -68,7 +69,7 @@ const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
     isErrorPopupVisible,
   } = useContext(ThemeContext);
   useEffect(() => {
-    async function fetchImageData() {
+    const fetchImageData = async () => {
       try {
         if (cids) {
           const response = await fetch(`https://ipfs.io/ipfs/${cids}`);
@@ -78,7 +79,7 @@ const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
       } catch (error) {
         console.log("Error fetching image data", error);
       }
-    }
+    };
     fetchImageData();
   }, [cids, price]);
 
@@ -88,15 +89,16 @@ const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
       await contract.deleteFile(id);
       setShowModal(true);
       setDeleteModal(false);
-      setPopupMessage(
-        "Image deleted successfully. Wait a few seconds and then refresh the page."
-      );
-      setIsErrorPopupVisible(true);
+      setSuccessfullDelete(true);
     } catch (error) {
       console.log("Error deleting file", error);
+    } finally {
+      setTimeout(() => {
+        setShowModal(false);
+        setSuccessfullDelete(false);
+      }, 60000);
     }
   };
-
   return (
     <div>
       {deleteModal && (
@@ -110,16 +112,15 @@ const ForSale: FC<ForSaleProps> = ({ cids, price, id }) => {
         />
       )}
       {showModal && (
-        <PopupMessage
-          isVisible={isErrorPopupVisible}
-          message={popupMessage}
-          onClose={() => setIsErrorPopupVisible(false)}
+        <GenericModal
+          open={showModal}
+          loader={successfullDelete}
+          label="Successfully deleted!"
+          description="Image deleted successfully. Wait a few seconds and then refresh the page."
         />
       )}
       <div className="mb-6">
-        {imagesForSale && imagesForSale.length === 0 ? (
-          "Empty :("
-        ) : (
+        {imagesForSale && (
           <ImageCardForSale
             img={imagesForSale}
             title={""}

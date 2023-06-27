@@ -19,7 +19,7 @@ const StepThree: FC<StepThreeProps> = () => {
           userAddress
         );
         console.log("UPLOADS", uploads);
-        router.push("/myProfile");
+        router.push("/myProfile?currentView=forSale");
       } catch (error) {
         console.log("ERROR", error);
       }
