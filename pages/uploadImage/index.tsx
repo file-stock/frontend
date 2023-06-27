@@ -136,7 +136,7 @@ function UploadImage() {
   };
 
   const applyAccessConditions = async (tokenId: string) => {
-    setModalText("3/3 Applying Access Conditions in progress.");
+    setModalText("3/3 Applying Access Conditions in progress");
     console.log("cid di applyAccessConditions", encryptedHash);
     console.log("tokenId di applyaccessconditions", tokenId.toString());
     const conditions = [
@@ -259,7 +259,7 @@ function UploadImage() {
       console.log("encryptedHash nell'evento", encryptedHash);
       console.log("value3 nell'evento", value3.toString());
       try {
-        setModalText("2/3 Finalizing transaction in progress.");
+        setModalText("2/3 Finalizing transaction in progress");
         const tx = await contract.finalizeUpload(value3, encryptedHash);
         await tx.wait();
         await applyAccessConditions(value3);
@@ -294,7 +294,7 @@ function UploadImage() {
 
   const startUpload = async (hash: any, tags: any) => {
     console.log("startUpload", hash);
-    setModalText("1/3 Transaction in progress.");
+    setModalText("1/3 Transaction in progress");
     if (!contract || !price) return;
     const tx = await contract.startUpload(
       hash,
