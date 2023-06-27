@@ -83,7 +83,7 @@ const ImageCard: FC<ImageCardProps> = ({
         cid,
         price,
         quantity: 1,
-        selected: true,
+        selected: false,
       };
       setCart([...cart, newItem]);
     }

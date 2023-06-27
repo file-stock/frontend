@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ethers } from "ethers";
 import { filecoinIcon } from "../../public";
 import GenericModal from "../../components/GenericModal";
+import PopupMessage from "../../components/PopupMessage";
 
 const Cart = () => {
   const {
@@ -14,10 +15,16 @@ const Cart = () => {
     savedForLater,
     setSavedForLater,
     isConnected,
-    ContractAbi,
+    setPopupMessage,
+    setIsErrorPopupVisible,
+    isErrorPopupVisible,
+    popupMessage,
+    contract,
   } = useContext(ThemeContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  const [isSuccessPopupVisible, setIsSuccessPopupVisible] = useState(false);
+  const [activeBtn, setActiveBtn] = useState<any>();
 
   const calculateTotalAmount = (cartItems: any[]) => {
     let sum = 0;
@@ -31,6 +38,7 @@ const Cart = () => {
         sum += priceFloat * item.quantity;
       }
     });
+    sum = parseFloat(sum.toFixed(2));
     setTotalPrice(sum);
   };
   console.log("totalPrice:", totalPrice);
@@ -60,7 +68,8 @@ const Cart = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     item: any
   ) => {
-    const quantity = parseInt(e.target.value);
+    let quantity = parseInt(e.target.value);
+    if (quantity < 0) quantity = 0;
     const updatedCart = cart.map((cartItem) => {
       if (cartItem.cid === item.cid) {
         return {
@@ -95,16 +104,16 @@ const Cart = () => {
       const selectedIds = cart.map((item) => {
         return ethers.BigNumber.from(item.imageId.hex);
       });
-      console.log("selectedIds:", selectedIds);
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contractAddress = "0xd99bAbF3F4b310e9D80ac396518112e552016608";
+      // console.log("selectedIds:", selectedIds);
+      // const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // const signer = provider.getSigner();
+      // const contractAddress = "0xd99bAbF3F4b310e9D80ac396518112e552016608";
 
-      const contract = new ethers.Contract(
-        contractAddress,
-        ContractAbi,
-        signer
-      );
+      // const contract = new ethers.Contract(
+      //   contractAddress,
+      //   ContractAbi,
+      //   signer
+      // );
       console.log(
         "value of transaction:",
         ethers.utils.parseEther(totalPrice.toString())
@@ -116,16 +125,46 @@ const Cart = () => {
       await tx.wait();
       setIsPopUpOpen(false);
       setCart([]);
-    } catch (err) {
+      setPopupMessage("Checkout successful!");
+      setIsSuccessPopupVisible(true);
+    } catch (err: any) {
+      if (err.code === "UNPREDICTABLE_GAS_LIMIT") {
+        setPopupMessage("You don't have enough funds");
+      } else if (err.code === "INVALID_ARGUMENT") {
+        setPopupMessage("Image not found");
+      } else if (err.code === -32603) {
+        setPopupMessage("Can't load image");
+      } else if (err.code === "ACTION_REJECTED") {
+        setPopupMessage("User denied transaction");
+      } else {
+        setPopupMessage("Error");
+      }
+      setIsPopUpOpen(false);
+      setIsErrorPopupVisible(true);
       console.error("ERROR inside checkout:", err);
+    } finally {
+      setTimeout(() => {
+        setIsErrorPopupVisible(false);
+      }, 2500);
     }
   };
-
+  useEffect(() => {
+    if (cart.length === 0) {
+      setActiveBtn(false);
+    } else {
+      setActiveBtn(true);
+    }
+  }, [cart]);
   console.log("cart:", cart);
   return (
     <>
       {isConnected ? (
         <div className="">
+          <PopupMessage
+            isVisible={isSuccessPopupVisible || isErrorPopupVisible}
+            message={popupMessage}
+            onClose={() => setIsErrorPopupVisible(false)}
+          />
           <GenericModal
             open={isPopUpOpen}
             loader={true}
@@ -140,7 +179,6 @@ const Cart = () => {
             ) : (
               cart.map((item, index) => {
                 const { cid, imageId, price } = item;
-                console.log("price:", price);
                 const priceInEther = ethers.utils.formatUnits(price);
                 console.log("priceInEther:", priceInEther);
                 return (
@@ -182,6 +220,7 @@ const Cart = () => {
 
                       <div className="ml-4">
                         <input
+                          key={item.cid}
                           type="checkbox"
                           className=""
                           onClick={() => handleSavedForLater(item)}
@@ -201,20 +240,15 @@ const Cart = () => {
             </div>
             {totalPrice}
           </div>
-          {cart && (
+          {cart && activeBtn && (
             <div
-              className={`text-white p-4 cursor-pointer w-fit m-10 rounded-lg ml-10 mt-20 
-              ${
-                cart.length === 0
-                  ? "bg-[#622774] cursor-not-allowed"
-                  : "bg-main hover:font-bold hover:text-xl hover:w-30"
-              }`}
+              className="text-white p-4 cursor-pointer w-fit m-10 rounded-lg ml-10 mt-20 bg-main hover:font-bold hover:text-xl hover:w-30"
               onClick={checkout}
             >
               Buy now
             </div>
           )}
-          <div className="border-t border-dashed">
+          <div className="border-t border-dashed mt-10">
             <div className="font-bold text-xl p-10">Saved for later</div>
             {savedForLater.map((item, index) => {
               return (
