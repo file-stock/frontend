@@ -86,7 +86,9 @@ const MyProfile = () => {
   useEffect(() => {
     //router.push(`/myProfile/${currentView}`);
     router.push(`/myProfile`);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  
   return (
     <div className="pb-[50px] pl-3">
       <div className="mt-[75px]">
@@ -131,37 +133,37 @@ const MyProfile = () => {
         <Collection />
       ) : (
         <div>
+          {isConnected && (
+            <div className="text-lg">
+              You currently have {myImages.length} images for sale.{" "}
+              <span className="text-main text-xl font-bold">
+                <Link href="/uploadImage">Upload</Link>
+              </span>{" "}
+              a new image now!
+            </div>
+          )}
           <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 mb-6 sm:mt-20">
-            {isConnected && sortedImages.length > 0 ? (
-              sortedImages.map(
-                (file: any, index: any) => (
-                  console.log(file.tokenId.toString()),
-                  (
-                    <div key={index}>
-                      <ForSale
-                        key={index}
-                        cids={file.watermarkedCid}
-                        price={file.price}
-                        id={file.tokenId.toString()}
-                      />
-                    </div>
+            {isConnected && sortedImages.length > 0
+              ? sortedImages.map(
+                  (file: any, index: any) => (
+                    console.log(file.tokenId.toString()),
+                    (
+                      <div key={index}>
+                        <ForSale
+                          key={index}
+                          cids={file.watermarkedCid}
+                          price={file.price}
+                          id={file.tokenId.toString()}
+                        />
+                      </div>
+                    )
                   )
                 )
-              )
-            ) : sortedImages.length === 0 && isConnected ? (
-              <div className="font-bold text-xl text-center p-10">
-                You have not put anything up for sale, if you want to sell
-                something go to{" "}
-                <span className="text-main text-xl font-bold hover:underline">
-                  <Link href="/uploadImage">Upload</Link>
-                </span>{" "}
-                page!!!
-              </div>
-            ) : (
-              <div className="font-bold text-xl text-center p-10">
-                Connect your wallet to see your profile!
-              </div>
-            )}
+              : !isConnected && (
+                  <div className="font-bold text-xl text-center p-10">
+                    Connect your wallet to see your profile!
+                  </div>
+                )}
           </div>
         </div>
       )}

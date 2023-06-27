@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { ThemeContext } from "../../../context/context";
 import { useState, useContext, useEffect, use } from "react";
 import ImageCardForSale from "../../../components/ImageCardForSale";
@@ -224,15 +225,15 @@ const Collection = () => {
               </div>
             );
           })
-        ) : nftData.length === 0 && isConnected ? (
+        ) : nftData.length === 0 && isConnected && !showModal ? (
           <div className="font-bold text-xl text-center p-10 ml-20">
             You don't have NFTs yet, if you want to buy something go to the{" "}
             <span className="text-main text-xl font-bold hover:underline">
               <Link href="/explore">Explore</Link>
             </span>{" "}
-            page and have a look!!!
+            page and take a look!
           </div>
-        ) : (
+        ) : !isConnected && (
           <div className="font-bold text-center text-xl p-10">
             Connect your wallet to see your profile!
           </div>
