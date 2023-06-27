@@ -60,7 +60,7 @@ const GenericModal: FC<ModalProps> = ({
               </svg>
             )}
             <div>
-              <div className="text-xl font-semibold">{label}</div>
+              <div className="text-xl font-semibold">{label}<span className="text-blue-500 animate-pulse">...</span></div>
               <div className="text.lg font-semibold">{description}</div>
             </div>
           </div>

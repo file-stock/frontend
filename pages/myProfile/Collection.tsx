@@ -172,7 +172,7 @@ const Collection = () => {
         <GenericModal
           open={showModal}
           loader={true}
-          label="Loading..."
+          label="Loading"
           description="Please wait while we load your NFTs."
         />
       )} 
