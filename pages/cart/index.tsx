@@ -126,7 +126,9 @@ const Cart = () => {
       await tx.wait();
       setIsPopUpOpen(false);
       setCart([]);
-      setPopupMessage("Checkout successful!");
+      setPopupMessage(
+        "Checkout successful! You can view your NFTs in your collection section now."
+      );
       setIsSuccessPopupVisible(true);
     } catch (err: any) {
       if (err.code === "UNPREDICTABLE_GAS_LIMIT") {
@@ -146,6 +148,7 @@ const Cart = () => {
     } finally {
       setTimeout(() => {
         setIsErrorPopupVisible(false);
+        setIsSuccessPopupVisible(false);
       }, 2500);
     }
   };
@@ -162,9 +165,14 @@ const Cart = () => {
       {isConnected ? (
         <div className="">
           <PopupMessage
-            isVisible={isSuccessPopupVisible || isErrorPopupVisible}
+            isVisible={isErrorPopupVisible}
             message={popupMessage}
             onClose={() => setIsErrorPopupVisible(false)}
+          />
+          <PopupMessage
+            isVisible={isSuccessPopupVisible}
+            message={popupMessage}
+            onClose={() => setIsSuccessPopupVisible(false)}
           />
           <GenericModal
             open={isPopUpOpen}

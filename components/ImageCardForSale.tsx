@@ -30,7 +30,11 @@ const ImageCardForSale: FC<ImageCardForSaleProps> = ({
     <>
       <div className="sm:flex sm:gap-5 md:flex md:gap-5 lg:flex lg:gap-5 xl:flex xl:gap-5 2xl:flex 2xl:gap-5">
         <div className="relative w-[330px] h-[280px]">
-          <Image src={img} fill={true} alt="myImages" className="rounded-lg" />
+          {img ? (
+            <Image src={img} alt="myImages" className="rounded-lg" fill />
+          ) : (
+            <div>Loading Image...</div>
+          )}
         </div>
         <div className="flex flex-col justify-between">
           <div className="text-xl font-semibold">{title}</div>

@@ -1,12 +1,13 @@
-import { ThemeContext } from "../../context/context";
+import { ThemeContext } from "../../../context/context";
 import { useState, useContext, useEffect, use } from "react";
-import ImageCardForSale from "../../components/ImageCardForSale";
-import { myCardSale } from "../../constants/constants";
-import ImageCard from "../../components/ImageCard";
+import ImageCardForSale from "../../../components/ImageCardForSale";
+import { myCardSale } from "../../../constants/constants";
+import ImageCard from "../../../components/ImageCard";
 import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
-import GenericModal from "../../components/GenericModal";
-import PopupMessage from "../../components/PopupMessage";
+import GenericModal from "../../../components/GenericModal";
+import PopupMessage from "../../../components/PopupMessage";
+import Link from "next/link";
 interface AccessCondition {
   data: {
     conditions: {
@@ -36,8 +37,16 @@ const Collection = () => {
   const [nftBalances, setNftBalances] = useState<any[]>([]);
   const [fileURL, setFileURL] = useState("");
   const [showModal, setShowModal] = useState(true);
-  const { contractRights, userAddress, allFiles, setIsErrorPopupVisible, isErrorPopupVisible, setPopupMessage, popupMessage } =
-    useContext(ThemeContext);
+  const {
+    contractRights,
+    userAddress,
+    allFiles,
+    setIsErrorPopupVisible,
+    isErrorPopupVisible,
+    setPopupMessage,
+    popupMessage,
+    isConnected,
+  } = useContext(ThemeContext);
 
   async function getBalances() {
     const balances = await Promise.all(
@@ -137,16 +146,16 @@ const Collection = () => {
         document.body.removeChild(a);
       }
     } catch (error: any) {
-      if (error.message === "you don't have access"){
-        setPopupMessage("Error: You don't have access")
-      } else if (error.code === "INVALID_ARGUMENT"){
-        setPopupMessage("Image not found")
+      if (error.message === "you don't have access") {
+        setPopupMessage("Error: You don't have access");
+      } else if (error.code === "INVALID_ARGUMENT") {
+        setPopupMessage("Image not found");
       } else if (error.code === -32603) {
         setPopupMessage("Can't load image");
       } else if (error.code === "ACTION_REJECTED") {
         setPopupMessage("User denied signature");
       } else {
-        setPopupMessage("Error")
+        setPopupMessage("Error");
       }
       setIsErrorPopupVisible(true);
     } finally {
@@ -168,21 +177,21 @@ const Collection = () => {
 
   return (
     <>
-      {showModal && (
+      {showModal && isConnected && nftData && (
         <GenericModal
           open={showModal}
           loader={true}
           label="Loading..."
           description="Please wait while we load your NFTs."
         />
-      )} 
-       <PopupMessage
-            isVisible={isErrorPopupVisible}
-            message={popupMessage}
-            onClose={() => setIsErrorPopupVisible(false)}
-          />
+      )}
+      <PopupMessage
+        isVisible={isErrorPopupVisible}
+        message={popupMessage}
+        onClose={() => setIsErrorPopupVisible(false)}
+      />
       <div className="flex flex-wrap gap-14 sm:mt-20">
-        {nftData &&
+        {isConnected && nftData.length > 0 ? (
           nftData.map((data, index) => {
             const balanceData = nftBalances.find(
               (b) => b.tokenId === data.tokenId.toString()
@@ -214,7 +223,20 @@ const Collection = () => {
                 </div>
               </div>
             );
-          })}
+          })
+        ) : nftData.length === 0 && isConnected ? (
+          <div className="font-bold text-xl text-center p-10 ml-20">
+            You don't have NFTs yet, if you want to buy something go to the{" "}
+            <span className="text-main text-xl font-bold hover:underline">
+              <Link href="/explore">Explore</Link>
+            </span>{" "}
+            page and have a look!!!
+          </div>
+        ) : (
+          <div className="font-bold text-center text-xl p-10">
+            Connect your wallet to see your profile!
+          </div>
+        )}
       </div>
     </>
   );

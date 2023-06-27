@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import ProfileUserPicture from "../../components/ProfileUserPicture";
-import Collection from "./Collection";
-import ForSale from "./ForSale";
+import Collection from "./collection";
+import ForSale from "./forSale";
 import { useContext } from "react";
 import { ThemeContext } from "../../context/context";
 import FiltersDropdown from "../explore/filters";
 import { utils } from "ethers";
 import priceFilters from "../../components/filters_data";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const filterOptions = [{ label: "Price ranges", options: priceFilters }];
 
@@ -83,9 +84,9 @@ const MyProfile = () => {
   };
 
   useEffect(() => {
-    router.push("/myProfile");
+    //router.push(`/myProfile/${currentView}`);
+    router.push(`/myProfile`);
   }, []);
-
   return (
     <div className="pb-[50px] pl-3">
       <div className="mt-[75px]">
@@ -131,7 +132,7 @@ const MyProfile = () => {
       ) : (
         <div>
           <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 mb-6 sm:mt-20">
-            {isConnected &&
+            {isConnected && sortedImages.length > 0 ? (
               sortedImages.map(
                 (file: any, index: any) => (
                   console.log(file.tokenId.toString()),
@@ -146,7 +147,21 @@ const MyProfile = () => {
                     </div>
                   )
                 )
-              )}
+              )
+            ) : sortedImages.length === 0 && isConnected ? (
+              <div className="font-bold text-xl text-center p-10">
+                You have not put anything up for sale, if you want to sell
+                something go to{" "}
+                <span className="text-main text-xl font-bold hover:underline">
+                  <Link href="/uploadImage">Upload</Link>
+                </span>{" "}
+                page!!!
+              </div>
+            ) : (
+              <div className="font-bold text-xl text-center p-10">
+                Connect your wallet to see your profile!
+              </div>
+            )}
           </div>
         </div>
       )}
