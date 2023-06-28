@@ -30,9 +30,6 @@ const Cart = () => {
   const calculateTotalAmount = (cartItems: any[]) => {
     let sum = 0;
     cartItems.forEach((item) => {
-      //console.log("item.price:", item.price);
-      //console.log("typeof item.price:", typeof item.price);
-
       if (item.price && item.quantity) {
         const priceInEther = ethers.utils.formatUnits(item.price, 18);
         const priceFloat = parseFloat(priceInEther.toString());
@@ -105,16 +102,6 @@ const Cart = () => {
       const selectedIds = cart.map((item) => {
         return ethers.BigNumber.from(item.imageId.hex);
       });
-      // console.log("selectedIds:", selectedIds);
-      // const provider = new ethers.providers.Web3Provider(window.ethereum);
-      // const signer = provider.getSigner();
-      // const contractAddress = "0xd99bAbF3F4b310e9D80ac396518112e552016608";
-
-      // const contract = new ethers.Contract(
-      //   contractAddress,
-      //   ContractAbi,
-      //   signer
-      // );
       console.log(
         "value of transaction:",
         ethers.utils.parseEther(totalPrice.toString())
@@ -149,7 +136,7 @@ const Cart = () => {
       setTimeout(() => {
         setIsErrorPopupVisible(false);
         setIsSuccessPopupVisible(false);
-      }, 2500);
+      }, 5500);
     }
   };
   useEffect(() => {

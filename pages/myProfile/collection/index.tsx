@@ -1,8 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { ThemeContext } from "../../../context/context";
 import { useState, useContext, useEffect, use } from "react";
-import ImageCardForSale from "../../../components/ImageCardForSale";
-import { myCardSale } from "../../../constants/constants";
 import ImageCard from "../../../components/ImageCard";
 import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
@@ -233,10 +231,12 @@ const Collection = () => {
             </span>{" "}
             page and take a look!
           </div>
-        ) : !isConnected && (
-          <div className="font-bold text-center text-xl p-10">
-            Connect your wallet to see your profile!
-          </div>
+        ) : (
+          !isConnected && (
+            <div className="font-bold text-center text-xl p-10">
+              Connect your wallet to see your profile!
+            </div>
+          )
         )}
       </div>
     </>

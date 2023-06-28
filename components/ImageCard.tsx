@@ -4,7 +4,6 @@ import Image from "next/image";
 import { favouriteIcon } from "../public";
 import Link from "next/link";
 import { useEffect, useState, useContext } from "react";
-import GenericModal from "./GenericModal";
 import { useRouter } from "next/router";
 import { ThemeContext } from "../context/context";
 
@@ -98,7 +97,6 @@ const ImageCard: FC<ImageCardProps> = ({
       <Link href={`/detail?id=${id}`}>
         <img
           src={imageData}
-          //fill={true}
           alt="myImages"
           className="rounded-lg h-full w-full"
           onLoad={() => setIsLoading(false)}
@@ -131,11 +129,6 @@ const ImageCard: FC<ImageCardProps> = ({
           <div className="absolute bottom-24 left-5 text-2xl font-bold">
             {title}
           </div>
-          {/* {buyLink ? (
-      <div className="absolute bottom-10 left-5 text-lg font-medium border border-white rounded-xl py-0.5 px-6">
-        <Link href={buyLink}>Buy</Link>
-      </div>
-    ) : ( */}
           <div className="absolute bottom-10 left-5 text-sm font-normal">
             {description}
           </div>
