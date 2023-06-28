@@ -1,6 +1,4 @@
-import Link from "next/link";
-import { FC, useEffect, useContext, useState } from "react";
-import ImageCardForSale from "../../components/ImageCardForSale";
+import { FC, useEffect, useContext } from "react";
 import lighthouse from "@lighthouse-web3/sdk";
 import { ThemeContext } from "../../context/context";
 import { useRouter } from "next/router";

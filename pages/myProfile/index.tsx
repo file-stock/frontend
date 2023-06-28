@@ -84,11 +84,10 @@ const MyProfile = () => {
   };
 
   useEffect(() => {
-    //router.push(`/myProfile/${currentView}`);
     router.push(`/myProfile`);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   return (
     <div className="pb-[50px] pl-3">
       <div className="mt-[75px]">
@@ -98,18 +97,18 @@ const MyProfile = () => {
         <div className="flex justify-between w-1/5 mt-[75px] mb-[45px]">
           <div
             onClick={() => setCurrentView("collection")}
-            className={`py-1.5 px-5 rounded-full text-greyText text-md cursor-pointer ${
+            className={`py-1.5 md:py-5 px-5 rounded-full text-greyText text-md cursor-pointer ${
               currentView === "collection" &&
-              "bg-main text-[#FFFFFF] font-bold sm:px-5 sm:py-2 md:px-5 md:py-2 lg:px-5 2xl:px-10 2xl:py-5 2xl:h-15 px-5 py-2"
+              "bg-main text-[#FFFFFF] font-bold sm:px-5 sm:py-2 md:px-5 md:py-5 lg:px-5 2xl:px-10 2xl:py-5 2xl:h-15 px-5 py-2"
             }`}
           >
             Collection
           </div>
           <div
             onClick={() => setCurrentView("forsale")}
-            className={`py-1.5 px-5 rounded-full text-greyText text-lg cursor-pointer whitespace-nowrap ${
+            className={`py-1.5 md:py-5 px-5 rounded-full text-greyText text-lg cursor-pointer whitespace-nowrap ${
               currentView === "forsale" &&
-              "bg-main text-[#FFFFFF] font-bold sm:px-5 sm:py-2 md:px-5 md:py-2 lg:px-5 2xl:px-10 2xl:py-5 2xl:h-15 px-5 py-2"
+              "bg-main text-[#FFFFFF] font-bold sm:px-5 sm:py-2 md:px-5 md:py-5 lg:px-5 2xl:px-10 2xl:py-5 2xl:h-15 px-5 py-2"
             }`}
           >
             For sale

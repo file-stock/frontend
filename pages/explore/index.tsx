@@ -8,7 +8,6 @@ import // colorFilters,
 // orientationFilters,
 priceFilters from "../../components/filters_data";
 import ImageCard from "../../components/ImageCard";
-import { exploreImages as cards } from "../../constants/constants";
 import { tags } from "../../public/tags";
 import TagSearch from "../../components/TagSearch";
 import { useRouter } from "next/router";

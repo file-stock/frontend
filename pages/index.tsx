@@ -3,17 +3,8 @@ import Header from "./home/Header";
 import CreatorOfTheMonth from "./home/CreatorOfTheMonth";
 import Gallery from "./home/Gallery";
 import TagSearch from "../components/TagSearch";
-import { utils } from "ethers";
 import { useContext } from "react";
 import { ThemeContext } from "../context/context";
-
-// function getRandomIndices(arrLength, numIndices) {
-//   const indices = new Set();
-//   while (indices.size < numIndices) {
-//     indices.add(Math.floor(Math.random() * arrLength));
-//   }
-//   return [...indices];
-// }
 
 export default function Home() {
   const {
