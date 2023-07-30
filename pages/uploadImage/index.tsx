@@ -20,7 +20,7 @@ function UploadImage() {
   const [hashValue, setHashValue] = useState<any>("");
   const [encryptedHash, setEncryptedHash] = useState<any>("");
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
-  const [modalText, setModalText] = useState("1/3 Loading"); 
+  const [modalText, setModalText] = useState("1/3 Loading");
 
   const fileInputRef = useRef(null);
 
@@ -194,25 +194,6 @@ function UploadImage() {
     setImgForSale((prev: any) => [...prev, newImgObject]);
   };
 
-  // const deployEncrypted = async () => {
-  //   if (encryptedSinteticBaseEvent) {
-  //     console.log("from deployEncrypted", encryptedSinteticBaseEvent);
-  //   }
-
-  //   const sig = await encryptionSignature();
-  //   //console.log();
-  //   const response = await lighthouse.uploadEncrypted(
-  //     encryptedSinteticBaseEvent,
-  //     sig.publicKey,
-  //     LIGHTHOUSE_API_KEY,
-  //     sig.signedMessage,
-  //     progressCallback
-  //   );
-
-  //   modifyFile(encryptedSinteticBaseEvent);
-  //   console.log("response", response); //failed error 500
-  //   return response.data.Hash;
-  // };
   const deployEncrypted = async () => {
     if (encryptedSinteticBaseEvent) {
       console.log("from deployEncrypted", encryptedSinteticBaseEvent);
@@ -230,7 +211,7 @@ function UploadImage() {
       );
 
       modifyFile(encryptedSinteticBaseEvent);
-      console.log("response", response); //failed error 500
+      console.log("response", response);
       return response.data.Hash;
     } catch (error) {
       console.error("Error uploading encrypted file", error);
@@ -244,9 +225,6 @@ function UploadImage() {
 
       setEncryptedHash(await deployEncrypted());
       console.log("encryptedHash fuori evento", encryptedHash);
-      // const rightsNFTCount = await contractRights.rightsNFTCount();
-      // const tokenId = rightsNFTCount.add(1);
-      // console.log("token id ", tokenId.toString());
     }
   };
 
@@ -264,7 +242,7 @@ function UploadImage() {
         await tx.wait();
         await applyAccessConditions(value3);
         setStep(3);
-        
+
         setIsPopUpOpen(false);
         console.log("Transaction:", tx);
       } catch (error) {
