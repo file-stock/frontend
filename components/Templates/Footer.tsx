@@ -14,7 +14,7 @@ const Footer = () => {
     { label: "Home", href: "/" },
     { label: "Explore", href: "/explore" },
     { label: "My Profile", href: "/myProfile" },
-    { label: "Contact us", href: "" },
+    { label: "FAQ", href: "/faq" },
   ];
   const footerLinks = [
     "Terms and condition",
