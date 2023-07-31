@@ -108,7 +108,7 @@ const Faq = () => {
       {sections.map((section, index) => (
         <div className="mb-4" key={index}>
           <div
-            className="text-xl font-bold cursor-pointer flex bg-main p-2 rounded-md text-white justify-between px-5"
+            className={` text-xl font-bold cursor-pointer flex bg-main ${!section.isOpen && "opacity-80"} hover:opacity-100 p-2 rounded-md text-white justify-between px-5`}
             onClick={() => toggleSection(index)}
           >
             <h1>{section.title}</h1>
