@@ -27,9 +27,9 @@ const NavBar = () => {
 
   const navigationLinks = [
     { label: "Home", href: "/" },
-    { label: "FAQ", href: "/faq" },
     { label: "Explore", href: "/explore" },
     { label: "Sell", href: "/uploadImage" },
+    { label: "FAQ", href: "/faq" },
   ];
 
   const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
