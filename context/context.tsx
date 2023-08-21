@@ -130,7 +130,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x4cb2f" }],
+        params: [{ chainId: "314" }],
       });
     } catch (switchError: any) {
       if (switchError.code === 4902) {
