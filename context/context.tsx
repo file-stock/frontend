@@ -68,16 +68,16 @@ type ContextType = {
   setSavedForLater: Dispatch<SetStateAction<any[]>>;
 };
 
-const rpcUrl = "https://api.calibration.node.glif.io/rpc/v1";
+const rpcUrl = "https://rpc.ankr.com/filecoin";
 const injected = injectedModule();
 
 init({
   wallets: [injected],
   chains: [
     {
-      id: "0xc45", //correspond to 3141
-      token: "tFIL",
-      label: "Filecoin Hyperspace",
+      id: "314", //correspond to 3141
+      token: "FIL",
+      label: "Filecoin Mainnet",
       rpcUrl,
     },
   ],
@@ -117,9 +117,9 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
 
-  const CONTRACT_ADDRESS = "0xd99bAbF3F4b310e9D80ac396518112e552016608";
-  const CONTRACT_RIGHTS = "0x2a51237504E365868B9054231d7CAd8ac6830046";
-  const CONTRACT_CREATOR = "0xE27E7Ada9870a48C17D1470CF65768782A918c32";
+  const CONTRACT_ADDRESS = "0x307C87ff1E333ad5CC193e2Fe0A13c3d27FA2d60";
+  const CONTRACT_RIGHTS = "0x4B10f9699B33686aBc694D35E09f698cD02688b2";
+  const CONTRACT_CREATOR = "0x52480B3fA8B136B86D824BD31DC9512909528E86";
   useEffect(() => {
     const hProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
     setHyperProvider(hProvider);
@@ -139,15 +139,15 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
             method: "wallet_addEthereumChain",
             params: [
               {
-                chainId: "0x4cb2f",
-                rpcUrls: ["https://api.calibration.node.glif.io/rpc/v1"],
-                chainName: "Filecoin - Hyperspace testnet",
+                chainId: "314",
+                rpcUrls: ["https://rpc.ankr.com/filecoin"],
+                chainName: "Filecoin - Mainnet",
                 nativeCurrency: {
-                  name: "tFIL",
-                  symbol: "tFIL",
+                  name: "FIL",
+                  symbol: "FIL",
                   decimals: 18,
                 },
-                blockExplorerUrls: ["https://hyperspace.filfox.info/en"],
+                blockExplorerUrls: ["https://filfox.info/en"],
               },
             ],
           });
