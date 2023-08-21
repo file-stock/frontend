@@ -68,16 +68,16 @@ type ContextType = {
   setSavedForLater: Dispatch<SetStateAction<any[]>>;
 };
 
-const rpcUrl = "https://api.calibration.node.glif.io/rpc/v1";
+const rpcUrl = "https://rpc.ankr.com/filecoin";
 const injected = injectedModule();
 
 init({
   wallets: [injected],
   chains: [
     {
-      id: "0xc45", //correspond to 3141
-      token: "tFIL",
-      label: "Filecoin Hyperspace",
+      id: "314", //correspond to 3141
+      token: "FIL",
+      label: "Filecoin Mainnet",
       rpcUrl,
     },
   ],
