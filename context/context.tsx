@@ -139,15 +139,15 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
             method: "wallet_addEthereumChain",
             params: [
               {
-                chainId: "0x4cb2f",
-                rpcUrls: ["https://api.calibration.node.glif.io/rpc/v1"],
-                chainName: "Filecoin - Hyperspace testnet",
+                chainId: "314",
+                rpcUrls: ["https://rpc.ankr.com/filecoin"],
+                chainName: "Filecoin - Mainnet",
                 nativeCurrency: {
-                  name: "tFIL",
-                  symbol: "tFIL",
+                  name: "FIL",
+                  symbol: "FIL",
                   decimals: 18,
                 },
-                blockExplorerUrls: ["https://hyperspace.filfox.info/en"],
+                blockExplorerUrls: ["https://filfox.info/en"],
               },
             ],
           });
