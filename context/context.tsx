@@ -75,7 +75,7 @@ init({
   wallets: [injected],
   chains: [
     {
-      id: "314", //correspond to 3141
+      id: "0x13a", //correspond to 314
       token: "FIL",
       label: "Filecoin Mainnet",
       rpcUrl,
@@ -130,7 +130,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "314" }],
+        params: [{ chainId: "0x13a" }],
       });
     } catch (switchError: any) {
       if (switchError.code === 4902) {
@@ -139,7 +139,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
             method: "wallet_addEthereumChain",
             params: [
               {
-                chainId: "314",
+                chainId: "0x13a",
                 rpcUrls: ["https://rpc.ankr.com/filecoin"],
                 chainName: "Filecoin - Mainnet",
                 nativeCurrency: {
