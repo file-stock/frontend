@@ -98,7 +98,7 @@ const ImageCard: FC<ImageCardProps> = ({
         <img
           src={imageData}
           alt="myImages"
-          className="rounded-lg h-full w-full"
+          className="h-full w-full object-none"
           onLoad={() => setIsLoading(false)}
         />
         {isLoading && (
