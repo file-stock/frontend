@@ -81,6 +81,7 @@ const Main = () => {
                     favorite={favorite}
                     addToCartButton={true}
                     buyNowButton={true}
+                    viewButton={true}
                     price={card.price}
                   />
                 ) : (

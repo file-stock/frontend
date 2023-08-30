@@ -176,6 +176,7 @@ const Explore = () => {
                   favorite={favorite}
                   buyNowButton={true}
                   addToCartButton={true}
+                  viewButton={true}
                   price={file.price}
                 />
               </div>

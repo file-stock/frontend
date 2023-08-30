@@ -19,6 +19,7 @@ type ImageCardProps = {
   cid?: string;
   buyNowButton?: boolean;
   addToCartButton?: boolean;
+  viewButton?: boolean;
   price?: any;
 };
 
@@ -34,12 +35,14 @@ const ImageCard: FC<ImageCardProps> = ({
   downloadButton,
   buyNowButton,
   addToCartButton,
+  viewButton,
   price,
 }) => {
   const { cart, setCart, isConnected } = useContext(ThemeContext);
   const [imageData, setImageData] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isHovered, setIsHovered] = useState(false);
+  const [fullScreen, setFullScreen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -88,6 +91,9 @@ const ImageCard: FC<ImageCardProps> = ({
     }
   };
 
+  const viewImage = () => {
+    setFullScreen(true);
+  };
   return (
     <div
       className={`relative w-[420px] group h-[460px] transform transition-transform hover:scale-110 hover:border hover:border-border rounded-lg`}
@@ -125,7 +131,7 @@ const ImageCard: FC<ImageCardProps> = ({
       </Link>
 
       <div>
-        <div className="flex flec-col text-white">
+        <div className="flex flex-col text-white">
           <div className="absolute bottom-24 left-5 text-2xl font-bold">
             {title}
           </div>
@@ -133,22 +139,21 @@ const ImageCard: FC<ImageCardProps> = ({
             {description}
           </div>
         </div>
-
-        {favorite && (
-          <div
-            className={`absolute opacity-0 group-hover:opacity-100 right-2 top-2 w-5 h-5 p-2 rounded-full ${
-              favorite.includes(id) ? "bg-error" : ""
-            }`}
-            onClick={onClick}
-          >
-            <Image src={favouriteIcon} fill={true} alt="fav" />
-          </div>
-        )}
         {isHovered && addToCartButton && (
-          <div className="absolute flex justify-center items-center group-hover:opacity-100 inset-0 bg-black bg-opacity-70 transition-opacity duration-300 opacity-0">
+          <div className="absolute flex group-hover:opacity-100 inset-0 bg-black bg-opacity-90 transition-opacity duration-300 opacity-0">
+            {favorite && (
+              <div
+                className={`absolute opacity-0 group-hover:opacity-100 right-2 top-2 w-5 h-5 p-2 rounded-full cursor-pointer ${
+                  favorite.includes(id) ? "bg-error" : "bg-white"
+                }`}
+                onClick={onClick}
+              >
+                <Image src={favouriteIcon} fill={true} alt="fav" />
+              </div>
+            )}
             {buyNowButton && (
               <button
-                className="mx-2 py-2 px-4 bg-green-500 text-white rounded hover:text-lg hover:underline"
+                className="mx-2 py-2 px-2 bg-green-500 text-white rounded hover:text-lg hover:underline"
                 onClick={handleBuyNowClick}
               >
                 Buy Now
@@ -156,15 +161,35 @@ const ImageCard: FC<ImageCardProps> = ({
             )}
             {addToCartButton && (
               <button
-                className="mx-2 py-2 px-4 bg-blue-500 text-white rounded hover:text-lg hover:underline"
+                className="mx-2 py-2 px-2 bg-blue-500 text-white rounded hover:text-lg hover:underline"
                 onClick={() => addToCart(id, cid, price)}
               >
                 Add to Cart
               </button>
             )}
+            {viewButton && (
+              <button
+                className="mx-2 py-2 px-2 bg-blue-500 text-white rounded hover:text-lg hover:underline"
+                onClick={viewImage}
+              >
+                View entire image
+              </button>
+            )}
           </div>
         )}
       </div>
+      {fullScreen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-75"
+          onClick={() => setFullScreen(false)}
+        >
+          <img
+            src={imageData}
+            alt="Full Image"
+            className="max-w-full max-h-full"
+          />
+        </div>
+      ) : null}
     </div>
   );
 };
